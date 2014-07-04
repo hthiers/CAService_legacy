@@ -9,13 +9,15 @@ if($session->id_tenant != null && $session->id_user != null):
 ?>
 
 <!-- AGREGAR JS & CSS AQUI -->
+<link rel="stylesheet" href="views/css/datatable.css">
+<link rel="stylesheet" href="views/css/dataTables.tableTools.min.css">
 <style type="text/css" title="currentStyle">
-    @import "views/css/datatable.css";
     table.dataTable, table.filtres {
         width: 100%;
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/jquery-tableTools.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
 function submitToForm(){
@@ -40,7 +42,7 @@ $(document).ready(function() {
             });
         },
         
-        "sDom": '<"top"lpf>rt<"clear">',
+        "sDom": 'T<"top"lpf>rt<"clear">',
         
         "oLanguage": {
             "sInfo": "_TOTAL_ registros",
@@ -58,15 +60,29 @@ $(document).ready(function() {
                 "sLast": "&Uacute;ltima"
             }
         },
+                
+        "oTableTools": {
+            "sSwfPath": "views/media/swf/copy_csv_xls_pdf.swf",
+            "aButtons": [
+                {
+                    "sExtends": "xls",
+                    "mColumns": [0,1,2,3,4,5,6]
+                },
+                {
+                    "sExtends": "pdf",
+                    "mColumns": [0,1,2,3,4,5,6]
+                }
+            ]
+        },
         
         //Custom filters params
-//        "fnServerParams": function ( aoData ){
-//            aoData.push(
-//                { "name": "filCliente", "value": $('#cboCliente').val() },
-//                { "name": "filMes", "value": $('#cboMes').val() },
+        "fnServerParams": function ( aoData ){
+            aoData.push(
+                { "name": "filCliente", "value": $('#cboCliente').val() },
+                { "name": "filMes", "value": $('#cboMes').val() }
 //                { "name": "filEstado", "value": $('#cboEstado').val() }
-//            );
-//        },
+            );
+        },
         
         "aoColumnDefs": [
             { "mDataProp": null, "aTargets": [-1] },
@@ -79,7 +95,7 @@ $(document).ready(function() {
             },
             {
                 "fnRender": function ( oObj ) {
-                    if(oObj.aData[6] != null){
+                    if(oObj.aData[6] !== null){
                         var seconds = oObj.aData[6];
                         var total = secondsToTime(seconds);
 
@@ -99,7 +115,7 @@ $(document).ready(function() {
     
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
     $('#cboMes').change(function() { oTable.fnDraw(); } );
-    $('#cboEstado').change(function() { oTable.fnDraw(); } );
+//    $('#cboEstado').change(function() { oTable.fnDraw(); } );
     
     // form submition handling
     $('#dt_form').submit( function() {
@@ -114,6 +130,13 @@ $(document).ready(function() {
             return true;
         }
     });
+    
+    ahora = new Date();
+    ahoraDay = ahora.getDate();
+    ahoraMonth = ahora.getMonth();
+    ahoraYear = ahora.getYear();
+    
+//    console.log("mes: "+ahoraMonth);
 });
 
 /*
@@ -145,6 +168,7 @@ require('templates/menu.tpl.php'); #banner & menu
             print_r($listado); print('<br />');
             print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
             print_r($arrayDates);print('<br />');
+            print_r($clientes);print('<br />');
             #print_r($permiso_editar); print('<br />');
             print('</div>');
         }
@@ -173,25 +197,34 @@ require('templates/menu.tpl.php'); #banner & menu
                 echo $error_flag;
         }
         ?>
-
-        <!-- CUSTOM FILTROS -->
-        <!--
-        <div id="dt_filtres">
+         <!--CUSTOM FILTROS--> 
+        
+        <div id="dt_filtres" style="float:left;margin-top:10px;">
+            <label style="float:none;">Mes: </label>
+            <select id="cboMes">
+                <?php
+                for ($i=0; $i<sizeof($arrayDates); $i++){
+                    if($i == date("m"))
+                        echo "<option selected value='$i'>". $arrayDates[$i] . "</option>";
+                    else
+                        echo "<option value='$i'>". $arrayDates[$i] . "</option>"; 
+                    
+                }
+                ?>
+            </select>
+            
+            <label style="float:none;">Cliente: </label>
+            <select id="cboCliente">
+                <?php
+                echo "<option value=''></option>";
+                for ($i=0; $i<sizeof($clientes); $i++){
+                        echo "<option value=".$clientes[$i][0].">". $clientes[$i][3] . "</option>";
+                }
+                ?>
+            </select>
         </div>
-        -->
-        <!-- END CUSTOM FILTROS -->
-
-        <!--
-        ...
-        <th>ID PROJECT</th>
-        <th>CODE PROJECT</th>
-        <th>ID TENANT</th>
-        <th>ID USER</th>
-        <th>CODE USER</th>
-        <th>ID CUSTOMER</th>
-        <th>DESC PROJECT</th>
-        <th>STATUS PROJECT</th>
-        -->
+        
+         <!--END CUSTOM FILTROS--> 
         
         <!-- DATATABLE -->
         <div id="dynamic">

@@ -24,15 +24,15 @@ class TasksController extends ControllerBase
 //        require_once 'models/ProjectsModel.php';
 //        require_once 'models/UsersModel.php';
         require_once 'models/TasksModel.php';
-
-        //Creamos una instancia de nuestro "modelo"
-//        $projectsModel = new ProjectsModel();
-//        $userModel = new UsersModel();
         $taskModel = new TasksModel();
+        
+        require_once 'models/CustomersModel.php';
+        $customerModel = new CustomersModel();
 
         //Le pedimos al modelo todos los items
-        $pdo = $taskModel->getAllTasksByTenant($session->id_tenant);
-
+        $pdoTask = $taskModel->getAllTasksByTenant($session->id_tenant);
+        $pdoCustomer = $customerModel->getAllCustomers($session->id_tenant);
+        
         // Obtener permisos de edición
 //        $permisos = $userModel->getUserModulePrivilegeByModule($session->id, 7);
 //        if($row = $permisos->fetch(PDO::FETCH_ASSOC)){
@@ -44,7 +44,17 @@ class TasksController extends ControllerBase
         $data['arrayDates'] = $arrayDates;
         
         //Pasamos a la vista toda la información que se desea representar
-        $data['listado'] = $pdo;
+        $data['listado'] = $pdoTask;
+        
+        $clientes = array();
+        
+        while($aRow = $pdoCustomer->fetch(PDO::FETCH_NUM))
+        {
+            
+            $clientes[] = $aRow;
+        }
+        
+        $data['clientes'] = $clientes;
 
         //Titulo pagina
         $data['titulo'] = "Lista de Tareas";
@@ -146,19 +156,19 @@ class TasksController extends ControllerBase
         }
 
         /******************** Custom Filtering */
-//        if( isset($_GET['filCliente']) && $_GET['filCliente'] != "")
-//        {
-//            if ( $sWhere == "" )
-//            {
-//                    $sWhere = "WHERE ";
-//            }
-//            else
-//            {
-//                    $sWhere .= " AND ";
-//            }
-//
-//            $sWhere .= " e.id_customer = '".$_GET['filCliente']."' ";
-//        }
+        if( isset($_GET['filCliente']) && $_GET['filCliente'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " c.id_customer = '".$_GET['filCliente']."' ";
+        }
         if( isset($_GET['filMes']) && $_GET['filMes'] != "")
         {
             if ( $sWhere == "" )
