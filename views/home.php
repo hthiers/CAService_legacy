@@ -36,7 +36,7 @@ $(document).ready(function(){
             
             <h2 class="menuinicio">Inicio de sesión</h2>
             <p class="submenu">
-                Versi&oacute;n 0.1.1
+                Versi&oacute;n 0.1.2
             </p>
             
             <div style="margin-top: 10px;">
