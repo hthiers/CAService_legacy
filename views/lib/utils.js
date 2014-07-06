@@ -16,6 +16,40 @@ function roundNumber(num, dec) {
 }
 
 /**
+ * Format date to local format
+ */
+function formatDateTimeString(date_string)
+{
+    var date = new Date(date_string);
+    
+    var day = date.getDate();
+    var month = date.getMonth()+1;
+    var year = date.getFullYear();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+
+    if(hours<10)
+        hours = '0'+hours;
+    if(minutes<10)
+        minutes = '0'+minutes;
+    if(seconds<10)
+        seconds = '0'+seconds;
+
+    var string_date = day+"/"+month+"/"+year+" "+hours+":"+minutes+":"+seconds;
+
+    return string_date;
+
+//    var obj = {
+//        "h": hours,
+//        "m": minutes,
+//        "s": seconds
+//    };
+//
+//    return obj;
+}
+
+/**
  * Format seconds to array
  */
 function secondsToTime(secs)

@@ -81,18 +81,18 @@ class TasksController extends ControllerBase
         #$sTable = $model->getTableName();
         $sTable = "cas_task";
 
-        $aColumns = array('a.label_task'
-                    , 'c.label_customer'
-                    , 'e.name_user'
-                    , 'b.label_project'
-                    , 'a.date_ini'
-                    , 'a.date_end'
-                    , 'a.time_total'
-                    , 'a.id_task'
-                    , 'a.id_tenant'
-                    , 'b.id_project'
-                    , 'c.id_customer'
-                    , 'e.id_user');
+        $aColumns = array(
+            'a.date_ini'
+            , 'a.date_end'
+            , 'c.label_customer'
+            , 'a.label_task'
+            , 'e.name_user'
+            , 'a.time_total'
+            , 'a.id_task'
+            , 'a.id_tenant'
+            , 'b.id_project'
+            , 'c.id_customer'
+            , 'e.id_user');
 
         $sIndexColumn = "code_task";
         $aTotalColumns = count($aColumns);
@@ -212,7 +212,8 @@ class TasksController extends ControllerBase
 
         /********************** Create Query */
         $sql = "
-            SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+            SELECT SQL_CALC_FOUND_ROWS 
+                ".str_replace(" , ", " ", implode(", ", $aColumns))."
             FROM $sTable a
             LEFT OUTER JOIN cas_project b
             ON (a.cas_project_id_project = b.id_project

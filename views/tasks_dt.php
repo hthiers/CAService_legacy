@@ -66,12 +66,24 @@ $(document).ready(function() {
             "aButtons": [
                 {
                     "sExtends": "xls",
-                    "mColumns": [0,1,2,3,4,5,6]
+                    "mColumns": "visible",
                 },
                 {
                     "sExtends": "pdf",
-                    "mColumns": [0,1,2,3,4,5,6]
-                }
+                    "mColumns": "visible"
+                },
+//                {
+//                    "sExtends": "copy",
+//                    "mColumns": "visible",
+//                    "fnClick": function ( nButton, oConfig, flash ) {
+//                        console.log(this.fnGetTableData(oConfig));
+//                        
+//                        var exp_data = this.fnGetTableData(oConfig);
+//                        var array_data = exp_data.split();
+//                        
+//                        this.fnSetText( flash, this.fnGetTableData(oConfig) );
+//                    }
+//                }
             ]
         },
         
@@ -85,18 +97,106 @@ $(document).ready(function() {
         },
         
         "aoColumnDefs": [
-            { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [7,8,9,10] },
+            {
+                "sWidth": "10%", "aTargets": [0,1,4,5]
+            },
+            {
+                "sWidth": "20%", "aTargets": [2]
+            },
+            //{ "mDataProp": null, "aTargets": [4] },
+            { "bVisible": false, "aTargets": [6,7,8,9] },
             {
                 "fnRender": function ( oObj ) {
-                    return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"submitToForm()\" value="'+oObj.aData[7]+'">VER</button>';
+                    if(oObj.aData[0] !== null){
+                        var db_date = oObj.aData[0];
+//                        var date = new Date(db_date);
+//                        //console.log("fecha: "+date);
+//                        
+//                        var day = date.getDate();
+//                        var month = date.getMonth()+1;
+//                        var year = date.getFullYear();
+//                        var hours = date.getHours();
+//                        var minutes = date.getMinutes();
+//                        var seconds = date.getSeconds();
+//                        var string_date = day+"/"+month+"/"+year+" "+hours+":"+minutes+":"+seconds;
+
+                        var string_date = formatDateTimeString(db_date);
+                        
+                        return string_date;
+                    }
+                    else{
+                        return '';
+                    }
                 },
-                "aTargets": [-1]
+                "aTargets": [0]
             },
             {
                 "fnRender": function ( oObj ) {
-                    if(oObj.aData[6] !== null){
-                        var seconds = oObj.aData[6];
+                    if(oObj.aData[1] !== null){
+                        var db_date = oObj.aData[1];
+//                        var date = new Date(db_date);
+//                        //console.log("fecha: "+date);
+//                        
+//                        var day = date.getDate();
+//                        var month = date.getMonth()+1;
+//                        var year = date.getFullYear();
+//                        var hours = date.getHours();
+//                        var minutes = date.getMinutes();
+//                        var seconds = date.getSeconds();
+//                        var string_date = day+"/"+month+"/"+year+" "+hours+":"+minutes+":"+seconds;
+
+                        var string_date = formatDateTimeString(db_date);
+                        
+                        return string_date;
+                    }
+                    else{
+                        return '';
+                    }
+                },
+                "aTargets": [1]
+            },
+//            {
+//                "fnRender": function ( oObj ) {
+//                    if(oObj.aData[5] !== null){
+//                        var db_date = oObj.aData[5];
+//                        var date = new Date(db_date);
+//                        //console.log("tiempo: "+date);
+//                        
+//                        var hours = date.getHours();
+//                        var minutes = date.getMinutes();
+//                        var string_time = hours+":"+minutes;
+//                        
+//                        return string_time;
+//                    }
+//                    else{
+//                        return '';
+//                    }
+//                },
+//                "aTargets": [2]
+//            },
+//            {
+//                "fnRender": function ( oObj ) {
+//                    if(oObj.aData[0] !== null){
+//                        var data_string = oObj.aData[0];
+//                        //var date = new Date(db_date);
+//                        //console.log("tiempo: "+date);
+//                        
+//                        //var hours = date.getHours();
+//                        //var minutes = date.getMinutes();
+//                        //var string_time = hours+":"+minutes;
+//                        
+//                        return data_string;
+//                    }
+//                    else{
+//                        return '';
+//                    }
+//                },
+//                "aTargets": [3]
+//            },
+            {
+                "fnRender": function ( oObj ) {
+                    if(oObj.aData[5] !== null){
+                        var seconds = oObj.aData[5];
                         var total = secondsToTime(seconds);
 
                         return total['h']+':'+total['m']+':'+total['s'];
@@ -105,12 +205,18 @@ $(document).ready(function() {
                         return '';
                     }
                 },
-                "aTargets": [6]
+                "aTargets": [5]
             },
+//            {
+//                "fnRender": function ( oObj ) {
+//                    return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"submitToForm()\" value="'+oObj.aData[7]+'">VER</button>';
+//                },
+//                "aTargets": [14]
+//            },
         ],
         
         "sPaginationType": "full_numbers",
-        "aaSorting": [[4, "desc"]]
+        "aaSorting": [[0, "asc"]]
     });
     
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
@@ -232,18 +338,22 @@ require('templates/menu.tpl.php'); #banner & menu
                 <table class="display" id="example">
                     <thead>
                         <tr class="headers">
-                            <th>ETIQUETA</th>
-                            <th>CLIENTE</th>
-                            <th>RESPONSABLE</th>
-                            <th>PROYECTO</th>
                             <th>INICIO</th>
                             <th>FIN</th>
+                            <th>CLIENTE</th>
+                            <th>GESTION</th>
+                            <th>RESPONSABLE</th>
+                            <!--<th>PROYECTO</th>-->
+<!--                            <th>INICIO_ORIGEN</th>
+                            <th>FIN_ORIGEN</th>-->
                             <th>TIEMPO</th>
                             <th>ID TASK</th>
                             <th>ID TENANT</th>
                             <th>ID PROJECT</th>
                             <th>ID CUSTOMER</th>
-                            <th>OPCIONES</th>
+                            <!--<th>OTRA COL</th>-->
+                            <!--<th>OTRA COL 2</th>-->
+                            <!--<th>OPCIONES</th>-->
                         </tr>
                     </thead>
                     <tbody>
