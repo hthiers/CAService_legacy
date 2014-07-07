@@ -68,12 +68,12 @@ $(document).ready(function() {
             "aButtons": [
                 {
                     "sExtends": "xls",
-                    "mColumns": "visible",
+                    "mColumns": [0,1,2,3,4,5],
                     "sFileName": "Control de Trabajos.xls"
                 },
                 {
                     "sExtends": "pdf",
-                    "mColumns": "visible"
+                    "mColumns": [0,1,2,3,4,5]
                 },
 //                {
 //                    "sExtends": "copy",
