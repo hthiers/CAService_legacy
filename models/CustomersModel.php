@@ -123,7 +123,8 @@ class CustomersModel extends ModelBase
                             ,'$code_customer'
                             ,$id_tenant
                             ,'$label_customer'
-                            ,'$detail_customer')");
+                            ,'$detail_customer')"
+                    , array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 
             $consulta->execute();
 
@@ -447,7 +448,7 @@ class CustomersModel extends ModelBase
          */
         public function goCustomQuery($sql)
         {
-            $consulta = $this->db->prepare($sql);
+            $consulta = $this->db->prepare($sql, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 
             $consulta->execute();
 

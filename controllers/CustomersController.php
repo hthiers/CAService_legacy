@@ -76,6 +76,7 @@ class CustomersController extends ControllerBase
                     , 'b.id_tenant'
                     , 'a.label_customer'
                     , 'a.detail_customer');
+        
         $sIndexColumn = "id_customer";
 
         /******************** Paging */
@@ -153,7 +154,8 @@ class CustomersController extends ControllerBase
 
         /********************** Create Query */
         $sql = "
-            SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+            SELECT SQL_CALC_FOUND_ROWS 
+                ".str_replace(" , ", " ", implode(", ", $aColumns))."
             FROM $sTable a
             INNER JOIN cas_tenant b
             ON (a.id_tenant = b.id_tenant
@@ -179,25 +181,26 @@ class CustomersController extends ControllerBase
         $iFilteredTotal = $iFilteredTotal[0];
 
         $output = array(
-                "sEcho" => intval($_GET['sEcho']),
-                "iTotalRecords" => $iTotal,
-                "iTotalDisplayRecords" => $iFilteredTotal,
-                "aaData" => array()
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $iTotal,
+            "iTotalDisplayRecords" => $iFilteredTotal,
+            "aaData" => array()
         );
 
         $k = 1;
         while($aRow = $result_data->fetch(PDO::FETCH_NUM))
         {
-                $row = array();
+            $row = array();
 
-                for ( $i=0 ; $i<count($aColumns) ; $i++ )
-                {
-                    $row[] = utf8_encode($aRow[ $i ]);
-                }
+            for ($i=0;$i<count($aColumns);$i++)
+            {
+//                $row[] = utf8_encode($aRow[ $i ]);
+                $row[] = $aRow[$i];
+            }
 
-                $output['aaData'][] = $row;
+            $output['aaData'][] = $row;
 
-                $k++;
+            $k++;
         }
 
         echo json_encode( $output );
