@@ -462,7 +462,7 @@ class TasksController extends ControllerBase
         
         if(isset($_POST['cbocustomers'])){
             if(is_numeric($_POST['cbocustomers']) && $_POST['cbocustomers'] > 0){
-                $customer = $_POST['cbocustomers'];
+                $id_customer = $_POST['cbocustomers'];
             }
         }
         
