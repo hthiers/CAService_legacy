@@ -222,7 +222,7 @@ class TasksController extends ControllerBase
             LEFT OUTER JOIN cas_customer c
             ON (a.cas_customer_id_customer = c.id_customer
                 AND 
-                a.id_tenant = b.id_tenant)
+                a.id_tenant = c.id_tenant)
             LEFT OUTER JOIN cas_task_has_cas_user d
             ON a.id_task = d.cas_task_id_task
             LEFT OUTER JOIN cas_user e
