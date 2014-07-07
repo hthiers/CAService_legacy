@@ -108,7 +108,9 @@ class CustomersModel extends ModelBase
          * @return pdo
          */
         public function addNewCustomer($id_customer, $code_customer, $id_tenant, $label_customer, $detail_customer = null)
-	{
+	{            
+            $this->db->exec("set names utf8");
+            
             $consulta = $this->db->prepare("
                     INSERT INTO cas_customer 
                             (id_customer

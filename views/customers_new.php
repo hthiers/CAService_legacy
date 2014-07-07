@@ -78,13 +78,13 @@ require('templates/menu.tpl.php'); #banner & menu
         <form id="moduleForm" name="form1" method="post"  action="?controller=customers&amp;action=customersAdd">
           <table class="table_left">
             <tr>
-                <td>Nombre</td>
+                <td>T&iacute;tulo cliente</td>
                 <td>
                     <input class="input_box" name="customer_name" type="text" id="customer_name" size="100" value="" />
                 </td>
             </tr>
             <tr>
-                <td>Datos contacto</td>
+                <td>Descripci&oacute;n cliente</td>
               <td>
                   <input class="input_box" name="customer_detail" type="text" id="customer_detail" size="100" value="" />
               </td>

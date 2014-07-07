@@ -247,6 +247,7 @@ class TasksModel extends ModelBase
      * @param type $new_code
      * @param type $etiqueta
      * @param type $date_ini
+     * @param type $hora_ini
      * @param type $date_end
      * @param type $time_total
      * @param type $descripcion

@@ -20,10 +20,12 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/jquery-tableTools.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
-function submitToForm(){
-    $('#action_type').val("view");
+function stopTask(){
+//    sin efecto....
+//    console.log("boton terminar ok");
+//    console.log("boton val: "+$(this).attr("value"));
 
-    return true;
+    return false;
 }
     
 $(document).ready(function() {
@@ -67,6 +69,7 @@ $(document).ready(function() {
                 {
                     "sExtends": "xls",
                     "mColumns": "visible",
+                    "sFileName": "Control de Trabajos.xls"
                 },
                 {
                     "sExtends": "pdf",
@@ -98,13 +101,16 @@ $(document).ready(function() {
         
         "aoColumnDefs": [
             {
-                "sWidth": "10%", "aTargets": [0,1,4,5]
+                "sClass": "td_options", "aTargets": [-1]
+            },
+            {
+                "sWidth": "10%", "aTargets": [0,1,4,5,-1]
             },
             {
                 "sWidth": "20%", "aTargets": [2]
             },
-            //{ "mDataProp": null, "aTargets": [4] },
-            { "bVisible": false, "aTargets": [6,7,8,9] },
+            { "mDataProp": null, "aTargets": [-1] },
+            { "bVisible": false, "aTargets": [6,7,8,9,10] },
             {
                 "fnRender": function ( oObj ) {
                     if(oObj.aData[0] !== null){
@@ -207,12 +213,20 @@ $(document).ready(function() {
                 },
                 "aTargets": [5]
             },
-//            {
-//                "fnRender": function ( oObj ) {
-//                    return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"submitToForm()\" value="'+oObj.aData[7]+'">VER</button>';
-//                },
-//                "aTargets": [14]
-//            },
+            {
+                "fnRender": function ( oObj ) {
+//                    console.log(oObj);
+                
+                    if(oObj.aData[1] === null || oObj.aData[1] === ""){
+                        return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"stopTask()\" value="'+oObj.aData[6]+'">VER</button>';
+                    }
+                    else{
+//                        console.log(oObj);
+                        return '';
+                    }
+                },
+                "aTargets": [-1]
+            },
         ],
         
         "sPaginationType": "full_numbers",
@@ -351,9 +365,10 @@ require('templates/menu.tpl.php'); #banner & menu
                             <th>ID TENANT</th>
                             <th>ID PROJECT</th>
                             <th>ID CUSTOMER</th>
+                            <th>ID USER</th>
+                            <th>OPCIONES</th>
                             <!--<th>OTRA COL</th>-->
                             <!--<th>OTRA COL 2</th>-->
-                            <!--<th>OPCIONES</th>-->
                         </tr>
                     </thead>
                     <tbody>

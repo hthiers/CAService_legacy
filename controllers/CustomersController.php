@@ -234,7 +234,7 @@ class CustomersController extends ControllerBase
     }
     
     public function customersAdd()
-    {   
+    {
         $session = FR_Session::singleton();
 
         $label_customer = $_POST['customer_name'];
@@ -279,7 +279,7 @@ class CustomersController extends ControllerBase
 
         if(isset($_POST['name']) && $_POST['name'] != ""):
             $label_customer = $_POST['name'];
-            $detail_customer = $_POST['contact'];
+            $detail_customer = $_POST['desc'];
             #$code_customer = rand(1, 100);
             #$code_customer = "c".$code_customer;
 

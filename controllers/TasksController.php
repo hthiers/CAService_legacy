@@ -57,7 +57,7 @@ class TasksController extends ControllerBase
         $data['clientes'] = $clientes;
 
         //Titulo pagina
-        $data['titulo'] = "Lista de Tareas";
+        $data['titulo'] = "Lista de Trabajos";
 
         $data['controller'] = "tasks";
         $data['action'] = "tasksView";
@@ -404,7 +404,7 @@ class TasksController extends ControllerBase
         }
 
         $data['new_code'] = $new_code;
-        $data['titulo'] = "Nueva Tarea #".$new_code;
+        $data['titulo'] = "Nuevo Trabajo #".$new_code;
 
         $pdoUser = $modelUser->getUserAccountByID($session->id_user);
         $value = null;
@@ -460,12 +460,19 @@ class TasksController extends ControllerBase
             }
         }
         
-//        if(isset($_POST['cbocustomer']))
-//            $customer = $_POST['cbocustomer'];
+        if(isset($_POST['cbocustomers'])){
+            if(is_numeric($_POST['cbocustomers']) && $_POST['cbocustomers'] > 0){
+                $customer = $_POST['cbocustomers'];
+            }
+        }
         
         $desc = $_POST['descripcion'];
-        $fecha = $_POST['fecha'];
-        $hora_ini = $_POST['hora_ini'];
+
+//        $fecha = $_POST['fecha'];
+        $fecha = date("Y-m-d"); #usar fecha de servidor
+//        $hora_ini = $_POST['hora_ini'];
+        $hora_ini = date("H:i:s"); #usar hora de servidor
+        
         $etiqueta = $_POST['etiqueta'];
         $estado = 1; #active by default
 
@@ -474,7 +481,6 @@ class TasksController extends ControllerBase
 
 //        $model = new ProjectsModel();
         $model = new TasksModel();
-//        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, $hora_ini, $fecha, $desc);
         $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, null,null,$desc,$estado,$id_project, $id_customer);
         
         $query = $result->queryString;

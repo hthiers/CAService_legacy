@@ -14,7 +14,7 @@ if($session->id_tenant != null && $session->id_user != null):
         margin-bottom: 10px;
     }
     .table_right {
-        margin-left: 70px;
+        margin-left: 120px;
     }
     td.middle {
         padding-bottom: 15px;
@@ -84,27 +84,15 @@ if($session->id_tenant != null && $session->id_user != null):
         $("#btn_play").click(function (event){
             iniTrabajo();
         });
-        
-        // Btn pause
-        $('#btn_pause').attr('disabled', 'disabled');
-        $("#btn_pause").click(function (event){
-            pausaTrabajo();
-        });
-        
-        // Btn submit stop
-        $("#btn_stop").click(function (event){
-           window.location.replace("<?php echo $rootPath;?>?controller=tasks&action=tasksDt");
-        });
-        $('#btn_stop').attr('disabled', 'disabled');
                 
-        // JQDialog Submit - Add new project
+        // JQDialog Submit - Add new customer
         $(".dlgSbmCstr").click(function(){
-            var name = $("#dlgSbm_name_project").val();
-            var desc = $("#dlgSbm_desc_project").val();
+            var name = $("#dlgSbm_name_customer").val();
+            var desc = $("#dlgSbm_desc_customer").val();
             //var dataString = 'name='+ name + '&desc=' + desc;
             if(name == '')
             {
-                alert("Ingrese nombre del proyecto");
+                alert("Ingrese título del cliente");
             }
             else
             {
@@ -112,26 +100,28 @@ if($session->id_tenant != null && $session->id_user != null):
                 //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
                     type: "POST",
-                    url: "?controller=projects&action=ajaxProjectsAdd",
+                    url: "?controller=customers&action=ajaxCustomersAdd",
                     data: {name:name, desc:desc},
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
                     if(response != null){
                         if(response[0] != 0){
-                            $("#cboprojects").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
+                            $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
                             //$("#flash").hide();
                             console.log(response);
-                            alert("Proyecto agregado!");
+                            alert("Cliente agregado!");
                         }
                         else
                             alert("Error: "+response[1]);
                     }
                     else{
+//                        console.log("no llego nulo");
                         alert("Ha ocurrido un error! (nulo)");
                     }
-                    $("#dialog-new-project").dialog("close");
+                    $("#dialog-new-customer").dialog("close");
                 }).fail(function(){
+//                    console.log("fail de ajax");
                     alert("Ha ocurrido un error!");
                 });
             }
@@ -166,19 +156,11 @@ if($session->id_tenant != null && $session->id_user != null):
         //$('#trabajo_timing').css({"border-top": "none"});
         
         $('#btn_play').attr('disabled', 'disabled');
-        $('#btn_pause').removeAttr('disabled');
-        $('#btn_stop').removeAttr('disabled');
         
         $('#formModule').submit();
     }
     
-    // Func pause project (count paused time to discount after)
-    function pausaTrabajo(){
-        $('#btn_play').removeAttr('disabled');
-        $('#btn_pause').attr('disabled', 'disabled');
-    }
-    
-    // JQDialog new project
+    // JQDialog new customer
     $(function() {
         // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
@@ -218,7 +200,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 }
         }
 
-        $( "#dialog-new-project" ).dialog({
+        $( "#dialog-new-customer" ).dialog({
                 autoOpen: false,
                 height: 300,
                 width: 350,
@@ -228,9 +210,9 @@ if($session->id_tenant != null && $session->id_user != null):
 //        $( "#create-user" ).click(function() {
 //                $( "#dialog-form" ).dialog( "open" );
 //        });
-        $( "#create-project" ).click(function() {
+        $( "#create-customer" ).click(function() {
 //            console.log("dialog para project.");
-            $( "#dialog-new-project" ).dialog( "open" );
+            $( "#dialog-new-customer" ).dialog( "open" );
         });
     });
 </script>
@@ -290,16 +272,16 @@ if($session->id_tenant != null && $session->id_user != null):
 
         <div id="dt_filtres">
             <form id="formModule" name="formModule" method="post" action="?controller=tasks&amp;action=tasksAdd">
-                <div id="trabajo_info" style="float: left;">
+                <div id="trabajo_info" style="float: left;width:100%;">
                     <table class="table_left">
                         <tr>
                             <td class="middle">Responsable</td>
                             <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
                         </tr>
-                        <tr>
+<!--                        <tr>
                             <td class="middle">Proyecto</td>
                             <td class="middle">
-                                <?php
+                                <?php/*
                                 echo "<select class='input_box' id='cboprojects' name='cboprojects'>\n";
                                 echo "<option value='noaplica' selected='selected'>Sin Proyecto</option>\n";
                                 while($row = $pdoProject->fetch(PDO::FETCH_ASSOC))
@@ -307,33 +289,49 @@ if($session->id_tenant != null && $session->id_user != null):
                                     echo "<option value='$row[id_project]'>$row[label_project]</option>\n";
                                 }
                                 echo "</select>\n";
-                                ?>
+                                */?>
                                 &nbsp;
                                 <a id="create-project" href="#">Nuevo</a>
                             </td>
+                        </tr>-->
+                        <tr>
+                            <td class="middle">Cliente</td>
+                            <td class="middle">
+                                <?php
+                                echo "<select class='input_box' id='cbocustomers' name='cbocustomers'>\n";
+                                echo "<option value='noaplica' selected='selected'>Sin Cliente</option>\n";
+                                while($row = $pdoCustomer->fetch(PDO::FETCH_ASSOC))
+                                {
+                                    echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
+                                }
+                                echo "</select>\n";
+                                ?>
+                                &nbsp;
+                                <a id="create-customer" href="#">Nuevo Cliente</a>
+                            </td>
                         </tr>
                         <tr>
-                            <td class="middle">Etiqueta</td>
+                            <td class="middle">Gesti&oacute;n</td>
                             <td class="middle">
                                 <input type="text" class="input_box" name="etiqueta" />
                             </td>
                         </tr>
+                    </table>
+                    <table class="table_right">
                         <tr>
                             <td>Descripci&oacute;n</td>
                             <td>
                                 <textarea class="input_box" name="descripcion"></textarea>
                             </td>
                         </tr>
-                    </table>
-                    <table class="table_right">
-                        <tr>
+<!--                        <tr>
                             <td class="middle">Fecha inicio</td>
                             <td class="middle"><div id="datepicker"></div></td>
                         </tr>
                         <tr>
                             <td class="middle">Hora inicio</td>
                             <td class="middle"><input id="hora_ini" class="input_box" name="hora_ini" type="text" value="" /></td>
-                        </tr>
+                        </tr>-->
                     </table>
                 </div>
                 <table id="trabajo_timing" style="float: none; width: 100%; border-top: 1px solid #CCC;">
@@ -341,12 +339,6 @@ if($session->id_tenant != null && $session->id_user != null):
                         <td colspan="2" style="text-align: center;">Control de tiempo 
                             <br /><br />
                             <input id="btn_play" class="time_control" type="button" value="INICIO" />
-                            <!--<input id="btn_pause" class="time_control" type="button" value="PAUSA" />-->
-                            <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" />-->
-                            <!--
-                            <br />
-                            <input type="text" class="time_status" value="tiempo..." />
-                            -->
                         </td>
                     </tr>                    
                 </table>

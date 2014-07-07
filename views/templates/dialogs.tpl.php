@@ -11,15 +11,15 @@
 <!-- END Confirm action -->
 
 <!-- New Customer -->
-<div id="dialog-form" title="Nuevo Cliente">
-    <form action="?controller=customers&amp;action=customersAdd" method="POST">
+<div id="dialog-new-customer" title="Nuevo Cliente">
+    <form action="?controller=customers&amp;action=ajaxCustomersAdd" method="POST">
         <fieldset style="padding:0; border:0; margin-top:25px;">
-            <label for="name">Nombre Organización</label>
-            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name" id="dlgSbm_name" class="text ui-widget-content ui-corner-all" />
-            <label for="email">Contacto</label>
-            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_contact" id="dlgSbm_contact" class="text ui-widget-content ui-corner-all" />
+            <label for="name">T&iacute;tulo Cliente</label>
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name_customer" id="dlgSbm_name_customer" class="text ui-widget-content ui-corner-all" />
+            <label for="email">Descripci&oacute;n</label>
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_desc_customer" id="dlgSbm_desc_customer" class="text ui-widget-content ui-corner-all" />
             
-            <input class="dlgSbmCstr" type="submit" value="GUARDAR" style="font-family: Verdana; font-size: 15px; padding: 2px;" />
+            <input class="dlgSbmCstr" type="submit" value="GUARDAR" style="width:80px;height:40px;font-family:inherit;font-size:12px;" />
         </fieldset>
     </form>
 </div>
@@ -72,7 +72,7 @@
 <!-- KEEP DIALOGS CLOSED -->
 <script type="text/javascript" language="javascript">
     $("#dialog-confirm").dialog({ autoOpen: false});
-    $("#dialog-form").dialog({ autoOpen: false});
+    $("#dialog-new-customer").dialog({ autoOpen: false});
     $("#dialog-project").dialog({ autoOpen: false});
     $("#dialog-projectTask").dialog({ autoOpen: false});
     $("#dialog-new-project").dialog({ autoOpen: false});
