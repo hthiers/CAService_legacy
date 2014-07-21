@@ -311,13 +311,19 @@ if($session->id_tenant != null && $session->id_user != null):
                             </td>
                         </tr>
                         <tr>
-                            <td class="middle">Gesti&oacute;n</td>
+                            <td class="middle">Gestion</td>
                             <td class="middle">
                                 <input type="text" class="input_box" name="etiqueta" />
                             </td>
                         </tr>
                     </table>
                     <table class="table_right">
+                        <tr>
+                            <td class="middle">Materia</td>
+                            <td class="middle">
+                                <input type="text" class="input_box" name="materia" />
+                            </td>
+                        </tr>
                         <tr>
                             <td>Descripci&oacute;n</td>
                             <td>

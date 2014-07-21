@@ -56,6 +56,19 @@ class TasksController extends ControllerBase
         
         $data['clientes'] = $clientes;
 
+        //Materias (types)
+        require_once 'models/TypesModel.php';
+        $typesModel = new TypesModel();
+        $pdoTypes = $typesModel->getAllTypesByTenant($session->id_tenant);
+        $types = array();
+        
+        while($aRow = $pdoTypes->fetch(PDO::FETCH_NUM))
+        {
+            $types[] = $aRow;
+        }
+        
+        $data['types'] = $types;
+        
         //Titulo pagina
         $data['titulo'] = "Lista de Trabajos";
 
@@ -86,13 +99,15 @@ class TasksController extends ControllerBase
             , 'a.date_end'
             , 'c.label_customer'
             , 'a.label_task'
+            , 'g.label_type'
             , 'e.name_user'
             , 'a.time_total'
             , 'a.id_task'
             , 'a.id_tenant'
             , 'b.id_project'
             , 'c.id_customer'
-            , 'e.id_user');
+            , 'e.id_user'
+            , 'f.cas_type_id_type');
 
         $sIndexColumn = "code_task";
         $aTotalColumns = count($aColumns);
@@ -182,19 +197,32 @@ class TasksController extends ControllerBase
 
             $sWhere .= " MONTH(a.date_ini) = '".$_GET['filMes']."' ";
         }
-//        if( isset($_GET['filEstado']) && $_GET['filEstado'] != "")
-//        {
-//            if ( $sWhere == "" )
-//            {
-//                    $sWhere = "WHERE ";
-//            }
-//            else
-//            {
-//                    $sWhere .= " AND ";
-//            }
-//
-//            $sWhere .= " a.status_project = '".$_GET['filEstado']."' ";
-//        }
+        if( isset($_GET['filType']) && $_GET['filType'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " f.cas_type_id_type = '".$_GET['filType']."' ";
+        }
+        if( isset($_GET['filEstado']) && $_GET['filEstado'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " a.status_task = '".$_GET['filEstado']."' ";
+        }
         
         # TENANT
         if ( $sWhere == "" )
@@ -227,6 +255,10 @@ class TasksController extends ControllerBase
             ON a.id_task = d.cas_task_id_task
             LEFT OUTER JOIN cas_user e
             ON d.cas_user_id_user = e.id_user
+            LEFT OUTER JOIN cas_task_has_cas_type f
+            ON a.id_task = f.cas_task_id_task
+            LEFT OUTER JOIN cas_type g
+            ON f.cas_type_id_type = g.id_type
             $sWhere
             $sOrder
             $sLimit";
@@ -272,6 +304,7 @@ class TasksController extends ControllerBase
             $k++;
         }
 
+        #echo $sql; //debug
         echo json_encode($output);
     }
     
@@ -808,6 +841,18 @@ class TasksController extends ControllerBase
         }
     }
     
+    public function ajaxBuildXls(){
+        /** Include PHPExcel */
+        //require_once dirname(__FILE__) . '/../Classes/PHPExcel.php';
+        require_once 'libs/PHPExcel/Classes/PHPExcel.php';
+        
+        
+        
+        
+        $var1 = $_POST['hello'];
+        
+        echo "hey: ".$var1;
+    }
     
     
     /******************************

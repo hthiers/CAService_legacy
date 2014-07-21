@@ -22,7 +22,8 @@ class CustomersModel extends ModelBase
                         from cas_customer a
                         inner join cas_tenant b
                         on a.id_tenant = b.id_tenant
-                        where b.id_tenant = $id_tenant");
+                        where b.id_tenant = $id_tenant
+                        order by a.label_customer asc");
 
 		$consulta->execute();
 		

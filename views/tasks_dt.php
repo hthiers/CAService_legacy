@@ -20,6 +20,76 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/jquery-tableTools.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
+
+TableTools.BUTTONS.download = {
+    "sAction": "text",
+    "sTag": "default",
+    "sFieldBoundary": "",
+    "sFieldSeperator": "\t",
+    "sNewLine": "<br>",
+    "sToolTip": "",
+    "sButtonClass": "DTTT_button_text",
+    "sButtonClassHover": "DTTT_button_text_hover",
+    "sButtonText": "Download",
+    "mColumns": "all",
+    "bHeader": true,
+    "bFooter": true,
+    "sDiv": "",
+    "fnMouseover": null,
+    "fnMouseout": null,
+    "fnClick": function( nButton, oConfig ) {
+        var oParams = this.s.dt.oApi._fnAjaxParameters( this.s.dt );
+        var aoPost = [
+            { "name": "hello", "value": "world" }
+        ];
+        var aoGet = [];
+ 
+        /* Create an IFrame to do the request */
+        nIFrame = document.createElement('iframe');
+        nIFrame.setAttribute( 'id', 'RemotingIFrame' );
+        nIFrame.style.border='0px';
+        nIFrame.style.width='0px';
+        nIFrame.style.height='0px';
+             
+        document.body.appendChild( nIFrame );
+        var nContentWindow = nIFrame.contentWindow;
+        nContentWindow.document.open();
+        nContentWindow.document.close();
+         
+        var nForm = nContentWindow.document.createElement( 'form' );
+        nForm.setAttribute( 'method', 'post' );
+         
+        /* Add POST data */
+        for ( var i=0 ; i<aoPost.length ; i++ )
+        {
+            nInput = nContentWindow.document.createElement( 'input' );
+            nInput.setAttribute( 'name', aoPost[i].name );
+            nInput.setAttribute( 'type', 'text' );
+            nInput.value = aoPost[i].value;
+             
+            nForm.appendChild( nInput );
+        }
+         
+        /* Add GET data to the URL */
+        var sUrlAddition = '';
+        for ( var i=0 ; i<aoGet.length ; i++ )
+        {
+            sUrlAddition += aoGet[i].name+'='+aoGet[i].value+'&';
+        }
+         
+        nForm.setAttribute( 'action', oConfig.sUrl );
+         
+        /* Add the form and the iframe */
+        nContentWindow.document.body.appendChild( nForm );
+         
+        /* Send the request */
+        nForm.submit();
+    },
+    "fnSelect": null,
+    "fnComplete": null,
+    "fnInit": null
+};
+    
 function stopTask(){
 //    sin efecto....
 //    console.log("boton terminar ok");
@@ -66,27 +136,20 @@ $(document).ready(function() {
         "oTableTools": {
             "sSwfPath": "views/media/swf/copy_csv_xls_pdf.swf",
             "aButtons": [
+//                {
+//                    "sExtends": "download",
+//                    "sButtonText": "My xls",
+//                    "sUrl": "?controller=tasks&action=ajaxBuildXls"
+//                },
                 {
                     "sExtends": "xls",
                     "mColumns": [0,1,2,3,4,5],
-                    "sFileName": "Control de Trabajos.xls"
+                    "sFileName": "Control de Trabajos.csv"
                 },
                 {
                     "sExtends": "pdf",
                     "mColumns": [0,1,2,3,4,5]
-                },
-//                {
-//                    "sExtends": "copy",
-//                    "mColumns": "visible",
-//                    "fnClick": function ( nButton, oConfig, flash ) {
-//                        console.log(this.fnGetTableData(oConfig));
-//                        
-//                        var exp_data = this.fnGetTableData(oConfig);
-//                        var array_data = exp_data.split();
-//                        
-//                        this.fnSetText( flash, this.fnGetTableData(oConfig) );
-//                    }
-//                }
+                }
             ]
         },
         
@@ -94,8 +157,9 @@ $(document).ready(function() {
         "fnServerParams": function ( aoData ){
             aoData.push(
                 { "name": "filCliente", "value": $('#cboCliente').val() },
-                { "name": "filMes", "value": $('#cboMes').val() }
-//                { "name": "filEstado", "value": $('#cboEstado').val() }
+                { "name": "filMes", "value": $('#cboMes').val() },
+                { "name": "filType", "value": $('#cboType').val() },
+                { "name": "filEstado", "value": $('#cboEstado').val() }
             );
         },
         
@@ -104,13 +168,13 @@ $(document).ready(function() {
                 "sClass": "td_options", "aTargets": [-1]
             },
             {
-                "sWidth": "10%", "aTargets": [0,1,4,5,-1]
+                "sWidth": "10%", "aTargets": [0,1,4,5,6,-1]
             },
             {
                 "sWidth": "20%", "aTargets": [2]
             },
             { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [6,7,8,9,10] },
+            { "bVisible": false, "aTargets": [7,8,9,10,11,12] },
             {
                 "fnRender": function ( oObj ) {
                     if(oObj.aData[0] !== null){
@@ -202,7 +266,7 @@ $(document).ready(function() {
             {
                 "fnRender": function ( oObj ) {
                     if(oObj.aData[5] !== null){
-                        var seconds = oObj.aData[5];
+                        var seconds = oObj.aData[6];
                         var total = secondsToTime(seconds);
 
                         return total['h']+':'+total['m']+':'+total['s'];
@@ -211,7 +275,7 @@ $(document).ready(function() {
                         return '';
                     }
                 },
-                "aTargets": [5]
+                "aTargets": [6]
             },
             {
                 "fnRender": function ( oObj ) {
@@ -235,7 +299,8 @@ $(document).ready(function() {
     
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
     $('#cboMes').change(function() { oTable.fnDraw(); } );
-//    $('#cboEstado').change(function() { oTable.fnDraw(); } );
+    $('#cboType').change(function() { oTable.fnDraw(); } );
+    $('#cboEstado').change(function() { oTable.fnDraw(); } );
     
     // form submition handling
     $('#dt_form').submit( function() {
@@ -289,6 +354,7 @@ require('templates/menu.tpl.php'); #banner & menu
             print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
             print_r($arrayDates);print('<br />');
             print_r($clientes);print('<br />');
+            print_r($types);print('<br />');
             #print_r($permiso_editar); print('<br />');
             print('</div>');
         }
@@ -336,10 +402,29 @@ require('templates/menu.tpl.php'); #banner & menu
             <label style="float:none;">Cliente: </label>
             <select id="cboCliente">
                 <?php
-                echo "<option value=''></option>";
+                echo "<option selected value=''>Todos</option>";
                 for ($i=0; $i<sizeof($clientes); $i++){
                         echo "<option value=".$clientes[$i][0].">". $clientes[$i][3] . "</option>";
                 }
+                ?>
+            </select>
+            
+            <label style="float:none;">Materia: </label>
+            <select id="cboType">
+                <?php
+                echo "<option selected value=''>Todas</option>";
+                for ($i=0; $i<sizeof($types); $i++){
+                        echo "<option value=".$types[$i][0].">". $types[$i][2] . "</option>";
+                }
+                ?>
+            </select>
+            
+            <label style="float:none;">Estado: </label>
+            <select id="cboEstado">
+                <?php
+                echo "<option selected value=''>Todos</option>";
+                echo "<option value=1>En curso</option>";
+                echo "<option value=2>Terminado</option>";
                 ?>
             </select>
         </div>
@@ -356,6 +441,7 @@ require('templates/menu.tpl.php'); #banner & menu
                             <th>FIN</th>
                             <th>CLIENTE</th>
                             <th>GESTION</th>
+                            <th>MATERIA</th>
                             <th>RESPONSABLE</th>
                             <!--<th>PROYECTO</th>-->
 <!--                            <th>INICIO_ORIGEN</th>

@@ -61,9 +61,9 @@ body{
 #menu_div{
     color: #ffffff;
     /*width:1020px;*/
-    height:25px; 
+    height:30px; 
     text-align:left; 
-    padding:3px;
+    /*padding:3px;*/
     /*padding-left:5px; */
     border-left:#CCCCCC 1px solid; 
     border-right:#CCCCCC 1px solid;

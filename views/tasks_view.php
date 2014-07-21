@@ -262,19 +262,25 @@ function pausaTrabajo(){
                             <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $label_customer; ?>" /></td>
                         </tr>
                         <tr>
-                            <td class="middle">Etiqueta</td>
+                            <td class="middle">Gestion</td>
                             <td class="middle">
                                 <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo $label_task; ?>" />
                             </td>
                         </tr>
                         <tr>
-                            <td>Descripci&oacute;n</td>
+                            <td>Descripción</td>
                             <td>
                                 <textarea readonly="readonly" class="input_box" name="descripcion"><?php echo $desc_task;?></textarea>
                             </td>
                         </tr>
                     </table>
                     <table class="table_right">
+                        <tr>
+                            <td class="middle">Materia</td>
+                            <td class="middle">
+                                <input type="text" class="input_box" name="materia" />
+                            </td>
+                        </tr>
                         <tr>
                             <td class="middle">Fecha inicio</td>
                             <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
