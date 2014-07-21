@@ -128,6 +128,50 @@ if($session->id_tenant != null && $session->id_user != null):
 
             return false;
 	});
+
+
+        // JQDialog Submit - Add new type
+        $(".dlgSbmCstr_type").click(function(){
+            var label_type = $("#dlgSbm_name_type").val();
+            //var dataString = 'name='+ name + '&desc=' + desc;
+            if(label_type === '')
+            {
+                alert("Ingrese nombre de la materia");
+            }
+            else
+            {
+                //$("#flash").show();
+                //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
+                $.ajax({
+                    type: "POST",
+                    url: "?controller=types&action=ajaxTypesAdd",
+                    data: {label_type:label_type},
+                    cache: false,
+                    dataType: "json"
+                }).done(function(response){
+                    if(response != null){
+                        if(response[0] != 0){
+                            $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
+                            //$("#flash").hide();
+                            console.log(response);
+                            alert("Materia agregada!");
+                        }
+                        else
+                            alert("Error: "+response[1]);
+                    }
+                    else{
+//                        console.log("no llego nulo");
+                        alert("Ha ocurrido un error! (nulo)");
+                    }
+                    $("#dialog-new-type").dialog("close");
+                }).fail(function(){
+//                    console.log("fail de ajax");
+                    alert("Ha ocurrido un error!");
+                });
+            }
+
+            return false;
+	});
     });
     
     // JQDatepicker
@@ -213,6 +257,61 @@ if($session->id_tenant != null && $session->id_user != null):
         $( "#create-customer" ).click(function() {
 //            console.log("dialog para project.");
             $( "#dialog-new-customer" ).dialog( "open" );
+        });
+    });
+    
+    
+    // JQDialog new type
+    $(function() {
+        $( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+        var label_type = $( "#label_type" )
+            allFields = $( [] ).add(label_type),
+            tips = $( ".validateTips" );
+
+        function updateTips( t ) {
+                tips
+                        .text( t )
+                        .addClass( "ui-state-highlight" );
+                setTimeout(function() {
+                        tips.removeClass( "ui-state-highlight", 1500 );
+                }, 500 );
+        }
+
+        function checkLength( o, n, min, max ) {
+                if ( o.val().length > max || o.val().length < min ) {
+                        o.addClass( "ui-state-error" );
+                        updateTips( "Length of " + n + " must be between " +
+                                min + " and " + max + "." );
+                        return false;
+                } else {
+                        return true;
+                }
+        }
+
+        function checkRegexp( o, regexp, n ) {
+                if ( !( regexp.test( o.val() ) ) ) {
+                        o.addClass( "ui-state-error" );
+                        updateTips( n );
+                        return false;
+                } else {
+                        return true;
+                }
+        }
+
+        $( "#dialog-new-type" ).dialog({
+                autoOpen: false,
+                height: 300,
+                width: 350,
+                modal: true
+        });
+
+//        $( "#create-user" ).click(function() {
+//                $( "#dialog-form" ).dialog( "open" );
+//        });
+        $( "#create-type" ).click(function() {
+//            console.log("dialog para project.");
+            $( "#dialog-new-type" ).dialog( "open" );
         });
     });
 </script>
@@ -321,7 +420,17 @@ if($session->id_tenant != null && $session->id_user != null):
                         <tr>
                             <td class="middle">Materia</td>
                             <td class="middle">
-                                <input type="text" class="input_box" name="materia" />
+                                <?php
+                                echo "<select class='input_box' id='cbotypes' name='cbotypes'>\n";
+                                echo "<option value='noaplica' selected='selected'>Sin Materia</option>\n";
+                                while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
+                                {
+                                    echo "<option value='$row[id_type]'>$row[label_type]</option>\n";
+                                }
+                                echo "</select>\n";
+                                ?>
+                                &nbsp;
+                                <a id="create-type" href="#">Nueva Materia</a>
                             </td>
                         </tr>
                         <tr>

@@ -297,6 +297,18 @@ class TasksModel extends ModelBase
 
         return $consulta;
     }
+    
+    public function addTypeToTask($id_task, $id_type)
+    {
+        $consulta = $this->db->prepare("INSERT INTO cas_task_has_cas_type 
+                (cas_task_id_task, cas_type_id_type) 
+                    VALUES 
+                ($id_task, $id_type)");
+
+        $consulta->execute();
+
+        return $consulta;
+    }
 
     /**
      * Update existent task

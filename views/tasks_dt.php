@@ -174,7 +174,7 @@ $(document).ready(function() {
                 "sWidth": "20%", "aTargets": [2]
             },
             { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [7,8,9,10,11,12] },
+            { "bVisible": false, "aTargets": [7,8,9,10,11] },
             {
                 "fnRender": function ( oObj ) {
                     if(oObj.aData[0] !== null){
@@ -265,7 +265,7 @@ $(document).ready(function() {
 //            },
             {
                 "fnRender": function ( oObj ) {
-                    if(oObj.aData[5] !== null){
+                    if(oObj.aData[6] !== null){
                         var seconds = oObj.aData[6];
                         var total = secondsToTime(seconds);
 
@@ -282,7 +282,7 @@ $(document).ready(function() {
 //                    console.log(oObj);
                 
                     if(oObj.aData[1] === null || oObj.aData[1] === ""){
-                        return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"stopTask()\" value="'+oObj.aData[6]+'">VER</button>';
+                        return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"stopTask()\" value="'+oObj.aData[7]+'">VER</button>';
                     }
                     else{
 //                        console.log(oObj);
@@ -399,6 +399,15 @@ require('templates/menu.tpl.php'); #banner & menu
                 ?>
             </select>
             
+            <label style="float:none;">Estado: </label>
+            <select id="cboEstado">
+                <?php
+                echo "<option selected value=''>Todos</option>";
+                echo "<option value=1>En curso</option>";
+                echo "<option value=2>Terminado</option>";
+                ?>
+            </select>
+            
             <label style="float:none;">Cliente: </label>
             <select id="cboCliente">
                 <?php
@@ -416,15 +425,6 @@ require('templates/menu.tpl.php'); #banner & menu
                 for ($i=0; $i<sizeof($types); $i++){
                         echo "<option value=".$types[$i][0].">". $types[$i][2] . "</option>";
                 }
-                ?>
-            </select>
-            
-            <label style="float:none;">Estado: </label>
-            <select id="cboEstado">
-                <?php
-                echo "<option selected value=''>Todos</option>";
-                echo "<option value=1>En curso</option>";
-                echo "<option value=2>Terminado</option>";
                 ?>
             </select>
         </div>

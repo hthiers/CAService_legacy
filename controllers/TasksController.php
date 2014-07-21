@@ -410,11 +410,13 @@ class TasksController extends ControllerBase
         require_once 'models/TasksModel.php';
         require_once 'models/UsersModel.php';
         require_once 'models/CustomersModel.php';
+        require_once 'models/TypesModel.php';
 
         $model = new ProjectsModel();
         $modelTask = new TasksModel();
         $modelUser = new UsersModel();
         $modelCustomer = new CustomersModel();
+        $modelTypes = new TypesModel();
 
         $pdo = $modelTask->getLastTask($session->id_tenant);
         $error = $pdo->errorInfo();
@@ -457,6 +459,9 @@ class TasksController extends ControllerBase
         
         $pdoProject = $model->getAllProjectsByTenant($session->id_tenant);
         $data['pdoProject'] = $pdoProject;
+        
+        $pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
+        $data['pdoTypes'] = $pdoTypes;
 
         #fecha actual
         $now = date("Y-m-d H:i:s");
@@ -482,6 +487,7 @@ class TasksController extends ControllerBase
         $id_created_task = null;
         $id_project = null;
         $id_customer = null;
+        $id_type = null;
 
         $new_code = $_POST['new_code'];
         $user = $_POST['resp'];
@@ -496,6 +502,12 @@ class TasksController extends ControllerBase
         if(isset($_POST['cbocustomers'])){
             if(is_numeric($_POST['cbocustomers']) && $_POST['cbocustomers'] > 0){
                 $id_customer = $_POST['cbocustomers'];
+            }
+        }
+        
+        if(isset($_POST['cbotypes'])){
+            if(is_numeric($_POST['cbotypes']) && $_POST['cbotypes'] > 0){
+                $id_type = $_POST['cbotypes'];
             }
         }
         
@@ -529,6 +541,9 @@ class TasksController extends ControllerBase
 //            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
             $result_user = $model->addUserToTask($values['id_task'], $id_user);
             $error_user = $result_user->errorInfo();
+            
+            $result_type = $model->addTypeToTask($values['id_task'], $id_type);
+            $error_type = $result_type->errorInfo();
             
             #customer movido a pop-up de nuevo project
 //            if($customer != null){

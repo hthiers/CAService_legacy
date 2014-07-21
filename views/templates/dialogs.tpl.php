@@ -25,6 +25,18 @@
 </div>
 <!-- END New Customer -->
 
+<!-- New Type -->
+<div id="dialog-new-type" title="Nueva Materia">
+    <form action="?controller=types&amp;action=ajaxTypesAdd" method="POST">
+        <fieldset style="padding:0; border:0; margin-top:25px;">
+            <label for="label_type">Nombre Materia</label>
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name_type" id="dlgSbm_name_type" class="text ui-widget-content ui-corner-all" />            
+            <input class="dlgSbmCstr_type" type="submit" value="GUARDAR" style="width:80px;height:40px;font-family:inherit;font-size:12px;" />
+        </fieldset>
+    </form>
+</div>
+<!-- END New Type -->
+
 <!-- New Project -->
 <div id="dialog-new-project" title="Nuevo Proyecto">
     <form action="?controller=projects&amp;action=ajaxProjectsAdd" method="POST">
@@ -73,6 +85,7 @@
 <script type="text/javascript" language="javascript">
     $("#dialog-confirm").dialog({ autoOpen: false});
     $("#dialog-new-customer").dialog({ autoOpen: false});
+    $("#dialog-new-type").dialog({ autoOpen: false});
     $("#dialog-project").dialog({ autoOpen: false});
     $("#dialog-projectTask").dialog({ autoOpen: false});
     $("#dialog-new-project").dialog({ autoOpen: false});
