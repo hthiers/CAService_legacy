@@ -97,6 +97,13 @@ function stopTask(){
 
     return false;
 }
+
+//$.fn.dataTableExt.oApi.fnTotaTime = function(oSettings){
+//    return {
+//        "iTotalPages": oSettings._iDisplayLength === -1 ?
+//            0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
+//    };
+//};  
     
 $(document).ready(function() {
     var oTable = $('#example').dataTable({
@@ -105,13 +112,21 @@ $(document).ready(function() {
         "bServerSide": true,
         "sAjaxSource": '?controller=tasks&action=ajaxTasksDt',
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
-            $.ajax({
-                "dataType": 'json', 
-                "type": "GET", 
-                "url": sSource, 
-                "data": aoData, 
-                "success": fnDrawCallback
-            });
+            $.getJSON(sSource, aoData, function(json) {
+                var total_seconds = json.iTotalTime;
+                var total_time = secondsToTime(total_seconds);
+                
+                $("#footer p").text('Tiempo total: '+total_time['h']+':'+total_time['m']+':'+total_time['s']);
+                
+                fnDrawCallback(json)
+            })
+//            $.ajax({
+//                "dataType": 'json', 
+//                "type": "GET", 
+//                "url": sSource, 
+//                "data": aoData, 
+//                "success": fnDrawCallback
+//            });
         },
         
         "sDom": 'T<"top"lpf>rt<"clear">',
@@ -225,44 +240,6 @@ $(document).ready(function() {
                 },
                 "aTargets": [1]
             },
-//            {
-//                "fnRender": function ( oObj ) {
-//                    if(oObj.aData[5] !== null){
-//                        var db_date = oObj.aData[5];
-//                        var date = new Date(db_date);
-//                        //console.log("tiempo: "+date);
-//                        
-//                        var hours = date.getHours();
-//                        var minutes = date.getMinutes();
-//                        var string_time = hours+":"+minutes;
-//                        
-//                        return string_time;
-//                    }
-//                    else{
-//                        return '';
-//                    }
-//                },
-//                "aTargets": [2]
-//            },
-//            {
-//                "fnRender": function ( oObj ) {
-//                    if(oObj.aData[0] !== null){
-//                        var data_string = oObj.aData[0];
-//                        //var date = new Date(db_date);
-//                        //console.log("tiempo: "+date);
-//                        
-//                        //var hours = date.getHours();
-//                        //var minutes = date.getMinutes();
-//                        //var string_time = hours+":"+minutes;
-//                        
-//                        return data_string;
-//                    }
-//                    else{
-//                        return '';
-//                    }
-//                },
-//                "aTargets": [3]
-//            },
             {
                 "fnRender": function ( oObj ) {
                     if(oObj.aData[6] !== null){
@@ -296,6 +273,11 @@ $(document).ready(function() {
         "sPaginationType": "full_numbers",
         "aaSorting": [[0, "asc"]]
     });
+    
+//    var oSettings = oTable.fnSettings();
+//    
+//    console.log(oSettings);
+//    console.log("total: "+oSettings.sInstance);
     
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
     $('#cboMes').change(function() { oTable.fnDraw(); } );
@@ -428,9 +410,8 @@ require('templates/menu.tpl.php'); #banner & menu
                 ?>
             </select>
         </div>
-        
-         <!--END CUSTOM FILTROS--> 
-        
+        <!--END CUSTOM FILTROS--> 
+         
         <!-- DATATABLE -->
         <div id="dynamic">
             <form id="dt_form" method="POST" action="<?php echo "?controller=".$controller."&amp;action=".$action;?>">
@@ -463,7 +444,7 @@ require('templates/menu.tpl.php'); #banner & menu
                         </tr>
                     </tbody>
                 </table>
-                <table>
+                <table style="float:left"> <!-- style float solo para perderlo -->
                     <tr>
                         <td><input id="action_type" type="hidden" name="action_type" value="" /></td>
                     </tr>
@@ -471,6 +452,10 @@ require('templates/menu.tpl.php'); #banner & menu
             </form>
         </div>
 
+        <div id="footer" class="headers" style="color:#ffffff;padding:3px;">
+            <p style="text-align:right;">Tiempo Total: </p>
+        </div>
+        
         <div class="spacer"></div>
 
     </div>

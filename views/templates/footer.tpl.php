@@ -7,7 +7,7 @@ if($session->id_tenant != null && $session->id_user != null):
 ?>
 <div id="info">
   <p class="Estilo1">
-      Control tiempos de trabajo - Beta v0.1.2
+      Control tiempos de trabajo - Beta v0.1.3
   </p>
 </div>
 

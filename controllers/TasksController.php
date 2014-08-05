@@ -265,26 +265,90 @@ class TasksController extends ControllerBase
 
         #print($sql);
 
+        //Result needed data
         $result_data = $model->goCustomQuery($sql);
-
+        
         $found_rows = $model->goCustomQuery("SELECT FOUND_ROWS()");
-
+        $foundTotal = $found_rows->fetch(PDO::FETCH_NUM);
+        $iFilteredTotal = $foundTotal[0];
+        
         $total_rows = $model->goCustomQuery("SELECT COUNT(`".$sIndexColumn."`) FROM $sTable");
 
+        //Found ids
+        $sql_ids = "SELECT a.id_task as id_task FROM $sTable a
+                    LEFT OUTER JOIN cas_project b
+                    ON (a.cas_project_id_project = b.id_project
+                        AND 
+                        a.id_tenant = b.id_tenant)
+                    LEFT OUTER JOIN cas_customer c
+                    ON (a.cas_customer_id_customer = c.id_customer
+                        AND 
+                        a.id_tenant = c.id_tenant)
+                    LEFT OUTER JOIN cas_task_has_cas_user d
+                    ON a.id_task = d.cas_task_id_task
+                    LEFT OUTER JOIN cas_user e
+                    ON d.cas_user_id_user = e.id_user
+                    LEFT OUTER JOIN cas_task_has_cas_type f
+                    ON a.id_task = f.cas_task_id_task
+                    LEFT OUTER JOIN cas_type g
+                    ON f.cas_type_id_type = g.id_type
+                    $sWhere
+                    $sLimit";
+
+        $idsPdo = $model->goCustomQuery($sql_ids);
+        $ids_array = null;
+        $ids_cols = "";
+        
+        #----------------- PROBANDO COLUMNAS QUE LLEGAN PARA SQL DE SUMATORIA TIEMPO!!!
+        $realTotal = $idsPdo->rowCount();
+        for($k = 0; $k<$realTotal; $k++){
+            $ids_row = $idsPdo->fetch(PDO::FETCH_ASSOC);
+            $ids_array[$k] = $ids_row['id_task'];
+            $ids_cols = $ids_cols.$ids_row['id_task'];
+            
+            if($k < $realTotal-1){
+                $ids_cols = $ids_cols.", ";
+            }
+        }
+
+        //Sum found task times
+        $sql_time = "SELECT SUM(a.time_total) FROM $sTable a
+                    LEFT OUTER JOIN cas_project b
+                    ON (a.cas_project_id_project = b.id_project
+                        AND 
+                        a.id_tenant = b.id_tenant)
+                    LEFT OUTER JOIN cas_customer c
+                    ON (a.cas_customer_id_customer = c.id_customer
+                        AND 
+                        a.id_tenant = c.id_tenant)
+                    LEFT OUTER JOIN cas_task_has_cas_user d
+                    ON a.id_task = d.cas_task_id_task
+                    LEFT OUTER JOIN cas_user e
+                    ON d.cas_user_id_user = e.id_user
+                    LEFT OUTER JOIN cas_task_has_cas_type f
+                    ON a.id_task = f.cas_task_id_task
+                    LEFT OUTER JOIN cas_type g
+                    ON f.cas_type_id_type = g.id_type
+                    $sWhere
+                    and a.id_task in ($ids_cols)";
+        
+        $total_time = $model->goCustomQuery($sql_time);
+        
         /*
         * Output
         */
         $iTotal = $total_rows->fetch(PDO::FETCH_NUM);
         $iTotal = $iTotal[0];
-
-        $iFilteredTotal = $found_rows->fetch(PDO::FETCH_NUM);
-        $iFilteredTotal = $iFilteredTotal[0];
+        
+        $iTotalTime = $total_time->fetch(PDO::FETCH_NUM);
+        $iTotalTime = $iTotalTime[0];
 
         $output = array(
             "sEcho" => intval($_GET['sEcho']),
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
-            "aaData" => array()
+            "aaData" => array(),
+            "iTotalTime" => $iTotalTime
         );
 
         $k = 1;
@@ -306,6 +370,22 @@ class TasksController extends ControllerBase
 
         #echo $sql; //debug
         echo json_encode($output);
+        
+//        echo "<br />";
+//        echo "<br />";
+//        echo $sql;
+//        echo "<br />";
+//        echo "<br />";
+//        echo $sql_ids;
+//        echo "<br />";
+//        echo "<br />";
+//        echo $sql_time;
+//        echo "<br />";
+//        echo "<br />";
+//        echo $iFilteredTotal;
+//        echo "<br />";
+//        echo "<br />";
+//        echo $realTotal;
     }
     
     public function ajaxTasksList()
