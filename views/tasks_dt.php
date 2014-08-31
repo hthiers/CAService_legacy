@@ -39,51 +39,57 @@ TableTools.BUTTONS.download = {
     "fnMouseout": null,
     "fnClick": function( nButton, oConfig ) {
         var oParams = this.s.dt.oApi._fnAjaxParameters( this.s.dt );
-        var aoPost = [
-            { "name": "hello", "value": "world" }
-        ];
-        var aoGet = [];
- 
+
+        oParams.push(
+            { "name": "filCliente", "value": $('#cboCliente').val() },
+            { "name": "filMes", "value": $('#cboMes').val() },
+            { "name": "filType", "value": $('#cboType').val() },
+            { "name": "filEstado", "value": $('#cboEstado').val() }
+        );
+
+        console.log(oParams);
+
         /* Create an IFrame to do the request */
-        nIFrame = document.createElement('iframe');
+        var nIFrame = document.createElement('iframe');
         nIFrame.setAttribute( 'id', 'RemotingIFrame' );
         nIFrame.style.border='0px';
         nIFrame.style.width='0px';
         nIFrame.style.height='0px';
-             
+        nIFrame.src = oConfig.sUrl+"&"+$.param(oParams);
         document.body.appendChild( nIFrame );
-        var nContentWindow = nIFrame.contentWindow;
-        nContentWindow.document.open();
-        nContentWindow.document.close();
+        
+//        var nContentWindow = nIFrame.contentWindow;
+//        nContentWindow.document.open();
+//        nContentWindow.document.close();
          
-        var nForm = nContentWindow.document.createElement( 'form' );
-        nForm.setAttribute( 'method', 'post' );
-         
-        /* Add POST data */
-        for ( var i=0 ; i<aoPost.length ; i++ )
-        {
-            nInput = nContentWindow.document.createElement( 'input' );
-            nInput.setAttribute( 'name', aoPost[i].name );
-            nInput.setAttribute( 'type', 'text' );
-            nInput.value = aoPost[i].value;
-             
-            nForm.appendChild( nInput );
-        }
-         
-        /* Add GET data to the URL */
-        var sUrlAddition = '';
-        for ( var i=0 ; i<aoGet.length ; i++ )
-        {
-            sUrlAddition += aoGet[i].name+'='+aoGet[i].value+'&';
-        }
-         
-        nForm.setAttribute( 'action', oConfig.sUrl );
-         
-        /* Add the form and the iframe */
-        nContentWindow.document.body.appendChild( nForm );
-         
-        /* Send the request */
-        nForm.submit();
+//        var nForm = nContentWindow.document.createElement( 'form' );
+//        nForm.setAttribute( 'method', 'post' );
+//         
+//        /* Add POST data */
+//        for ( var i=0 ; i<aoPost.length ; i++ )
+//        {
+//            nInput = nContentWindow.document.createElement( 'input' );
+//            nInput.setAttribute( 'name', aoPost[i].name );
+//            nInput.setAttribute( 'type', 'text' );
+//            nInput.value = aoPost[i].value;
+//             
+//            nForm.appendChild( nInput );
+//        }
+//         
+//        /* Add GET data to the URL */
+//        var sUrlAddition = '';
+//        for ( var i=0 ; i<aoGet.length ; i++ )
+//        {
+//            sUrlAddition += aoGet[i].name+'='+aoGet[i].value+'&';
+//        }
+//         
+//        nForm.setAttribute( 'action', oConfig.sUrl );
+//         
+//        /* Add the form and the iframe */
+//        nContentWindow.document.body.appendChild( nForm );
+//         
+//        /* Send the request */
+//        nForm.submit();
     },
     "fnSelect": null,
     "fnComplete": null,
@@ -118,8 +124,8 @@ $(document).ready(function() {
                 
                 $("#footer p").text('Tiempo total: '+total_time['h']+':'+total_time['m']+':'+total_time['s']);
                 
-                fnDrawCallback(json)
-            })
+                fnDrawCallback(json);
+            });
 //            $.ajax({
 //                "dataType": 'json', 
 //                "type": "GET", 
@@ -151,20 +157,20 @@ $(document).ready(function() {
         "oTableTools": {
             "sSwfPath": "views/media/swf/copy_csv_xls_pdf.swf",
             "aButtons": [
-//                {
-//                    "sExtends": "download",
-//                    "sButtonText": "My xls",
-//                    "sUrl": "?controller=tasks&action=ajaxBuildXls"
-//                },
                 {
-                    "sExtends": "xls",
-                    "mColumns": [0,1,2,3,4,5],
-                    "sFileName": "Control de Trabajos.csv"
-                },
-                {
-                    "sExtends": "pdf",
-                    "mColumns": [0,1,2,3,4,5]
+                    "sExtends": "download",
+                    "sButtonText": "Excel",
+                    "sUrl": "?controller=tasks&action=ajaxBuildXls"
                 }
+//                {
+//                    "sExtends": "xls",
+//                    "mColumns": [0,1,2,3,4,5],
+//                    "sFileName": "Control de Trabajos.csv"
+//                },
+//                {
+//                    "sExtends": "pdf",
+//                    "mColumns": [0,1,2,3,4,5]
+//                }
             ]
         },
         
