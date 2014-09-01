@@ -1129,8 +1129,18 @@ class TasksController extends ControllerBase
         header ('Pragma: public'); // HTTP/1.0
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
+
+        //$objWriter->save('php://output');
+        $this->SaveViaTempFile($objWriter);
+        
         exit;
+    }
+    
+    public function SaveViaTempFile($objWriter){
+        $filePath = '/tmp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
+        $objWriter->save($filePath);
+        readfile($filePath);
+        unlink($filePath);
     }
     
     public function processTasksJSON(){
