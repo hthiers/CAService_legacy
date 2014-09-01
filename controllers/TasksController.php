@@ -483,7 +483,8 @@ class TasksController extends ControllerBase
     /*
      * Show new project form 
      */
-    public function tasksNewForm(){
+    public function tasksNewForm()
+    {
         $session = FR_Session::singleton();
 
         require_once 'models/ProjectsModel.php';
@@ -646,7 +647,7 @@ class TasksController extends ControllerBase
     }
 
     public function ajaxTaskAdd()
-    {   
+    {  
         $session = FR_Session::singleton();
 
         $label = $_POST['label'];
@@ -938,7 +939,8 @@ class TasksController extends ControllerBase
     }
     
     // Build Excel Report
-    public function ajaxBuildXls(){       
+    public function ajaxBuildXls()
+    {
         // Process parameters from $_GET
         $jresult = $this->processTasksJSON();
         $obj = json_decode($jresult);
@@ -1048,7 +1050,7 @@ class TasksController extends ControllerBase
         $last_col = 6;
         
         // cols
-        $colArray = [
+        $colArray = array (
             0 => 'A',
             1 => 'B',
             2 => 'C',
@@ -1061,8 +1063,8 @@ class TasksController extends ControllerBase
             9 => 'J',
             10 => 'K',
             11 => 'L',
-            12 => 'M',
-        ];
+            12 => 'M'
+        );
         
 //        for($i=2; $i<5; $i++){
 //            $objPHPExcel->setActiveSheetIndex(0)
