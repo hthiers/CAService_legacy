@@ -1137,7 +1137,7 @@ class TasksController extends ControllerBase
     }
     
     public function SaveViaTempFile($objWriter){
-        $filePath = '/tmp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
+        $filePath = '/var/zpanel/temp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
         $objWriter->save($filePath);
         readfile($filePath);
         unlink($filePath);
