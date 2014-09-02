@@ -956,9 +956,9 @@ class TasksController extends ControllerBase
         $dataTotalTime = Utils::formatTime($dataTotalTime);
         
         // Set debug options
-        //error_reporting(E_ALL);
-        //ini_set('display_errors', TRUE);
-        //ini_set('display_startup_errors', TRUE);
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
 
         // Include PHPExcel
         require_once 'libs/PHPExcel/Classes/PHPExcel.php';
@@ -1138,6 +1138,7 @@ class TasksController extends ControllerBase
     
     public function SaveViaTempFile($objWriter){
         $filePath = '/var/zpanel/temp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
+//        $filePath = '/tmp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
         $objWriter->save($filePath);
         readfile($filePath);
         unlink($filePath);
