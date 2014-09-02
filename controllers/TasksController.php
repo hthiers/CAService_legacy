@@ -1114,8 +1114,8 @@ class TasksController extends ControllerBase
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Set excel filename
-//        $fileName = 'reporte_trabajos_'.$currentDatetime.'.xlsx';
-        $fileName = 'reporte_trabajos_'.$currentDatetime.'.xls';
+        $fileName = 'reporte_trabajos_'.$currentDatetime.'.xlsx';
+//        $fileName = 'reporte_trabajos_'.$currentDatetime.'.xls';
         
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -1130,12 +1130,16 @@ class TasksController extends ControllerBase
         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header ('Pragma: public'); // HTTP/1.0
 
-//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 
 //        $objWriter->save('php://output');
-        $this->SaveViaTempFile($objWriter);
-        exit();
+//        $this->SaveViaTempFile($objWriter);
+        $filePath = '/tmp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
+        $objWriter->save($filePath);
+        readfile($filePath);
+        unlink($filePath);
+        exit;
     }
     
     public function SaveViaTempFile($objWriter){
@@ -1434,4 +1438,3 @@ class TasksController extends ControllerBase
         return json_encode($output);
     }
 }
-?>
