@@ -941,6 +941,8 @@ class TasksController extends ControllerBase
     // Build Excel Report
     public function ajaxBuildXls()
     {
+        define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+        
         // Process parameters from $_GET
         $jresult = $this->processTasksJSON();
         $obj = json_decode($jresult);
@@ -954,12 +956,11 @@ class TasksController extends ControllerBase
         $dataTotalTime = Utils::formatTime($dataTotalTime);
         
         // Set debug options
-        error_reporting(E_ALL);
-        ini_set('display_errors', TRUE);
-        ini_set('display_startup_errors', TRUE);
+        //error_reporting(E_ALL);
+        //ini_set('display_errors', TRUE);
+        //ini_set('display_startup_errors', TRUE);
 
         // Include PHPExcel
-        define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
         require_once 'libs/PHPExcel/Classes/PHPExcel.php';
         
         // Styles Arrays
@@ -1025,8 +1026,8 @@ class TasksController extends ControllerBase
         // Title (first row)
         $currentDatetime = date('dmY-His');
         
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.date('Y').' - Fecha exportación: '.date('d-m-Y H:i:s'));
+//        $objPHPExcel->setActiveSheetIndex(0)
+//                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.date('Y').' - Fecha exportación: '.date('d-m-Y H:i:s'));
 //                ->mergeCells('A1:G1')
 //                ->getRowDimension(1)->setRowHeight(30);
 //        $objPHPExcel->setActiveSheetIndex(0)
@@ -1037,7 +1038,7 @@ class TasksController extends ControllerBase
                 ->setCellValue('A2', 'Inicio')
                 ->setCellValue('B2', 'Fin')
                 ->setCellValue('C2', 'Cliente')
-                ->setCellValue('D2', 'Gestión')
+                ->setCellValue('D2', 'Gestion')
                 ->setCellValue('E2', 'Materia')
                 ->setCellValue('F2', 'Responsable')
                 ->setCellValue('G2', 'Tiempo');
@@ -1066,44 +1067,44 @@ class TasksController extends ControllerBase
             12 => 'M'
         );
         
-//        for($i=2; $i<5; $i++){
-//            $objPHPExcel->setActiveSheetIndex(0)
-//                    ->setCellValue($colArray[$i].''.$i, 'col: '.$colArray[$i].', i:'.$i);
-//        }
-        
-        // Set content from data
-        foreach ($data as $fila => $caso) {
-            foreach ($caso as $col => $valor) {
-                
-                if($col <= $last_col){
-                    if($col == 6){
-                        $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue($colArray[$col].''.$row, Utils::formatTime($valor));
-                    }
-                    else{
-                        $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue($colArray[$col].''.$row, $valor);
-                    }
-                }
-            }
-            
-//            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':G'.$row)->applyFromArray($style_content);
-            $row++;
+        for($i=2; $i<5; $i++){
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($colArray[$i].''.$i, 'col: '.$colArray[$i].', i:'.$i);
         }
         
+        // Set content from data
+//        foreach ($data as $fila => $caso) {
+//            foreach ($caso as $col => $valor) {
+//                
+//                if($col <= $last_col){
+//                    if($col == 6){
+//                        $objPHPExcel->setActiveSheetIndex(0)
+//                            ->setCellValue($colArray[$col].''.$row, Utils::formatTime($valor));
+//                    }
+//                    else{
+//                        $objPHPExcel->setActiveSheetIndex(0)
+//                            ->setCellValue($colArray[$col].''.$row, $valor);
+//                    }
+//                }
+//            }
+//            
+////            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':G'.$row)->applyFromArray($style_content);
+//            $row++;
+//        }
+        
         // Set tasks total time on last row
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue($colArray[5].''.$row, 'Tiempo total');
+//        $objPHPExcel->setActiveSheetIndex(0)
+//                    ->setCellValue($colArray[5].''.$row, 'Tiempo total');
 //                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
-        $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue($colArray[6].''.$row, $dataTotalTime);
+//        $objPHPExcel->setActiveSheetIndex(0)
+//                    ->setCellValue($colArray[6].''.$row, $dataTotalTime);
 //                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
         
         // Set ON autosize no each col
-        foreach(range('A','G') as $columnID) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID);
-//                    ->setAutoSize(true);
-        }
+//        foreach(range('A','G') as $columnID) {
+//            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID);
+////                    ->setAutoSize(true);
+//        }
         
         // Rename worksheet
         $objPHPExcel->getActiveSheet()->setTitle('Reporte');
