@@ -941,7 +941,17 @@ class TasksController extends ControllerBase
     // Build Excel Report
     public function ajaxBuildXls()
     {
-        define('EOL',(PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
+        // Set debug options
+        error_reporting(E_ALL);
+        ini_set('display_errors', TRUE);
+        ini_set('display_startup_errors', TRUE);
+        
+        if (PHP_SAPI == 'cli'){
+            die('Solo ejecutable desde web browser');
+        }
+        
+        // Include PHPExcel
+        require_once 'libs/PHPExcel/Classes/PHPExcel.php';
         
         // Process parameters from $_GET
         $jresult = $this->processTasksJSON();
@@ -949,19 +959,10 @@ class TasksController extends ControllerBase
         
         // data from source
         $data = $obj->{'aaData'};
-        #print_r($data);
         
         // total time from source
         $dataTotalTime = $obj->{'iTotalTime'};
         $dataTotalTime = Utils::formatTime($dataTotalTime);
-        
-        // Set debug options
-        error_reporting(E_ALL);
-        ini_set('display_errors', TRUE);
-        ini_set('display_startup_errors', TRUE);
-
-        // Include PHPExcel
-        require_once 'libs/PHPExcel/Classes/PHPExcel.php';
         
         // Styles Arrays
         $style_content = array(
@@ -1119,7 +1120,7 @@ class TasksController extends ControllerBase
         
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Content-Disposition: attachment;filename="reporte.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -1131,10 +1132,6 @@ class TasksController extends ControllerBase
         header ('Pragma: public'); // HTTP/1.0
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-//        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-
-//        $objWriter->save('php://output');
-//        $this->SaveViaTempFile($objWriter);
         $filePath = '/var/zpanel/temp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
         $objWriter->save($filePath);
         readfile($filePath);
@@ -1143,7 +1140,7 @@ class TasksController extends ControllerBase
     }
     
     public function SaveViaTempFile($objWriter){
-        $filePath = '/var/zpanel/temp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
+        $filePath = '/tmp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
 //        $filePath = '/tmp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
         $objWriter->save($filePath);
         readfile($filePath);
