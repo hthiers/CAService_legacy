@@ -1026,11 +1026,11 @@ class TasksController extends ControllerBase
         $currentDatetime = date('dmY-His');
         
         $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.date('Y').' - Fecha exportación: '.date('d-m-Y H:i:s'))
-                ->mergeCells('A1:G1')
-                ->getRowDimension(1)->setRowHeight(30);
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->getStyle('A1:G1')->applyFromArray($style_title);
+                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.date('Y').' - Fecha exportación: '.date('d-m-Y H:i:s'));
+//                ->mergeCells('A1:G1')
+//                ->getRowDimension(1)->setRowHeight(30);
+//        $objPHPExcel->setActiveSheetIndex(0)
+//                ->getStyle('A1:G1')->applyFromArray($style_title);
         
         // Cols title
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1040,8 +1040,8 @@ class TasksController extends ControllerBase
                 ->setCellValue('D2', 'Gestión')
                 ->setCellValue('E2', 'Materia')
                 ->setCellValue('F2', 'Responsable')
-                ->setCellValue('G2', 'Tiempo')
-                ->getStyle('A2:G2')->applyFromArray($style_subtitle);
+                ->setCellValue('G2', 'Tiempo');
+//                ->getStyle('A2:G2')->applyFromArray($style_subtitle);
         
         // first row (custom starting row)
         $row = 3;
@@ -1101,8 +1101,8 @@ class TasksController extends ControllerBase
         
         // Set ON autosize no each col
         foreach(range('A','G') as $columnID) {
-            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
-                    ->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID);
+//                    ->setAutoSize(true);
         }
         
         // Rename worksheet
@@ -1132,7 +1132,6 @@ class TasksController extends ControllerBase
 
         //$objWriter->save('php://output');
         $this->SaveViaTempFile($objWriter);
-        
         exit;
     }
     
