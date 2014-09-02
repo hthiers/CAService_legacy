@@ -1087,17 +1087,17 @@ class TasksController extends ControllerBase
                 }
             }
             
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':G'.$row)->applyFromArray($style_content);
+//            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':G'.$row)->applyFromArray($style_content);
             $row++;
         }
         
         // Set tasks total time on last row
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue($colArray[5].''.$row, 'Tiempo total')
-                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
+                    ->setCellValue($colArray[5].''.$row, 'Tiempo total');
+//                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue($colArray[6].''.$row, $dataTotalTime)
-                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
+                    ->setCellValue($colArray[6].''.$row, $dataTotalTime);
+//                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
         
         // Set ON autosize no each col
         foreach(range('A','G') as $columnID) {
@@ -1130,9 +1130,9 @@ class TasksController extends ControllerBase
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 
-        //$objWriter->save('php://output');
+//        $objWriter->save('php://output');
         $this->SaveViaTempFile($objWriter);
-        exit;
+        exit();
     }
     
     public function SaveViaTempFile($objWriter){
