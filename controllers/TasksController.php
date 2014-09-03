@@ -1027,12 +1027,12 @@ class TasksController extends ControllerBase
         // Title (first row)
         $currentDatetime = date('dmY-His');
         
-//        $objPHPExcel->setActiveSheetIndex(0)
-//                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.date('Y').' - Fecha exportación: '.date('d-m-Y H:i:s'));
-//                ->mergeCells('A1:G1')
-//                ->getRowDimension(1)->setRowHeight(30);
-//        $objPHPExcel->setActiveSheetIndex(0)
-//                ->getStyle('A1:G1')->applyFromArray($style_title);
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.date('Y').' - Fecha exportación: '.date('d-m-Y H:i:s'))
+                ->mergeCells('A1:G1')
+                ->getRowDimension(1)->setRowHeight(30);
+        $objPHPExcel->setActiveSheetIndex(0)
+                ->getStyle('A1:G1')->applyFromArray($style_title);
         
         // Cols title
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1116,7 +1116,6 @@ class TasksController extends ControllerBase
 
         // Set excel filename
         $fileName = 'reporte_trabajos_'.$currentDatetime.'.xlsx';
-//        $fileName = 'reporte_trabajos_'.$currentDatetime.'.xls';
         
         // cleaning
         ob_end_clean();
