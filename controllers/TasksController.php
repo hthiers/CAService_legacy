@@ -1102,10 +1102,10 @@ class TasksController extends ControllerBase
                     ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
         
         // Set autosize ON for each col
-//        foreach(range('A','G') as $columnID) {
-//            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID);
-////                    ->setAutoSize(true);
-//        }
+        foreach(range('A','G') as $columnID) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
+                    ->setAutoSize(true);
+        }
         
         // Rename worksheet
         $objPHPExcel->getActiveSheet()->setTitle('Reporte');
