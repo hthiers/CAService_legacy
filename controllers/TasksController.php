@@ -1118,6 +1118,10 @@ class TasksController extends ControllerBase
         $fileName = 'reporte_trabajos_'.$currentDatetime.'.xlsx';
 //        $fileName = 'reporte_trabajos_'.$currentDatetime.'.xls';
         
+        // cleaning
+        ob_end_clean();
+        ob_start();
+        
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="reporte.xlsx"');
