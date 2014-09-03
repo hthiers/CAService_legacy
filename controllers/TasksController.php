@@ -1094,14 +1094,14 @@ class TasksController extends ControllerBase
         }
         
         // Set tasks total time on last row
-//        $objPHPExcel->setActiveSheetIndex(0)
-//                    ->setCellValue($colArray[5].''.$row, 'Tiempo total');
-//                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
-//        $objPHPExcel->setActiveSheetIndex(0)
-//                    ->setCellValue($colArray[6].''.$row, $dataTotalTime);
-//                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($colArray[5].''.$row, 'Tiempo total')
+                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($colArray[6].''.$row, $dataTotalTime)
+                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
         
-        // Set ON autosize no each col
+        // Set autosize ON for each col
 //        foreach(range('A','G') as $columnID) {
 //            $objPHPExcel->getActiveSheet()->getColumnDimension($columnID);
 ////                    ->setAutoSize(true);
