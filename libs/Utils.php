@@ -131,5 +131,17 @@ class Utils
         else
             return $monthsArray[$num_month];
     }
+    
+    /**
+     * Save a PHPExcel generated file to system temp folder prior to export
+     * @param String $objWriter
+     * @param String $path
+     */
+    public static function SaveViaTempFile($objWriter, $path){
+        $filePath = ''.$path.'' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
+        $objWriter->save($filePath);
+        readfile($filePath);
+        unlink($filePath);
+    }
 }
 ?>

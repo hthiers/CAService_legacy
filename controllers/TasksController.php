@@ -1136,19 +1136,8 @@ class TasksController extends ControllerBase
         header ('Pragma: public'); // HTTP/1.0
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $filePath = '/var/zpanel/temp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
-        $objWriter->save($filePath);
-        readfile($filePath);
-        unlink($filePath);
+        Utils::SaveViaTempFile($objWriter, '/var/zpanel/temp/');
         exit;
-    }
-    
-    public function SaveViaTempFile($objWriter){
-        $filePath = '/tmp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
-//        $filePath = '/tmp/' . rand(0, getrandmax()) . rand(0, getrandmax()) . ".tmp";
-        $objWriter->save($filePath);
-        readfile($filePath);
-        unlink($filePath);
     }
     
     public function processTasksJSON(){
