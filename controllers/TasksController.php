@@ -1042,8 +1042,8 @@ class TasksController extends ControllerBase
                 ->setCellValue('D2', 'Gestion')
                 ->setCellValue('E2', 'Materia')
                 ->setCellValue('F2', 'Responsable')
-                ->setCellValue('G2', 'Tiempo');
-//                ->getStyle('A2:G2')->applyFromArray($style_subtitle);
+                ->setCellValue('G2', 'Tiempo')
+                ->getStyle('A2:G2')->applyFromArray($style_subtitle);
         
         // first row (custom starting row)
         $row = 3;
