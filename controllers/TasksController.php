@@ -1089,7 +1089,7 @@ class TasksController extends ControllerBase
                 }
             }
             
-//            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':G'.$row)->applyFromArray($style_content);
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':G'.$row)->applyFromArray($style_content);
             $row++;
         }
         
