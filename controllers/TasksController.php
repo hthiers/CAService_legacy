@@ -435,7 +435,7 @@ class TasksController extends ControllerBase
             }
             
             #current time
-            $now = date("Y-m-d H:i:s");
+            $now = date("Y/m/d H:i:s");
             $currentDateTime = new DateTime($now);
             $timezone = new DateTimeZone($session->timezone);
             $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
@@ -545,7 +545,7 @@ class TasksController extends ControllerBase
         $data['pdoTypes'] = $pdoTypes;
 
         #fecha actual
-        $now = date("Y-m-d H:i:s");
+        $now = date("Y/m/d H:i:s");
         $currentDateTime = new DateTime($now);
         $timezone = new DateTimeZone($session->timezone);
         $currentDateTime = $currentDateTime->setTimezone($timezone);
@@ -595,7 +595,7 @@ class TasksController extends ControllerBase
         $desc = $_POST['descripcion'];
 
 //        $fecha = $_POST['fecha'];
-        $fecha = date("Y-m-d"); #usar fecha de servidor
+        $fecha = date("Y/m/d"); #usar fecha de servidor
 //        $hora_ini = $_POST['hora_ini'];
         $hora_ini = date("H:i:s"); #usar hora de servidor
         
@@ -660,7 +660,7 @@ class TasksController extends ControllerBase
             $project = $_POST['cboproject'];
         
         #current time
-        $now = date("Y-m-d H:i:s");
+        $now = date("Y/m/d H:i:s");
         $currentDateTime = new DateTime($now);
         $timezone = new DateTimeZone($session->timezone);
         $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
@@ -734,7 +734,7 @@ class TasksController extends ControllerBase
         $values = $pdoTask->fetch(PDO::FETCH_ASSOC);
         if($values != null && $values != false){
             // current time
-            $now = date("Y-m-d H:i:s");
+            $now = date("Y/m/d H:i:s");
             $currentDateTime = new DateTime($now);
             $timezone = new DateTimeZone($session->timezone);
             $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
@@ -805,7 +805,7 @@ class TasksController extends ControllerBase
             $values = $pdoModel->fetch(PDO::FETCH_ASSOC);
             if($values != false){
                 // current time
-                $now = date("Y-m-d H:i:s");
+                $now = date("Y/m/d H:i:s");
                 $currentDateTime = new DateTime($now);
                 $timezone = new DateTimeZone($session->timezone);
                 $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
@@ -879,7 +879,7 @@ class TasksController extends ControllerBase
             $values = $pdoTask->fetch(PDO::FETCH_ASSOC);
 
             // current time
-            $now = date("Y-m-d H:i:s");
+            $now = date("Y/m/d H:i:s");
             $currentDateTime = new DateTime($now);
             $timezone = new DateTimeZone($session->timezone);
             $currentDateTime = $currentDateTime->setTimezone($timezone);
@@ -1067,12 +1067,7 @@ class TasksController extends ControllerBase
             11 => 'L',
             12 => 'M'
         );
-        
-//        for($i=2; $i<5; $i++){
-//            $objPHPExcel->setActiveSheetIndex(0)
-//                    ->setCellValue($colArray[$i].''.$i, 'col: '.$colArray[$i].', i:'.$i);
-//        }
-        
+
         // Set content from data
         foreach ($data as $fila => $caso) {
             foreach ($caso as $col => $valor) {
@@ -1088,11 +1083,11 @@ class TasksController extends ControllerBase
                     }
                 }
             }
-            
+
             $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':G'.$row)->applyFromArray($style_content);
             $row++;
         }
-        
+
         // Set tasks total time on last row
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($colArray[5].''.$row, 'Tiempo total')
@@ -1100,27 +1095,26 @@ class TasksController extends ControllerBase
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($colArray[6].''.$row, $dataTotalTime)
                     ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
-        
+
         // Set autosize ON for each col
         foreach(range('A','G') as $columnID) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
                     ->setAutoSize(true);
         }
-        
+
         // Rename worksheet
         $objPHPExcel->getActiveSheet()->setTitle('Reporte');
-        
         
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Set excel filename
         $fileName = 'reporte_trabajos_'.$currentDatetime.'.xlsx';
-        
+
         // cleaning
         ob_end_clean();
         ob_start();
-        
+
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$fileName.'"');
@@ -1138,7 +1132,7 @@ class TasksController extends ControllerBase
         Utils::SaveViaTempFile($objWriter, '/var/zpanel/temp/');
         exit;
     }
-    
+
     public function processTasksJSON(){
         $session = FR_Session::singleton();
         require_once 'models/TasksModel.php';

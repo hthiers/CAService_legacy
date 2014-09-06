@@ -57,39 +57,6 @@ TableTools.BUTTONS.download = {
         nIFrame.style.height='0px';
         nIFrame.src = oConfig.sUrl+"&"+$.param(oParams);
         document.body.appendChild( nIFrame );
-        
-//        var nContentWindow = nIFrame.contentWindow;
-//        nContentWindow.document.open();
-//        nContentWindow.document.close();
-         
-//        var nForm = nContentWindow.document.createElement( 'form' );
-//        nForm.setAttribute( 'method', 'post' );
-//         
-//        /* Add POST data */
-//        for ( var i=0 ; i<aoPost.length ; i++ )
-//        {
-//            nInput = nContentWindow.document.createElement( 'input' );
-//            nInput.setAttribute( 'name', aoPost[i].name );
-//            nInput.setAttribute( 'type', 'text' );
-//            nInput.value = aoPost[i].value;
-//             
-//            nForm.appendChild( nInput );
-//        }
-//         
-//        /* Add GET data to the URL */
-//        var sUrlAddition = '';
-//        for ( var i=0 ; i<aoGet.length ; i++ )
-//        {
-//            sUrlAddition += aoGet[i].name+'='+aoGet[i].value+'&';
-//        }
-//         
-//        nForm.setAttribute( 'action', oConfig.sUrl );
-//         
-//        /* Add the form and the iframe */
-//        nContentWindow.document.body.appendChild( nForm );
-//         
-//        /* Send the request */
-//        nForm.submit();
     },
     "fnSelect": null,
     "fnComplete": null,
@@ -126,13 +93,6 @@ $(document).ready(function() {
                 
                 fnDrawCallback(json);
             });
-//            $.ajax({
-//                "dataType": 'json', 
-//                "type": "GET", 
-//                "url": sSource, 
-//                "data": aoData, 
-//                "success": fnDrawCallback
-//            });
         },
         
         "sDom": 'T<"top"lpf>rt<"clear">',
@@ -162,15 +122,6 @@ $(document).ready(function() {
                     "sButtonText": "Excel",
                     "sUrl": "?controller=tasks&action=ajaxBuildXls"
                 }
-//                {
-//                    "sExtends": "xls",
-//                    "mColumns": [0,1,2,3,4,5],
-//                    "sFileName": "Control de Trabajos.csv"
-//                },
-//                {
-//                    "sExtends": "pdf",
-//                    "mColumns": [0,1,2,3,4,5]
-//                }
             ]
         },
         
@@ -201,7 +152,7 @@ $(document).ready(function() {
                     if(oObj.aData[0] !== null){
                         var db_date = oObj.aData[0];
 //                        var date = new Date(db_date);
-//                        //console.log("fecha: "+date);
+                        console.log("fecha: "+db_date);
 //                        
 //                        var day = date.getDate();
 //                        var month = date.getMonth()+1;
