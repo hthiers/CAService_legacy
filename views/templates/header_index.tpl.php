@@ -9,7 +9,7 @@ $debugMode = $config->get('debug');
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Control tiempos de trabajo - demo no funcional v0.1</title>
+    <title>Control tiempos de trabajo - Beta v0.1.5</title>
     
     <style type="text/css" title="currentStyle">
 		@import "views/css/estilo.css";
