@@ -44,10 +44,11 @@ TableTools.BUTTONS.download = {
             { "name": "filCliente", "value": $('#cboCliente').val() },
             { "name": "filMes", "value": $('#cboMes').val() },
             { "name": "filType", "value": $('#cboType').val() },
-            { "name": "filEstado", "value": $('#cboEstado').val() }
+            { "name": "filEstado", "value": $('#cboEstado').val() },
+            { "name": "filUser", "value": $('#cboUser').val() }
         );
 
-        console.log(oParams);
+//        console.log(oParams);
 
         /* Create an IFrame to do the request */
         var nIFrame = document.createElement('iframe');
@@ -70,13 +71,6 @@ function stopTask(){
 
     return false;
 }
-
-//$.fn.dataTableExt.oApi.fnTotaTime = function(oSettings){
-//    return {
-//        "iTotalPages": oSettings._iDisplayLength === -1 ?
-//            0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
-//    };
-//};  
     
 $(document).ready(function() {
     var oTable = $('#example').dataTable({
@@ -131,7 +125,8 @@ $(document).ready(function() {
                 { "name": "filCliente", "value": $('#cboCliente').val() },
                 { "name": "filMes", "value": $('#cboMes').val() },
                 { "name": "filType", "value": $('#cboType').val() },
-                { "name": "filEstado", "value": $('#cboEstado').val() }
+                { "name": "filEstado", "value": $('#cboEstado').val() },
+                { "name": "filUser", "value": $('#cboUser').val() }
             );
         },
         
@@ -151,17 +146,6 @@ $(document).ready(function() {
                 "fnRender": function ( oObj ) {
                     if(oObj.aData[0] !== null){
                         var db_date = oObj.aData[0];
-//                        var date = new Date(db_date);
-                        console.log("fecha: "+db_date);
-//                        
-//                        var day = date.getDate();
-//                        var month = date.getMonth()+1;
-//                        var year = date.getFullYear();
-//                        var hours = date.getHours();
-//                        var minutes = date.getMinutes();
-//                        var seconds = date.getSeconds();
-//                        var string_date = day+"/"+month+"/"+year+" "+hours+":"+minutes+":"+seconds;
-
                         var string_date = formatDateTimeString(db_date);
                         
                         return string_date;
@@ -176,17 +160,6 @@ $(document).ready(function() {
                 "fnRender": function ( oObj ) {
                     if(oObj.aData[1] !== null){
                         var db_date = oObj.aData[1];
-//                        var date = new Date(db_date);
-//                        //console.log("fecha: "+date);
-//                        
-//                        var day = date.getDate();
-//                        var month = date.getMonth()+1;
-//                        var year = date.getFullYear();
-//                        var hours = date.getHours();
-//                        var minutes = date.getMinutes();
-//                        var seconds = date.getSeconds();
-//                        var string_date = day+"/"+month+"/"+year+" "+hours+":"+minutes+":"+seconds;
-
                         var string_date = formatDateTimeString(db_date);
                         
                         return string_date;
@@ -231,15 +204,11 @@ $(document).ready(function() {
         "aaSorting": [[0, "asc"]]
     });
     
-//    var oSettings = oTable.fnSettings();
-//    
-//    console.log(oSettings);
-//    console.log("total: "+oSettings.sInstance);
-    
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
     $('#cboMes').change(function() { oTable.fnDraw(); } );
     $('#cboType').change(function() { oTable.fnDraw(); } );
     $('#cboEstado').change(function() { oTable.fnDraw(); } );
+    $('#cboUser').change(function() { oTable.fnDraw(); } );
     
     // form submition handling
     $('#dt_form').submit( function() {
@@ -259,8 +228,6 @@ $(document).ready(function() {
     ahoraDay = ahora.getDate();
     ahoraMonth = ahora.getMonth();
     ahoraYear = ahora.getYear();
-    
-//    console.log("mes: "+ahoraMonth);
 });
 
 /*
@@ -301,20 +268,6 @@ require('templates/menu.tpl.php'); #banner & menu
         <!-- END DEBUG -->
 
         <p class="titulos-form"><?php echo $titulo; ?></p>
-
-        <!--
-        <p style="font-size: 12px; color: #999;">
-            Nota: Esta pantalla permitir&iacute;a gestionar todos los registros existentes en el sistema, en principio, solo para el usuario en sesi&oacute;n. 
-            Una barra azul en la cabecera de la p&aacute;gina muestra diferentes opciones de men&uacute;. En este caso solo funcionan como v&iacute;nculos 
-            el item de "TRABAJOS" y "NUEVO TRABAJO".
-            <br />
-            Sobre la tabla de abajo se encuentran los filtros de informaciÃ³n en la tabla.
-            Un bot&oacute;n de exportar permitir&iacute;a crear un documento Excel con todos los trabajos en vista.
-            Una columna de opciones permitir&iacute;a ejecutar ciertas acciones sobre un trabajo, en este caso se encuentra un v&iacute;nculo "ver"
-            para abrir un registro.
-            Haciendo clic en las cabeceras de la tabla es posible cambiar el orden por columna.
-        </p>
-        -->
         
         <?php 
         if (isset($error_flag)){
@@ -329,10 +282,12 @@ require('templates/menu.tpl.php'); #banner & menu
             <select id="cboMes">
                 <?php
                 for ($i=0; $i<sizeof($arrayDates); $i++){
-                    if($i == date("m"))
+                    if($i == date("m")){
                         echo "<option selected value='$i'>". $arrayDates[$i] . "</option>";
-                    else
+                    }
+                    else {
                         echo "<option value='$i'>". $arrayDates[$i] . "</option>"; 
+                    }
                     
                 }
                 ?>
@@ -363,6 +318,24 @@ require('templates/menu.tpl.php'); #banner & menu
                 echo "<option selected value=''>Todas</option>";
                 for ($i=0; $i<sizeof($types); $i++){
                         echo "<option value=".$types[$i][0].">". $types[$i][2] . "</option>";
+                }
+                ?>
+            </select>
+            
+            <label style="float:none;">Responsable: </label>
+            <select id="cboUser">
+                <?php
+                echo "<option value=''>Todos</option>";
+                
+                for ($i=0; $i<sizeof($users); $i++){
+                    
+                        //check if item is current user
+                        $selected = "";
+                        if($users[$i][0] == $session->id_user){
+                            $selected = "selected";
+                        }
+                        
+                        echo "<option ".$selected." value=".$users[$i][0].">". $users[$i][3] . "</option>";
                 }
                 ?>
             </select>

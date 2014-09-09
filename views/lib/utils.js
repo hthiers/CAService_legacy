@@ -16,11 +16,32 @@ function roundNumber(num, dec) {
 }
 
 /**
+ * Parse string in a ISO8601 format
+ * @param String input
+ * @param String format
+ * @returns {Date}
+ */
+function parseDate(input, format) {
+  format = format || 'yyyy-mm-dd'; // default format
+  var parts = input.match(/(\d+)/g), 
+      i = 0, fmt = {};
+  // extract date-part indexes from the format
+  format.replace(/(yyyy|dd|mm)/g, function(part) { fmt[part] = i++; });
+
+  return new Date(parts[fmt['yyyy']], parts[fmt['mm']]-1, parts[fmt['dd']]);
+}
+
+/**
  * Format date to local format
  */
 function formatDateTimeString(date_string)
 {
-    var date = new Date(date_string);
+    // Avoid dash (Safari parse error)
+    var date_s = date_string.substring(0,10).replace("-", "/").replace("-", "/");
+    var time_s = date_string.substring(11,19);
+    var fixed_date_string = date_s+' '+time_s;
+    
+    var date = new Date(fixed_date_string);
     
     var day = date.getDate();
     var month = date.getMonth()+1;

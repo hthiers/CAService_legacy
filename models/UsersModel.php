@@ -1,6 +1,24 @@
 <?php
 class UsersModel extends ModelBase
 {
+        public function getAllUserAccountByTenant($id_tenant)
+	{
+		//realizamos la consulta de todos los segmentos
+		$consulta = $this->db->prepare("SELECT 
+                                id_user
+                                , code_user
+                                , id_tenant
+                                , name_user
+                                , id_profile
+                            FROM cas_user
+                            WHERE id_tenant = '$id_tenant'");
+                
+		$consulta->execute();
+		
+		//devolvemos la coleccion para que la vista la presente.
+		return $consulta;
+	}
+    
 	public function getUserAccount($username, $password)
 	{
 		//realizamos la consulta de todos los segmentos

@@ -69,6 +69,20 @@ class TasksController extends ControllerBase
         
         $data['types'] = $types;
         
+        //Responsables (users)
+        require_once 'models/UsersModel.php';
+        $usersModel = new UsersModel();
+        $pdoUsers = $usersModel->getAllUserAccountByTenant($session->id_tenant);
+        $users = array();
+        
+        while($aRow = $pdoUsers->fetch(PDO::FETCH_NUM))
+        {
+            $users[] = $aRow;
+        }
+        
+        $data['users'] = $users;
+        
+        
         //Titulo pagina
         $data['titulo'] = "Lista de Trabajos";
 
@@ -223,6 +237,19 @@ class TasksController extends ControllerBase
 
             $sWhere .= " a.status_task = '".$_GET['filEstado']."' ";
         }
+        if( isset($_GET['filUser']) && $_GET['filUser'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " e.id_user = '".$_GET['filUser']."' ";
+        }
         
         # TENANT
         if ( $sWhere == "" )
@@ -370,22 +397,6 @@ class TasksController extends ControllerBase
 
         #echo $sql; //debug
         echo json_encode($output);
-        
-//        echo "<br />";
-//        echo "<br />";
-//        echo $sql;
-//        echo "<br />";
-//        echo "<br />";
-//        echo $sql_ids;
-//        echo "<br />";
-//        echo "<br />";
-//        echo $sql_time;
-//        echo "<br />";
-//        echo "<br />";
-//        echo $iFilteredTotal;
-//        echo "<br />";
-//        echo "<br />";
-//        echo $realTotal;
     }
     
     public function ajaxTasksList()
