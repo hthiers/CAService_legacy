@@ -418,14 +418,14 @@ class TasksController extends ControllerBase
     }
 
     /**
-     * show project info 
+     * show task info 
      */
     public function tasksView()
     {
         $session = FR_Session::singleton();
         $paused_date = null;
-
-        $id_task = $_POST['id_task'];
+        
+        $id_task = filter_input(INPUT_POST, 'task_id');
         $session->id_task = $id_task;
 
         require_once 'models/TasksModel.php';
@@ -479,6 +479,8 @@ class TasksController extends ControllerBase
             $data['id_customer'] = $values['cas_customer_id_customer'];
             $data['id_user'] = $values['id_user'];
             $data['name_user'] = $values['name_user'];
+            $data['label_customer'] = $values['label_customer'];
+            $data['label_type'] = $values['label_type'];
             
             $data['total_progress'] = $total_progress;
             $data['paused_date'] = $paused_date;
@@ -488,7 +490,96 @@ class TasksController extends ControllerBase
         $data['titulo'] = "Tarea #";
         $data['pdo'] = $pdo;
         
+        $data['action'] = "view";
+        
         $this->view->show("tasks_view.php", $data);
+    }
+    
+    public function tasksEditForm()
+    {
+        $session = FR_Session::singleton();
+        $paused_date = null;
+
+        $id_task = filter_input(INPUT_POST, 'task_id');
+        $session->id_task = $id_task;
+
+        require_once 'models/TasksModel.php';
+        require_once 'models/CustomersModel.php';
+        require_once 'models/TypesModel.php';
+        $model = new TasksModel();
+        $modelCustomer = new CustomersModel();
+        $modelTypes = new TypesModel();
+
+        $pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
+        $data['pdoTypes'] = $pdoTypes;
+        
+        $pdo = $model->getTaskById($session->id_tenant, $id_task);
+        
+        $values = $pdo->fetch(PDO::FETCH_ASSOC);
+        if($values != null && $values != false){
+            #time
+            if($values['time_total'] != null){
+                $time_s = round($values['time_total'], 2);
+                $time_m = round((float)$time_s / 60, 2);
+                $time_h = round((float)$time_m / 60, 2);
+                $data['time_s'] = $time_s;
+                $data['time_m'] = $time_m;
+                $data['time_h'] = $time_h;
+            }
+            
+            #current time
+            $now = date("Y/m/d H:i:s");
+            $currentDateTime = new DateTime($now);
+            $timezone = new DateTimeZone($session->timezone);
+            $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+            $data['currentTime'] = $current_date;
+            
+            #current progress
+            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
+
+            #paused time
+            if($values['date_pause'] != null){
+                $total_progress = $total_progress - $values['time_paused'];
+                
+                $paused_date = Utils::diffDates($values['date_pause'], $values['date_ini'], 'S', false);
+                $paused_date = $paused_date - $values['time_paused'];
+            }
+            
+            #customers
+            $pdoCustomer = $modelCustomer->getAllCustomers($session->id_tenant);
+            $data['pdoCustomer'] = $pdoCustomer;
+            
+            #data
+            $data['id_task'] = $values['id_task'];
+            $data['code_task'] = $values['code_task'];
+            $data['id_tenant'] = $values['id_tenant'];
+            $data['label_task'] = $values['label_task'];
+            $data['date_ini'] = $values['date_ini'];
+            $data['date_end'] = $values['date_end'];
+            $data['time_total'] = $values['time_total']; 
+            $data['desc_task'] = $values['desc_task'];
+            $data['date_pause'] = $values['date_pause'];
+            $data['time_paused'] = $values['time_paused'];
+            $data['status_task'] = $values['status_task'];
+            $data['id_project'] = $values['cas_project_id_project'];
+            $data['id_customer'] = $values['cas_customer_id_customer'];
+            $data['id_user'] = $values['id_user'];
+            $data['name_user'] = $values['name_user'];
+            $data['label_customer'] = $values['label_customer'];
+            $data['label_type'] = $values['label_type'];
+            
+            $data['total_progress'] = $total_progress;
+            $data['paused_date'] = $paused_date;
+            $data['currentTime'] = $current_date;
+        }
+
+        $data['titulo'] = "Edición de Trabajo #";
+        $data['pdo'] = $pdo;
+        
+        $data['controller'] = "tasks";
+        $data['action'] = "edit";
+        
+        $this->view->show("tasks_edit.php", $data);
     }
 
     /*
@@ -605,20 +696,37 @@ class TasksController extends ControllerBase
         
         $desc = $_POST['descripcion'];
 
-//        $fecha = $_POST['fecha'];
-        $fecha = date("Y/m/d"); #usar fecha de servidor
-//        $hora_ini = $_POST['hora_ini'];
-        $hora_ini = date("H:i:s"); #usar hora de servidor
+        $fecha = null;
+        $hora_ini = null;
+        
+        if($_POST['chk_past']){
+            $fecha = $_POST['fecha'];
+            $hora_ini = $_POST['hora_ini'];
+            $duration = $_POST['duration'];
+            
+            //Get end and duration if past job
+            $fecha_ini_full = $fecha.' '.$hora_ini;
+            $total_time = Utils::formatTimeSeconds($duration);
+            $fecha_fin = date('Y/m/d H:i:s', strtotime($fecha_ini_full)+$total_time);
+        }
+        else{
+            $fecha = date("Y/m/d"); #usar fecha de servidor
+            $hora_ini = date("H:i:s"); #usar hora de servidor
+        }
         
         $etiqueta = $_POST['etiqueta'];
         $estado = 1; #active by default
 
-//        require_once 'models/ProjectsModel.php';
         require_once 'models/TasksModel.php';
-
-//        $model = new ProjectsModel();
         $model = new TasksModel();
-        $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, null,null,$desc,$estado,$id_project, $id_customer);
+        
+        if($_POST['chk_past']){
+            $estado = 2;
+            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, $fecha_fin, $total_time,$desc,$estado,$id_project, $id_customer);
+        }
+        else{
+            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, null,null,$desc,$estado,$id_project, $id_customer);
+        }
         
         $query = $result->queryString;
         
@@ -626,22 +734,14 @@ class TasksController extends ControllerBase
         $rows_n = $result->rowCount();
 
         if($error[0] == 00000 && $rows_n > 0){
-//            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant); 
             $result = $model->getTaskIDByCode($session->id_tenant, $new_code);
             $values = $result->fetch(PDO::FETCH_ASSOC);
             
-//            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
             $result_user = $model->addUserToTask($values['id_task'], $id_user);
             $error_user = $result_user->errorInfo();
             
             $result_type = $model->addTypeToTask($values['id_task'], $id_type);
             $error_type = $result_type->errorInfo();
-            
-            #customer movido a pop-up de nuevo project
-//            if($customer != null){
-//                $result_cust = $model->addCustomerToProject($id_new_project, $customer);
-//                $error_cust = $result_cust->errorInfo();
-//            }
             
             #$this->projectsDt(1);
             header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=1");
@@ -658,7 +758,7 @@ class TasksController extends ControllerBase
     }
 
     public function ajaxTaskAdd()
-    {  
+    {
         $session = FR_Session::singleton();
 
         $label = $_POST['label'];
@@ -839,7 +939,7 @@ class TasksController extends ControllerBase
                 //pause project
                 $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
                         , $values['label_task'], $values['date_ini'], null
-                        , null, $values['desc_task'], $status, null, null
+                        , null, $values['desc_task'], $status, null, $values['cas_customer_id_customer']
                         , $values['date_pause'], $paused_progress);
 
                 if($result != null){
@@ -945,6 +1045,100 @@ class TasksController extends ControllerBase
         }
         else{
             #$this->projectsDt(10, "Error, el proyecto no ha sido encontrado.");
+            header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no existe tarea!");
+        }
+    }
+
+    /*
+     * Update task data (forced new datetime end)
+     */
+    public function tasksUpdate()
+    {
+        $session = FR_Session::singleton();
+        $id_task = $session->id_task;
+
+        if($id_task != null){
+            require_once 'models/TasksModel.php';
+            $model = new TasksModel();
+            
+            //Form vars
+            $id_customer = filter_input(INPUT_POST, 'cbocustomers');
+            $label_task = filter_input(INPUT_POST, 'etiqueta');
+            $desc_task = filter_input(INPUT_POST, 'descripcion');
+            $type = filter_input(INPUT_POST, 'materia');
+            $fecha_ini = filter_input(INPUT_POST, 'fecha_ini');
+            $hora_ini = filter_input(INPUT_POST, 'hora_ini');
+            $total_time = filter_input(INPUT_POST, 'duration');
+            
+            //Get current values
+            $pdoTask = $model->getTaskById($session->id_tenant, $id_task);
+            $values = $pdoTask->fetch(PDO::FETCH_ASSOC);
+            
+            //Avoid blank values
+            $label_task = empty($label_task) ? $values['label_task'] : $label_task;
+            $desc_task = empty($desc_task) ? $values['desc_task'] : $desc_task;
+            $type = empty($type) ? null : $type;
+            $hora_ini = empty($hora_ini) ? null : $hora_ini;
+            
+            //Date time fix (in case of blank)
+            $fecha_ini_fix = null;
+            if(empty($fecha_ini)){
+                $fecha_ini_fix = $values['date_ini'];
+            }
+            else{
+                $fecha_ini_fix = $fecha_ini.' '.$hora_ini;
+            }
+            
+            //Calculate new end date by the new total time
+            $total_time_fix = null;
+            
+            if(empty($total_time)){
+                $total_time_fix = $values['time_total'];
+            }
+            else{
+                $total_time_fix = Utils::formatTimeSeconds($total_time);
+//                $date_end = date('Y/m/d H:i:s', strtotime($fecha_ini_fix." +".$hours." hour ".$minutes." minutes ".$seconds." seconds"));
+            }
+            
+            $date_end = date('Y/m/d H:i:s', strtotime($fecha_ini_fix)+$total_time_fix);
+            
+            
+            //Force new end datetime
+            $date_paused = null;
+            $time_paused = null;
+            
+            //Get update method
+            $result = $model->updateTask($session->id_tenant
+                    , $values['id_task']
+                    , $values['code_task']
+                    , $label_task
+                    , $fecha_ini_fix
+                    , $date_end
+                    , $total_time_fix
+                    , $desc_task
+                    , $values['status_task']
+                    , null
+                    , $id_customer
+                    , $date_paused
+                    , $time_paused);
+
+            if($result != null){
+                $error = $result->errorInfo();
+                $numr = $result->rowCount();
+
+                if($error[0] == 00000){                   
+                    header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=1");
+                }
+                else{
+                    $url = "?controller=tasks&action=tasksDt&error_flag=10&message=";
+                    header("Location: ".$this->root.$url."'Error al intentar editar: ".$error[2]."'");
+                }
+            }
+            else{
+                header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: actualizacion fallida!");
+            }
+        }
+        else{
             header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no existe tarea!");
         }
     }

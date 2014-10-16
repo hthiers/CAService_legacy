@@ -71,6 +71,62 @@ function formatDateTimeString(date_string)
 }
 
 /**
+ * Format date to local format (without time)
+ */
+function formatDateTimeStringNoTime(date_string, format)
+{
+    // Avoid dash (Safari parse error)
+    var date_s = date_string.substring(0,10).replace("-", "/").replace("-", "/");
+    var time_s = date_string.substring(11,19);
+    var fixed_date_string = date_s+' '+time_s;
+    
+    var date = new Date(fixed_date_string);
+    
+    var day = date.getDate();
+    var month = date.getMonth()+1;
+    var year = date.getFullYear();
+
+    var string_date = "";
+
+    if(format === 'es'){
+        string_date = day+"/"+month+"/"+year;
+    }
+    else{
+        string_date = year+"/"+month+"/"+day;
+    }
+
+    return string_date;
+}
+
+/**
+ * Format date to local time format (time)
+ */
+function formatDateTimeStringTime(date_string)
+{
+    // Avoid dash (Safari parse error)
+    var date_s = date_string.substring(0,10).replace("-", "/").replace("-", "/");
+    var time_s = date_string.substring(11,19);
+    var fixed_date_string = date_s+' '+time_s;
+    
+    var date = new Date(fixed_date_string);
+    
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+
+    if(hours<10)
+        hours = '0'+hours;
+    if(minutes<10)
+        minutes = '0'+minutes;
+    if(seconds<10)
+        seconds = '0'+seconds;
+
+    var string_time = hours+":"+minutes+":"+seconds;
+
+    return string_time;
+}
+
+/**
  * Format seconds to array
  */
 function secondsToTime(secs)

@@ -65,6 +65,8 @@ class TasksModel extends ModelBase
                     , c.label_customer
                     , e.id_user
                     , e.name_user
+                    , f.cas_type_id_type
+                    , g.label_type
                 FROM  cas_task a
                 LEFT OUTER JOIN cas_project b
                 ON (a.cas_project_id_project = b.id_project
@@ -78,6 +80,10 @@ class TasksModel extends ModelBase
                 ON a.id_task = d.cas_task_id_task
                 LEFT OUTER JOIN cas_user e
                 ON d.cas_user_id_user = e.id_user
+                LEFT OUTER JOIN cas_task_has_cas_type f
+                ON a.id_task = f.cas_task_id_task
+                LEFT OUTER JOIN cas_type g
+                ON f.cas_type_id_type = g.id_type
                 WHERE a.id_tenant = $id_tenant");
 
         $consulta->execute();
@@ -111,11 +117,21 @@ class TasksModel extends ModelBase
                     , c.name_user
                     , a.date_pause
                     , a.time_paused
+                    , d.cas_type_id_type
+                    , e.label_type
+                    , f.label_customer
                 FROM  cas_task a
                 LEFT OUTER JOIN cas_task_has_cas_user b
                 ON a.id_task = b.cas_task_id_task
                 LEFT OUTER JOIN cas_user c
                 ON b.cas_user_id_user = c.id_user
+                LEFT OUTER JOIN cas_task_has_cas_type d
+                ON a.id_task = d.cas_task_id_task
+                LEFT OUTER JOIN cas_type e
+                ON d.cas_type_id_type = e.id_type
+                LEFT OUTER JOIN cas_customer f
+                ON (a.cas_customer_id_customer = f.id_customer
+                AND a.id_tenant = f.id_tenant)
                 WHERE a.id_tenant = ?
                   AND a.id_task = ?
                 ORDER BY a.label_task
@@ -298,6 +314,12 @@ class TasksModel extends ModelBase
         return $consulta;
     }
     
+    /**
+     * Add a type to an existent task
+     * @param type $id_task
+     * @param type $id_type
+     * @return type
+     */
     public function addTypeToTask($id_task, $id_type)
     {
         $consulta = $this->db->prepare("INSERT INTO cas_task_has_cas_type 
@@ -320,10 +342,15 @@ class TasksModel extends ModelBase
      * @param type $stop_date
      * @param type $total_time
      * @param type $desc
+     * @param type $status
+     * @param type $id_project
+     * @param type $id_customer
+     * @param type $date_pause
+     * @param type $time_paused
      * @return PDO
      */
     public function updateTask($id_tenant, $id_task, $code_task, $etiqueta
-            , $init_date, $stop_date, $total_time, $desc, $status, $id_project, $id_customer
+            , $init_date, $stop_date, $total_time, $desc, $status, $id_project = null, $id_customer = null
             , $date_pause, $time_paused)
     {
         // force null values
@@ -343,10 +370,9 @@ class TasksModel extends ModelBase
                     , time_total = $total_time
                     , desc_task = '$desc'
                     , status_task = '$status'
-                    , cas_project_id_project = $id_project
-                    , cas_customer_id_customer = $id_customer
                     , date_pause = $date_pause
                     , time_paused = $time_paused
+                    , cas_customer_id_customer = $id_customer
                     WHERE id_tenant = $id_tenant
                       AND id_task = $id_task");
 

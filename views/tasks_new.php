@@ -65,6 +65,8 @@ if($session->id_tenant != null && $session->id_user != null):
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/jquery.timepicker.min.js"></script>
 <script type="text/javascript">
     // JQDialog window
     var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
@@ -73,12 +75,6 @@ if($session->id_tenant != null && $session->id_user != null):
         //var myDate = new Date();
         //var displayDate = myDate.getFullYear() + '/' + (myDate.getMonth()+1) + '/' + (myDate.getDate());
         //var outStr = myDate.getHours()+':'+myDate.getMinutes()
-       
-        var displayDate = "<?php echo $current_date; ?>";
-        var outStr = "<?php echo $current_time; ?>";
-       
-        $("#hora_ini").val(outStr);
-        $("#hdnPicker").val(displayDate);
         
         // Btn play
         $("#btn_play").click(function (event){
@@ -90,7 +86,7 @@ if($session->id_tenant != null && $session->id_user != null):
             var name = $("#dlgSbm_name_customer").val();
             var desc = $("#dlgSbm_desc_customer").val();
             //var dataString = 'name='+ name + '&desc=' + desc;
-            if(name == '')
+            if(name === '')
             {
                 alert("Ingrese título del cliente");
             }
@@ -172,6 +168,42 @@ if($session->id_tenant != null && $session->id_user != null):
 
             return false;
 	});
+        
+        var date_ini = "<?php echo $current_date; ?>";
+        $("#hdnPicker").val(date_ini);
+        
+        //set timepicker for init time field
+        var task_time = "<?php echo $current_time; ?>";
+        $("#hora_ini").val(task_time);
+
+//        $('#hora_ini').val(task_time.substring(0,5));
+        $('#hora_ini').timepicker({
+            'step': 15,
+            'scrollDefault': task_time,
+            'timeFormat': 'H:i'
+        });
+
+        //set duration picker
+        $('#duration').val('00:15:00');
+        $('#duration').timepicker({
+            'step': 15,
+            'minTime': '00:15:00',
+            'scrollDefault': '00:15:00',
+            'timeFormat': 'H:i:s'
+        });
+        
+        //hide fields for past jobs
+        $(".hdn_row").hide();
+        
+        //show hidden fields by checkbox
+        $("#chk_past").on("click", function(){
+            if($("#chk_past").prop("checked")){
+                $(".hdn_row").show();
+            }
+            else{
+                $(".hdn_row").hide();
+            }
+        });
     });
     
     // JQDatepicker
@@ -186,6 +218,7 @@ if($session->id_tenant != null && $session->id_user != null):
         $( "#datepicker" ).datepicker({
             firstDay: 1,
             dateFormat: "yy/mm/dd",
+            maxDate: "0D",
             onSelect: function(date, picker){
                 $("#hdnPicker").val(date);
             }
@@ -415,8 +448,12 @@ if($session->id_tenant != null && $session->id_user != null):
                                 <input type="text" class="input_box" name="etiqueta" />
                             </td>
                         </tr>
-                    </table>
-                    <table class="table_right">
+                        <tr>
+                            <td class="middle">Descripci&oacute;n</td>
+                            <td class="middle">
+                                <textarea class="input_box" name="descripcion"></textarea>
+                            </td>
+                        </tr>
                         <tr>
                             <td class="middle">Materia</td>
                             <td class="middle">
@@ -433,20 +470,24 @@ if($session->id_tenant != null && $session->id_user != null):
                                 <a id="create-type" href="#">Nueva Materia</a>
                             </td>
                         </tr>
+                    </table>
+                    <table class="table_right">
                         <tr>
-                            <td>Descripci&oacute;n</td>
-                            <td>
-                                <textarea class="input_box" name="descripcion"></textarea>
-                            </td>
+                            <td class="middle" colspan="2">¿Trabajo ya realizado? <input style="width: 20px;" id="chk_past" class="input_box" name="chk_past" type="checkbox" /></td>
+                            <td class="middle"></td>
                         </tr>
-<!--                        <tr>
+                        <tr class="hdn_row">
                             <td class="middle">Fecha inicio</td>
                             <td class="middle"><div id="datepicker"></div></td>
                         </tr>
-                        <tr>
+                        <tr class="hdn_row">
                             <td class="middle">Hora inicio</td>
                             <td class="middle"><input id="hora_ini" class="input_box" name="hora_ini" type="text" value="" /></td>
-                        </tr>-->
+                        </tr>
+                        <tr class="hdn_row">
+                            <td class="middle">Duración</td>
+                            <td class="middle"><input id="duration" class="input_box" name="duration" type="text" value="" /></td>
+                        </tr>
                     </table>
                 </div>
                 <table id="trabajo_timing" style="float: none; width: 100%; border-top: 1px solid #CCC;">

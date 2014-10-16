@@ -54,7 +54,9 @@ class Utils
             case "W"   :   $resultado = $resultado / 60 / 60 / 24 / 7;   break;
         }
         
-        if($redondear) $resultado = round($resultado);
+        if($redondear){
+            $resultado = round($resultado);
+        }
 
         return $resultado;
     }
@@ -73,9 +75,21 @@ class Utils
             case "W"   :   $resultado = $resultado / 60 / 60 / 24 / 7;   break;
         }
         
-        if($redondear) $resultado = round($resultado);
+        if($redondear){
+            $resultado = round($resultado);
+        }
 
         return $resultado;
+    }
+    
+    public static function formatTimeSeconds($time){
+        $hours = substr($time, 0, 2);
+        $minutes = substr($time, 3, 2);
+        $seconds = substr($time, 6, 2);
+        
+        $time_seconds = $hours*3600 + $minutes*60 + $seconds;
+        
+        return $time_seconds;
     }
     
     /**

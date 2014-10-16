@@ -63,22 +63,40 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    var current_time = "";
+    requested_action = "<?php echo $action;?>";
+    console.log(requested_action);
     
-    $('.input_box').attr('disabled', 'disabled');
-//    $('#btn_play').attr('disabled', 'disabled');
+    if(requested_action === "view"){
+        $('.input_box').attr('disabled', 'disabled');
+        $('.input_box').attr('readonly', 'readonly');
+    }
 
-    $("#btn_play").click(function (event){
+    $("#btn_play").click(function (){
         iniTrabajo();
     });
 
-     $("#btn_pause").click(function (event){
+    $("#btn_pause").click(function (){
         pausaTrabajo();
+    });
+    
+    $("#btn_save").click(function (){
+        
+        var urlAction = "<?php echo "?controller=".$controller."&action=tasksEdit";?>";
+    
+        $('#formModule').attr('action', urlAction);
+        $('#formModule').attr('method', 'POST');        
+        $("#formModule").submit();
+    });
+    
+    $("#btn_cancel").click(function (){
+        parent.history.back();
+        return false;
     });
 
     $("#btn_stop").click(function (event){
-        //$("#formModule").attr("action", "?controller=Projects&action=projectsStop");
-        //window.location.replace("<?php #echo $rootPath;?>?controller=Projects&action=projectsDt"); 
+        event.preventDefault();
+        $("#formModule").attr("action", "?controller=tasks&action=tasksStop");
+        $("#formModule").attr("method", "post");
         $('#formModule').submit();
     });
 
@@ -192,6 +210,41 @@ function pausaTrabajo(){
         alert("ajax error: "+textStatus);
     });
 }
+
+function updateTask(){
+    var id_task = "<?php echo $id_task;?>";
+
+    $.ajax({
+        type: "POST",
+        url: "?controller=tasks&action=tasksPause",
+        data: {id_task:id_task},
+        cache: false,
+        dataType: "json"
+    }).done(function(response){
+        if(response !== null){
+            console.log(response);
+            if(response[0] === "0"){
+//                $("#flash").hide();
+                $('#btn_play').removeAttr('disabled');
+                $('#btn_pause').attr('disabled', 'disabled');
+                
+                console.log("task paused!");
+                current_time = $('#progress_clock').val();
+                clearTimeout(timeout);
+            }
+            else{
+                alert("sql error");
+            }
+        }
+        else{
+            console.log(response);
+            alert("response null");
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log(textStatus);
+        alert("ajax error: "+textStatus);
+    });
+}
 </script>
 
 </head>
@@ -247,30 +300,26 @@ function pausaTrabajo(){
         <div id="dt_filtres">
 
             <div>
-                <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
-                <form id="formModule" name="formModule" method="post" action="?controller=tasks&action=tasksStop">
-                <?php else: ?>
-                <form>
-                <?php endif; ?>
+                <form id="formModule" name="formModule" method="" action="">
                     <table class="table_left">
                         <tr>
                             <td class="middle">Responsable</td>
-                            <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
+                            <td class="middle"><input class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
                         </tr>
                         <tr>
                             <td class="middle">Cliente</td>
-                            <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $label_customer; ?>" /></td>
+                            <td class="middle"><input class="input_box" name="cliente" type="text" value="<?php echo $label_customer; ?>" /></td>
                         </tr>
                         <tr>
                             <td class="middle">Gestion</td>
                             <td class="middle">
-                                <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo $label_task; ?>" />
+                                <input type="text" class="input_box" name="etiqueta" value="<?php echo $label_task; ?>" />
                             </td>
                         </tr>
                         <tr>
                             <td>Descripción</td>
                             <td>
-                                <textarea readonly="readonly" class="input_box" name="descripcion"><?php echo $desc_task;?></textarea>
+                                <textarea class="input_box" name="descripcion"><?php echo $desc_task;?></textarea>
                             </td>
                         </tr>
                     </table>
@@ -278,75 +327,86 @@ function pausaTrabajo(){
                         <tr>
                             <td class="middle">Materia</td>
                             <td class="middle">
-                                <input type="text" class="input_box" name="materia" />
+                                <input type="text" class="input_box" name="materia" value="<?php echo $label_type; ?>" />
                             </td>
                         </tr>
                         <tr>
                             <td class="middle">Fecha inicio</td>
-                            <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
+                            <td class="middle"><input class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
                         </tr>
-                        <?php 
-                        // Active and on time
-                        if($status_task == 1 && strtotime($currentTime) > strtotime($date_ini)): ?>
-                        <tr>
-                            <td class="middle">Tiempo transcurrido</td>
-                            <td class="middle">
-                                <input id="progress_clock" readonly="readonly" class="input_box" name="tiempo_progress" type="text" value="" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="text-align: center;">Control de tiempo 
-                                <br /><br />
-                                <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
-                                <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
-                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
-                            </td>
-                        </tr>
-                        <?php 
-                        // Active and scheduled in future
-                        elseif($status_task == 1 && strtotime($currentTime) < strtotime($date_ini)):?>
-                        <tr>
-                            <td colspan="2" style="text-align: center;">Control de tiempo 
-                                <br /><br />
-                                <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
-                                <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
-                            </td>
-                        </tr>
-                        <?php 
-                        // Paused
-                        elseif($status_task == 3 && strtotime($currentTime) > strtotime($date_ini)):?>
-                        <tr>
-                            <td class="middle">Tiempo transcurrido</td>
-                            <td class="middle">
-                                <input id="progress_clock" readonly="readonly" class="input_box" name="tiempo_progress" type="text" value="" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="text-align: center;">Control de tiempo 
-                                <br /><br />
-                                <input id="btn_play" class="time_control" type="button" value="INICIO" />
-                                <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
-                            </td>
-                        </tr>
-                        <?php 
-                        // Finalized
-                        else: ?>
-                        <tr>
-                            <td class="middle">Fecha fin</td>
-                            <td class="middle"><input readonly="readonly" class="input_box" name="fecha_fin" type="text" value="<?php echo $date_end; ?>" /></td>
-                        </tr>
-                        <tr>
-                            <td class="middle">Tiempo total</td>
-                            <td class="middle">
-                                <input id="inptTiempoTotal" readonly="readonly" class="input_box" name="tiempo_total" type="text" value="" />
+                        <?php
+                        if($action !== "edit"):
+                            // Active and on time
+                            if($status_task == 1 && strtotime($currentTime) > strtotime($date_ini)): ?>
+                            <tr>
+                                <td class="middle">Tiempo transcurrido</td>
+                                <td class="middle">
+                                    <input id="progress_clock" readonly="readonly" class="input_box" name="tiempo_progress" type="text" value="" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">Control de tiempo 
+                                    <br /><br />
+                                    <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
+                                    <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
+                                    <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
+                                </td>
+                            </tr>
+                            <?php 
+                            // Active and scheduled in future
+                            elseif($status_task == 1 && strtotime($currentTime) < strtotime($date_ini)):?>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">Control de tiempo 
+                                    <br /><br />
+                                    <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
+                                    <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
+                                    <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
+                                </td>
+                            </tr>
+                            <?php 
+                            // Paused
+                            elseif($status_task == 3 && strtotime($currentTime) > strtotime($date_ini)):?>
+                            <tr>
+                                <td class="middle">Tiempo transcurrido</td>
+                                <td class="middle">
+                                    <input id="progress_clock" readonly="readonly" class="input_box" name="tiempo_progress" type="text" value="" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align: center;">Control de tiempo 
+                                    <br /><br />
+                                    <input id="btn_play" class="time_control" type="button" value="INICIO" />
+                                    <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
+                                    <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
+                                </td>
+                            </tr>
+                            <?php 
+                            // Finalized
+                            else: ?>
+                            <tr>
+                                <td class="middle">Fecha fin</td>
+                                <td class="middle"><input readonly="readonly" class="input_box" name="fecha_fin" type="text" value="<?php echo $date_end; ?>" /></td>
+                            </tr>
+                            <tr>
+                                <td class="middle">Tiempo total</td>
+                                <td class="middle">
+                                    <input id="inptTiempoTotal" readonly="readonly" class="input_box" name="tiempo_total" type="text" value="" />
 
-                                <input type="hidden" id="time_total_s" name="time_total_s" value="<?php echo $time_s; ?>" />
-                                <input type="hidden" id="time_total_m" name="time_total_m" value="<?php echo $time_m; ?>" />
-                                <input type="hidden" id="time_total_h" name="time_total_h" value="<?php echo $time_h; ?>" />
-                            </td>
-                        </tr>
+                                    <input type="hidden" id="time_total_s" name="time_total_s" value="<?php echo $time_s; ?>" />
+                                    <input type="hidden" id="time_total_m" name="time_total_m" value="<?php echo $time_m; ?>" />
+                                    <input type="hidden" id="time_total_h" name="time_total_h" value="<?php echo $time_h; ?>" />
+                                </td>
+                            </tr>
+                            <?php endif;?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="2" style="text-align: center;"> 
+                                    <br /><br />
+                                    <input id="btn_save" class="time_control" type="button" value="GRABAR" />
+                                    <input id="btn_clean" class="time_control" type="reset" value="LIMPIAR" />
+                                    <input id="btn_cancel" class="time_control" type="button" value="CANCELAR" />
+                                </td>
+                            </tr>
                         <?php endif; ?>
                     </table>
                     <div style="clear: both;">
@@ -379,4 +439,3 @@ function pausaTrabajo(){
 #endif; #privs
 endif; #session
 require('templates/footer.tpl.php');
-?>

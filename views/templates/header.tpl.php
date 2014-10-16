@@ -21,10 +21,11 @@ $navegador = substr($navegador,25,8);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-<title>Control tiempos de trabajo - Beta v0.1.5</title>
+<title>Control tiempos de trabajo - Beta v0.1.6</title>
 <!-- @import "views/css/custom-theme/jquery-ui-1.8.20.custom.css"; -->
 <style type="text/css">
     @import "views/css/custom-theme-blue/jquery-ui-1.8.23.custom.css";
+    @import "views/css/jquery.timepicker.css";
     @import "views/css/estilo.css";
     @import "views/css/reset-min.css";
     @import "views/css/formularios.css";

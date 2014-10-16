@@ -63,13 +63,37 @@ TableTools.BUTTONS.download = {
     "fnComplete": null,
     "fnInit": null
 };
-    
-function stopTask(){
-//    sin efecto....
-//    console.log("boton terminar ok");
-//    console.log("boton val: "+$(this).attr("value"));
 
-    return false;
+/*
+* Getting needed value from dt row
+ */
+function fnFormatDetails (oTable, nTr){
+    var aData = oTable.fnGetData( nTr );
+    return aData[6];
+}
+
+function viewTask(task){
+    console.log(task);
+
+    var urlAction = "<?php echo "?controller=".$controller."&action=tasksView";?>";
+    
+    $('#dt_form').attr('action', urlAction);
+    $('#dt_form').attr('method', 'POST');
+    $('#task_id').val(task);
+    
+    $("#dt_form").submit();
+}
+
+function editTask(task){
+    console.log(task);
+    
+    var urlAction = "<?php echo "?controller=".$controller."&action=tasksEditForm";?>";
+    
+    $('#dt_form').attr('action', urlAction);
+    $('#dt_form').attr('method', 'POST');
+    $('#task_id').val(task);
+    
+    $("#dt_form").submit();
 }
     
 $(document).ready(function() {
@@ -186,18 +210,21 @@ $(document).ready(function() {
             },
             {
                 "fnRender": function ( oObj ) {
-//                    console.log(oObj);
+                    //console.log(oObj.aData[1]);
                 
                     if(oObj.aData[1] === null || oObj.aData[1] === ""){
-                        return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"stopTask()\" value="'+oObj.aData[7]+'">VER</button>';
+                        return "<input type='button' id=\'btn_view\' class=\'input\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='VER' />";
                     }
-                    else{
+                    else if(oObj.aData[1] !== null && oObj.aData[1] !== ""){
 //                        console.log(oObj);
+                        return "<input type='button' id=\'btn_edit\' class=\'input\' name='"+oObj.aData[7]+"' onclick='editTask("+oObj.aData[7]+")' value='EDITAR' />";
+                    }
+                    else {
                         return '';
                     }
                 },
                 "aTargets": [-1]
-            },
+            }
         ],
         
         "sPaginationType": "full_numbers",
@@ -210,33 +237,35 @@ $(document).ready(function() {
     $('#cboEstado').change(function() { oTable.fnDraw(); } );
     $('#cboUser').change(function() { oTable.fnDraw(); } );
     
+//    $("#dt_form input").click(function (){
+//        console.log("click: ");
+//    });
+    
     // form submition handling
-    $('#dt_form').submit( function() {
-        var sData = oTable.$('input').serialize();
-        var actionType = $('#action_type').val();
-        var urlAction = "";
-        
-        if(actionType == 'edit_form'){
-            urlAction = "<?php echo "?controller=".$controller."&amp;action=".$action;?>";
-            $('#action_type').val("");
-            
-            return true;
-        }
-    });
+//    $('#dt_form').submit( function(event) {
+//        event.preventDefault();
+//        
+////        var sData = oTable.$('input').serialize();
+////        var actionType = $('#action_type').val();
+////        var urlAction = "";
+//        
+//        console.log(this);
+//        
+//        return false;
+//        
+////        if(actionType == 'edit_form'){
+////            urlAction = "<?php #echo "?controller=".$controller."&amp;action=".$action;?>";
+////            $('#action_type').val("");
+////            
+////            return true;
+////        }
+//    });
     
     ahora = new Date();
     ahoraDay = ahora.getDate();
     ahoraMonth = ahora.getMonth();
     ahoraYear = ahora.getYear();
 });
-
-/*
-* Getting needed value from dt row
- */
-function fnFormatDetails (oTable, nTr){
-    var aData = oTable.fnGetData( nTr );
-    return aData[6];
-}
 </script>
 
 </head>
@@ -344,7 +373,7 @@ require('templates/menu.tpl.php'); #banner & menu
          
         <!-- DATATABLE -->
         <div id="dynamic">
-            <form id="dt_form" method="POST" action="<?php echo "?controller=".$controller."&amp;action=".$action;?>">
+            <form id="dt_form" method="" action="">
                 <table class="display" id="example">
                     <thead>
                         <tr class="headers">
@@ -370,13 +399,13 @@ require('templates/menu.tpl.php'); #banner & menu
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="11" class="dataTables_empty">Loading data from server</td>
+                            <td colspan="11" class="dataTables_empty">Procesando...</td>
                         </tr>
                     </tbody>
                 </table>
                 <table style="float:left"> <!-- style float solo para perderlo -->
                     <tr>
-                        <td><input id="action_type" type="hidden" name="action_type" value="" /></td>
+                        <td><input id="task_id" type="hidden" name="task_id" value="" /></td>
                     </tr>
                 </table>
             </form>
