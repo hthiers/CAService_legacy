@@ -32,7 +32,7 @@ $url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER
 include 'libs/Menu.php';
 $menu = new Menu();
 #$menu->loadMenu($session,$navegador,$rootPath,$controller);
-$menu->loadTestMenu();
+$menu->loadMainMenu($session);
 ?>
 </div>
 <!-- END MENU -->

@@ -1,3 +1,5 @@
 config.php
 error_log
 .directory
+config.php~
+nbproject/

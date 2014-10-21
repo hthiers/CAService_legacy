@@ -83,6 +83,55 @@ class Menu extends ModelBase
             }
         }
         
+        function loadMainMenu($session)
+        {
+            if($session->id_profile == 1)
+            {
+                $this->loadMainMenuAdmin();
+            }
+            
+            else if($session->id_profile == 2)
+            {
+                $this->loadMainMenuGeneric();
+            }
+        }
+        
+        function loadMainMenuAdmin() 
+        {
+            $menuFullString = '<ul id="menu">';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
+                $menuFullString.= '</li>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO TRABAJO</a>';
+                $menuFullString.= '</li>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
+                $menuFullString.= '</li>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersAddForm">NUEVO CLIENTE</a>';
+                $menuFullString.= '</li>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=panel&amp;action=usersDt">USUARIOS</a>';
+                $menuFullString.= '</li>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=panel&amp;action=newUserForm">NUEVO USUARIO</a>';
+                $menuFullString.= '</li>';
+            $menuFullString.= '</ul>';
+            
+            print $menuFullString;
+        }
+        
+        function loadMainMenuGeneric()
+        {
+            $menuFullString = '<ul id="menu">';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
+                $menuFullString.= '</li>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO TRABAJO</a>';
+                $menuFullString.= '</li>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
+                $menuFullString.= '</li>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersAddForm">NUEVO CLIENTE</a>';
+                $menuFullString.= '</li>';
+            $menuFullString.= '</ul>';
+            
+            print $menuFullString;
+        }
+        
         function loadTestMenu()
         {
             $menuFullString = '<ul id="menu">';
