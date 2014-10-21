@@ -273,7 +273,7 @@ class UsersModel extends ModelBase
             return $consulta;
         }
         
-        public function addNewUser($nombre, $apellidop, $apellidom, $username, $password, $privilegio)
+        public function addNewUserAlpha($nombre, $apellidop, $apellidom, $username, $password, $privilegio)
         {
             require_once 'AdminModel.php';
             $logModel = new AdminModel();
@@ -352,6 +352,91 @@ class UsersModel extends ModelBase
             
             //devolvemos la coleccion para que la vista la presente.
             return $consulta;
+        }
+        
+        //Nuevos métodos para contexto de user
+        public function addNewUser($id_tenant, $code_user, $name_user, $id_profile, $password_user)
+        {
+            $name = empty($name_user) ? "NULL" : "$name_user";
+            $password = md5($password_user);
+            
+            $consulta = $this->db->prepare("INSERT INTO cas_user "
+                    . "(id_user, code_user, id_tenant, name_user, "
+                    . "id_profile, password_user) VALUES (NULL, "
+                    . "$code_user, $id_tenant, '$name', $id_profile, '$password');");
+            
+            $consulta->execute();
+            
+            return $consulta;
+            
+        }
+        
+        public function getLastCodeUser()
+        {
+            $consulta = $this->db->prepare("SELECT MAX( code_user ) 'code' FROM cas_user");
+            $consulta->execute();
+            return $consulta;
+        } 
+        
+        public function getUserById(UserVO $user)
+        {
+            $query = $this->db->prepare("SELECT id_user, code_user, id_tenant, name_user, "
+                    . "id_profile, password_user from cas_user where id_user =".$user->getIdUser());
+            $query->execute();
+            return $query;
+        }
+        
+        public function editUser(UserVO $user)
+        {   
+            $query = $this->db->prepare("UPDATE cas_user set code_user=".$user->getCodeUser().", "
+                    . "id_tenant=".$user->getIdTenant().", name_user='".$user->getNameUser()."', "
+                    . "id_profile=".$user->getIdProfile().", password_user='".$user->getPasswordUser()."' "
+                    . "where id_user=".$user->getIdUser());
+            $query->execute();
+            return $query;
+        }
+        
+        public function getAllUsers(UserVO $user)
+        {
+            $query = $this->db->prepare("SELECT u.id_user, u.code_user, u.id_tenant, u.name_user, p.label_profile "
+                    . "from cas_user u inner join cas_profile p on u.id_profile = p.id_profile where u.id_tenant = ".$user->getIdTenant()." "
+                    . "order by u.name_user");
+        
+            $query->execute();
+            return $query;
+        }
+        
+        public function removeUserAction()
+        {
+        
+        }
+        
+        /**
+         * Get PDO object from custom sql query
+         * NOTA: Esta función impide tener un control de la consulta sql (depende desde donde se llame).
+         * @param string $sql
+         * @return PDO
+         */
+        public function goCustomQuery($sql)
+        {
+            $consulta = $this->db->prepare($sql, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+
+            $consulta->execute();
+            //print_r($consulta);
+            return $consulta;
+            //print_r($consulta);
+        }
+        
+        /**
+         * Get database table name linked to this model
+         * NOTA: Solo por lógica modelo = tabla
+         * @return string 
+         */
+        public function getTableName()
+        {
+            $tableName = "cas_user";
+            
+            return $tableName;
         }
 }
 ?>
