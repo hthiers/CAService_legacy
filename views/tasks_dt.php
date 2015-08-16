@@ -146,7 +146,8 @@ $(document).ready(function() {
         //Custom filters params
         "fnServerParams": function ( aoData ){
             aoData.push(
-                { "name": "filCliente", "value": $('#cboCliente').val() },
+		{ "name": "filAnio", "value": $('#cboAnio').val() },                
+		{ "name": "filCliente", "value": $('#cboCliente').val() },
                 { "name": "filMes", "value": $('#cboMes').val() },
                 { "name": "filType", "value": $('#cboType').val() },
                 { "name": "filEstado", "value": $('#cboEstado').val() },
@@ -230,41 +231,32 @@ $(document).ready(function() {
         "sPaginationType": "full_numbers",
         "aaSorting": [[0, "asc"]]
     });
-    
+     
+    ahora = new Date();
+    ahoraDay = ahora.getDate();
+    ahoraMonth = ahora.getMonth();
+    ahoraYear = ahora.getYear();
+
+    // año
+    var dteNow = new Date();
+    var intYear = dteNow.getFullYear();
+
+    $('#cboAnio')
+         .append($("<option></option>")
+         .attr("value",intYear)
+         .text(intYear));
+    $('#cboAnio')
+         .append($("<option></option>")
+         .attr("value",intYear-1)
+         .text(intYear-1)); 
+
+    // listeners de filtros para dataTable
+    $('#cboAnio').change(function() { oTable.fnDraw(); } );
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
     $('#cboMes').change(function() { oTable.fnDraw(); } );
     $('#cboType').change(function() { oTable.fnDraw(); } );
     $('#cboEstado').change(function() { oTable.fnDraw(); } );
     $('#cboUser').change(function() { oTable.fnDraw(); } );
-    
-//    $("#dt_form input").click(function (){
-//        console.log("click: ");
-//    });
-    
-    // form submition handling
-//    $('#dt_form').submit( function(event) {
-//        event.preventDefault();
-//        
-////        var sData = oTable.$('input').serialize();
-////        var actionType = $('#action_type').val();
-////        var urlAction = "";
-//        
-//        console.log(this);
-//        
-//        return false;
-//        
-////        if(actionType == 'edit_form'){
-////            urlAction = "<?php #echo "?controller=".$controller."&amp;action=".$action;?>";
-////            $('#action_type').val("");
-////            
-////            return true;
-////        }
-//    });
-    
-    ahora = new Date();
-    ahoraDay = ahora.getDate();
-    ahoraMonth = ahora.getMonth();
-    ahoraYear = ahora.getYear();
 });
 </script>
 
@@ -307,10 +299,14 @@ require('templates/menu.tpl.php'); #banner & menu
          <!--CUSTOM FILTROS--> 
         
         <div id="dt_filtres" style="float:left;margin-top:10px;">
+	    <label style="float:none;">Año: </label>
+            <select id="cboAnio">
+            </select>
+
             <label style="float:none;">Mes: </label>
             <select id="cboMes">
                 <?php
-                for ($i=0; $i<sizeof($arrayDates); $i++){
+                for ($i=0; $i<=sizeof($arrayDates); $i++){
                     if($i == date("m")){
                         echo "<option selected value='$i'>". $arrayDates[$i] . "</option>";
                     }

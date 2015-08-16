@@ -39,7 +39,7 @@ class TasksController extends ControllerBase
 //            $data['permiso_editar'] = $row['EDITAR'];
 //        }
         
-        # dates
+        // meses
         $arrayDates = Utils::getMonths();
         $data['arrayDates'] = $arrayDates;
         
@@ -198,7 +198,20 @@ class TasksController extends ControllerBase
 
             $sWhere .= " c.id_customer = '".$_GET['filCliente']."' ";
         }
-        if( isset($_GET['filMes']) && $_GET['filMes'] != "")
+	if( isset($_GET['filAnio']) && $_GET['filAnio'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " YEAR(a.date_ini) = '".$_GET['filAnio']."' ";
+        }        
+	if( isset($_GET['filMes']) && $_GET['filMes'] != "")
         {
             if ( $sWhere == "" )
             {
@@ -1069,6 +1082,7 @@ class TasksController extends ControllerBase
             $fecha_ini = filter_input(INPUT_POST, 'fecha_ini');
             $hora_ini = filter_input(INPUT_POST, 'hora_ini');
             $total_time = filter_input(INPUT_POST, 'duration');
+            $hora_end = filter_input(INPUT_POST, 'hora_end');
             
             //Get current values
             $pdoTask = $model->getTaskById($session->id_tenant, $id_task);
@@ -1089,24 +1103,52 @@ class TasksController extends ControllerBase
                 $fecha_ini_fix = $fecha_ini.' '.$hora_ini;
             }
             
-            //Calculate new end date by the new total time
-            $total_time_fix = null;
+            //DEBUG
+            echo "duration: ".$total_time."<br>";
+            echo "hora fin: ".$hora_end."<br><br>";
             
-            if(empty($total_time)){
-                $total_time_fix = $values['time_total'];
+            //Choose end way
+            $total_time_fix = null;
+            $date_end = null;
+            
+            if(isset($total_time)){
+                //Calculate new end date by the new total time
+                if(empty($total_time)){
+                    $total_time_fix = $values['time_total'];
+                }
+                else{
+                    $total_time_fix = Utils::formatTimeSeconds($total_time);
+                }
+                
+                $date_end = date('Y/m/d H:i:s', strtotime($fecha_ini_fix)+$total_time_fix);
+            }
+            elseif(isset($hora_end)){
+                //Calculate new total time by the new  end date
+                if(empty($hora_end)){
+                    $date_end = $values['date_end'];
+                    echo "<br>traje todo";
+                }
+                else{
+                    //$date_end
+                    echo "<br>viene data!";
+                }
+            }
+            
+            if(isset($total_time)){
+                echo "<br>existe";
             }
             else{
-                $total_time_fix = Utils::formatTimeSeconds($total_time);
-//                $date_end = date('Y/m/d H:i:s', strtotime($fecha_ini_fix." +".$hours." hour ".$minutes." minutes ".$seconds." seconds"));
+                echo "<br>no existe";
             }
             
-            $date_end = date('Y/m/d H:i:s', strtotime($fecha_ini_fix)+$total_time_fix);
             
+                        
             
             //Force new end datetime
             $date_paused = null;
             $time_paused = null;
             
+            /*
             //Get update method
             $result = $model->updateTask($session->id_tenant
                     , $values['id_task']
@@ -1136,7 +1178,7 @@ class TasksController extends ControllerBase
             }
             else{
                 header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: actualizacion fallida!");
-            }
+            }*/
         }
         else{
             header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no existe tarea!");

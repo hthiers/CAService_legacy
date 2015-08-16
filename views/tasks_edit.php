@@ -87,7 +87,7 @@ $(document).ready(function(){
         $("#inptTiempoTotal").val(tiempo_string);
     }
     
-    //set timepicker for init time field
+    //set timepicker for init time
     var date_ini = "<?php echo $date_ini;?>";
     var task_time = formatDateTimeStringTime(date_ini);
         
@@ -107,6 +107,29 @@ $(document).ready(function(){
         'step': 15,
         'minTime': '00:15:00',
         'timeFormat': 'H:i:s'
+    });
+    
+    //set timepicker for end time
+    $('#hora_end').attr("disabled", "disabled");
+    var date_end = "<?php echo $date_end;?>";
+    var task_time_end = formatDateTimeStringTime(date_end);
+        
+    $('#hora_end').val(task_time_end.substring(0,5));
+    $('#hora_end').val(task_time_end.substring(0,5));
+    $('#hora_end').timepicker({
+        'step': 15,
+        'scrollDefault': task_time_end,
+        'timeFormat': 'H:i'
+    });
+    
+    //change between duration & end time
+    $('.opt_duration').click(function(){
+        $('#duration').removeAttr("disabled");
+        $('#hora_end').attr("disabled", "disabled");
+    });
+    $('.opt_hora').click(function(){
+        $('#duration').attr("disabled", "disabled");
+        $('#hora_end').removeAttr("disabled");
     });
 });
 
@@ -293,7 +316,17 @@ function updateTask(){
                         </tr>
                         <tr>
                             <td class="middle">Duración</td>
-                            <td class="middle"><input id="duration" class="input_box" name="duration" type="text" value="" /></td>
+                            <td class="middle">
+                                <input id="duration" class="input_box" name="duration" type="text" value="" />
+                                <input style="width: auto;" type="radio" class="opt_duration" name="end_option" value="1" checked="checked" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="middle">Hora fin</td>
+                            <td class="middle">
+                                <input id="hora_end" class="input_box" name="hora_end" type="text" value="" />
+                                <input style="width: auto;" type="radio" class="opt_hora" name="end_option" value="2" />
+                            </td>
                         </tr>
                     </table>
                     
