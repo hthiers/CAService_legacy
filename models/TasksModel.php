@@ -288,7 +288,7 @@ class TasksModel extends ModelBase
                     , status_task, cas_project_id_project, cas_customer_id_customer) 
                         VALUES 
                     (NULL, '$new_code', $id_tenant, '$etiqueta'
-                        , '$date_ini. .$hora_ini', $date_end, $time_total, '$descripcion'
+                        , '$date_ini $hora_ini', $date_end, $time_total, '$descripcion'
                         , $estado, $id_project, $id_customer)");
 
         $consulta->execute();

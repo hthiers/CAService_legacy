@@ -78,20 +78,6 @@ $(document).ready(function(){
     $("#btn_pause").click(function (){
         pausaTrabajo();
     });
-    
-    $("#btn_save").click(function (){
-        
-        var urlAction = "<?php echo "?controller=".$controller."&action=tasksEdit";?>";
-    
-        $('#formModule').attr('action', urlAction);
-        $('#formModule').attr('method', 'POST');        
-        $("#formModule").submit();
-    });
-    
-    $("#btn_cancel").click(function (){
-        parent.history.back();
-        return false;
-    });
 
     $("#btn_stop").click(function (event){
         event.preventDefault();
@@ -113,30 +99,28 @@ $(document).ready(function(){
     var status = <?php echo $status_task; ?>;
 
     // Set timer
-    if(total_progress > 0){
-        //active
-        if(status === 1){
-            console.log("continued");
-            console.log("$pasued_date: <?php echo $paused_date;?>");
-            console.log("$time_paused: <?php echo $time_paused;?>");
+    //active
+    if(status === 1){
+        console.log("continued");
+        console.log("$pasued_date: <?php echo $paused_date;?>");
+        console.log("$time_paused: <?php echo $time_paused;?>");
             
-            var tiempo_array = secondsToTime(total_progress);
-            var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
-            customClock(tiempo_string);
-        }
-        //paused
-        else if(status === 3){
-            console.log("paused");
-            console.log("$pasued_date: <?php echo $paused_date;?>");
-            console.log("$time_paused: <?php echo $time_paused;?>");
-            
-            var paused_seconds = <?php if($paused_date == null): echo 0; else: echo $paused_date; endif;?>;
-            console.log(paused_seconds);
-            
-            var paused_array = secondsToTime(paused_seconds);
-            var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
-            $('#progress_clock').val(paused_string);
-        }
+        var tiempo_array = secondsToTime(total_progress);
+        var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
+        customClock(tiempo_string);
+    }
+    //paused
+    else if(status === 3){
+        console.log("paused");
+        console.log("$pasued_date: <?php echo $paused_date;?>");
+        console.log("$time_paused: <?php echo $time_paused;?>");
+
+        var paused_seconds = <?php if($paused_date == null): echo 0; else: echo $paused_date; endif;?>;
+        console.log(paused_seconds);
+
+        var paused_array = secondsToTime(paused_seconds);
+        var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
+        $('#progress_clock').val(paused_string);
     }
 });
 
@@ -337,7 +321,7 @@ function updateTask(){
                         <?php
                         if($action !== "edit"):
                             // Active and on time
-                            if($status_task == 1 && strtotime($currentTime) > strtotime($date_ini)): ?>
+                            if($status_task == 1 && strtotime($currentTime) >= strtotime($date_ini)): ?>
                             <tr>
                                 <td class="middle">Tiempo transcurrido</td>
                                 <td class="middle">

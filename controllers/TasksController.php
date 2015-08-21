@@ -424,10 +424,13 @@ class TasksController extends ControllerBase
 //        $result = $pdo->fetchAll(PDO::FETCH_ASSOC);
         
         
-        if($pdo->rowCount() > 0)
+        if($pdo->rowCount() > 0){
             echo json_encode($pdo->fetchAll(PDO::FETCH_ASSOC));
-        else
+        }
+        else{
             return false;
+            
+        }
     }
 
     /**
@@ -438,7 +441,16 @@ class TasksController extends ControllerBase
         $session = FR_Session::singleton();
         $paused_date = null;
         
-        $id_task = filter_input(INPUT_POST, 'task_id');
+        $id_task = null;
+        
+        // Support POST & GET
+        if(filter_input(INPUT_POST, 'task_id') != ''){
+            $id_task = filter_input(INPUT_POST, 'task_id');
+        }
+        else{
+            $id_task = filter_input(INPUT_GET, 'task_id');
+        }
+
         $session->id_task = $id_task;
 
         require_once 'models/TasksModel.php';
@@ -747,6 +759,8 @@ class TasksController extends ControllerBase
         $rows_n = $result->rowCount();
 
         if($error[0] == 00000 && $rows_n > 0){
+            // result OK
+            
             $result = $model->getTaskIDByCode($session->id_tenant, $new_code);
             $values = $result->fetch(PDO::FETCH_ASSOC);
             
@@ -757,16 +771,19 @@ class TasksController extends ControllerBase
             $error_type = $result_type->errorInfo();
             
             #$this->projectsDt(1);
-            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=1");
+            #header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=1");
+            header("Location: ".$this->root."?controller=Tasks&action=tasksView&task_id=".$values['id_task']);
         }
         elseif($error[0] == 00000 && $rows_n < 1){
+            // No rows added
+
             #$this->projectsDt(10, "Ha ocurrido un error grave!");
             header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error grave'");
         }
         else{
-            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-//            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='error sql: ".$query."'");
-            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+            // Something went wrong
+
+            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error: ".$error[2].", >> SQL: ".$query." '");
         }
     }
 

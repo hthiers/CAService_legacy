@@ -105,17 +105,21 @@ class Utils
             $mins = floor(($seconds - ($hours*3600)) / 60);
             $secs = floor(($seconds - ($hours*3600)) % 60);
 
-            if($hours < 10)
+            if($hours < 10){
                 $hours = "0".$hours;
-            if($mins < 10)
+            }
+            if($mins < 10){
                 $mins = "0".$mins;
-            if($secs < 10)
+            }
+            if($secs < 10){
                 $secs = "0".$secs;
-
+            }
+            
             $time = $hours.":".$mins.":".$secs;
         }
-        else
+        else{
             $time = "n/a";
+        }
 
             return $time;           
     }
@@ -140,10 +144,12 @@ class Utils
             , 11 => 'Noviembre'
             , 12 => 'Diciembre');
         
-        if($num_month == null)
+        if($num_month == null){
             return $monthsArray;
-        else
+        }
+        else{
             return $monthsArray[$num_month];
+        }
     }
     
     /**
@@ -158,4 +164,3 @@ class Utils
         unlink($filePath);
     }
 }
-?>

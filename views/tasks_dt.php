@@ -41,6 +41,7 @@ TableTools.BUTTONS.download = {
         var oParams = this.s.dt.oApi._fnAjaxParameters( this.s.dt );
 
         oParams.push(
+            { "name": "filAnio", "value": $('#cboAnio').val() },
             { "name": "filCliente", "value": $('#cboCliente').val() },
             { "name": "filMes", "value": $('#cboMes').val() },
             { "name": "filType", "value": $('#cboType').val() },
@@ -240,15 +241,16 @@ $(document).ready(function() {
     // año
     var dteNow = new Date();
     var intYear = dteNow.getFullYear();
-
+    /*
     $('#cboAnio')
-         .append($("<option></option>")
-         .attr("value",intYear)
+         .append($("<option selected></option>")
+         .attr("value", "")
          .text(intYear));
     $('#cboAnio')
          .append($("<option></option>")
          .attr("value",intYear-1)
          .text(intYear-1)); 
+    */
 
     // listeners de filtros para dataTable
     $('#cboAnio').change(function() { oTable.fnDraw(); } );
@@ -301,6 +303,10 @@ require('templates/menu.tpl.php'); #banner & menu
         <div id="dt_filtres" style="float:left;margin-top:10px;">
 	    <label style="float:none;">Año: </label>
             <select id="cboAnio">
+                <?php
+                echo "<option selected value=".date('Y').">". date('Y') ."</option>";
+                echo "<option value=".date('Y',strtotime('-1 year')).">". date('Y',strtotime('-1 year')) ."</option>";
+                ?>
             </select>
 
             <label style="float:none;">Mes: </label>
