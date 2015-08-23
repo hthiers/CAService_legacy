@@ -363,7 +363,7 @@ class UsersModel extends ModelBase
             $consulta = $this->db->prepare("INSERT INTO cas_user "
                     . "(id_user, code_user, id_tenant, name_user, "
                     . "id_profile, password_user) VALUES (NULL, "
-                    . "$code_user, $id_tenant, '$name', $id_profile, '$password');");
+                    . "'$code_user', $id_tenant, '$name', $id_profile, '$password');");
             
             $consulta->execute();
             

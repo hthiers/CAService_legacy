@@ -82,11 +82,11 @@ class PanelController extends ControllerBase
         }
         elseif($error[0] == 00000 && $rows_n < 1){
             #$this->projectsDt(10, "Ha ocurrido un error grave!");
-            header("Location: ".$this->root."?controller=Customers&action=usersDt&error_flag=10&message='Ha ocurrido un error grave'");
+            header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error grave'");
         }
         else{
             #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            header("Location: ".$this->root."?controller=Customers&action=usersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+            header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
         
     }
