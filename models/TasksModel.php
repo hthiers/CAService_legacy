@@ -224,7 +224,7 @@ class TasksModel extends ModelBase
                 INNER JOIN cas_tenant B
                 ON A.id_tenant = B.id_tenant
                 WHERE B.id_tenant = $id_tenant
-                  AND A.code_task = $code_task
+                  AND A.code_task = '$code_task'
                 LIMIT 1");
 
         $consulta->execute();

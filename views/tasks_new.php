@@ -101,8 +101,8 @@ if($session->id_tenant != null && $session->id_user != null):
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
-                    if(response != null){
-                        if(response[0] != 0){
+                    if(response !== null){
+                        if(response[0] !== 0){
                             $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
                             //$("#flash").hide();
                             console.log(response);
@@ -145,8 +145,8 @@ if($session->id_tenant != null && $session->id_user != null):
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
-                    if(response != null){
-                        if(response[0] != 0){
+                    if(response !== null){
+                        if(response[0] !== 0){
                             $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
                             //$("#flash").hide();
                             console.log(response);
@@ -397,8 +397,9 @@ if($session->id_tenant != null && $session->id_user != null):
         
         <?php 
         if (isset($error_flag)){
-            if(strlen($error_flag) > 0)
+            if(strlen($error_flag) > 0){
                 echo $error_flag;
+            }
         }
         ?>
 
@@ -500,7 +501,6 @@ if($session->id_tenant != null && $session->id_user != null):
                 </table>
                 <div style="clear: both;">
                     <input id="hdnPicker" type="hidden" name="fecha" value="" />
-                    <input id="hdnCode" type="hidden" name="new_code" value="<?php echo $new_code; ?>" />
                     <input id="hdnUser" type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
                 </div>
             </form>
@@ -514,4 +514,3 @@ if($session->id_tenant != null && $session->id_user != null):
 #endif; #privs
 endif; #session
 require('templates/footer.tpl.php');
-?>

@@ -218,8 +218,8 @@ $(document).ready(function() {
                         return "<input type='button' id=\'btn_view\' class=\'input\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='VER' />";
                     }
                     else if(oObj.aData[1] !== null && oObj.aData[1] !== ""){
-//                        console.log(oObj);
-                        return "<input type='button' id=\'btn_edit\' class=\'input\' name='"+oObj.aData[7]+"' onclick='editTask("+oObj.aData[7]+")' value='EDITAR' />";
+                        //return "<input type='button' id=\'btn_edit\' class=\'input\' name='"+oObj.aData[7]+"' onclick='editTask("+oObj.aData[7]+")' value='EDITAR' />";
+                        return '';
                     }
                     else {
                         return '';

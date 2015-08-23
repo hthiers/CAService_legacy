@@ -265,7 +265,7 @@ function updateTask(){
 
         <?php #if(isset($pdo)): $values = $pdo->fetch(PDO::FETCH_ASSOC); ?>
         
-        <p class="titulos-form"><?php echo $titulo.$code_task; ?></p>
+        <p class="titulos-form"><?php echo $titulo; ?></p>
 
         <!--
         <p style="font-size: 12px; color: #999;">

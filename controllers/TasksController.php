@@ -512,7 +512,7 @@ class TasksController extends ControllerBase
             $data['currentTime'] = $current_date;
         }
 
-        $data['titulo'] = "Tarea #";
+        $data['titulo'] = "Detalle de Trabajo";
         $data['pdo'] = $pdo;
         
         $data['action'] = "view";
@@ -598,7 +598,7 @@ class TasksController extends ControllerBase
             $data['currentTime'] = $current_date;
         }
 
-        $data['titulo'] = "Edición de Trabajo #";
+        $data['titulo'] = "Edición de Trabajo";
         $data['pdo'] = $pdo;
         
         $data['controller'] = "tasks";
@@ -632,22 +632,14 @@ class TasksController extends ControllerBase
         $value = $pdo->fetch(PDO::FETCH_ASSOC);
 
         if($error[0] != 00000){
-            $new_code = 1;
             $data['error'] = "ERROR: ".$error[2];
-        }
-        elseif($value != null)
-        {
-            $last_code = $value['code_task'];
-            $new_code = (int) $last_code + 1;
         }
         else
         {
-            $new_code = 1;
-            $data['error'] = "No hay tareas";
+            $data['error'] = "No Hay trabajos";
         }
 
-        $data['new_code'] = $new_code;
-        $data['titulo'] = "Nuevo Trabajo #".$new_code;
+        $data['titulo'] = "Nuevo Trabajo";
 
         $pdoUser = $modelUser->getUserAccountByID($session->id_user);
         $value = null;
@@ -697,7 +689,11 @@ class TasksController extends ControllerBase
         $id_customer = null;
         $id_type = null;
 
-        $new_code = $_POST['new_code'];
+        #$new_code = $_POST['new_code'];
+        
+        // UUID code
+        $new_code = Utils::guidv4();
+        
         $user = $_POST['resp'];
         $id_user = $_POST['id_user'];
         
@@ -1049,7 +1045,7 @@ class TasksController extends ControllerBase
             //stop status
             $status = 2;
             
-            #stop tarea
+            #stop trabajo
             $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
                     , $values['label_task'], $values['date_ini'], $current_date, $total_progress
                     , $values['desc_task'], $status, $values['cas_project_id_project'], $values['cas_customer_id_customer']
@@ -1075,7 +1071,7 @@ class TasksController extends ControllerBase
         }
         else{
             #$this->projectsDt(10, "Error, el proyecto no ha sido encontrado.");
-            header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no existe tarea!");
+            header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no existe trabajo!");
         }
     }
 
@@ -1198,7 +1194,7 @@ class TasksController extends ControllerBase
             }*/
         }
         else{
-            header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no existe tarea!");
+            header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no existe trabajo!");
         }
     }
     
