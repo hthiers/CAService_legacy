@@ -388,12 +388,12 @@ class UsersModel extends ModelBase
         
         public function editUser(UserVO $user)
         {   
-            $query = $this->db->prepare("UPDATE cas_user set code_user=".$user->getCodeUser().", "
+            $query = $this->db->prepare("UPDATE cas_user set code_user='".$user->getCodeUser()."', "
                     . "id_tenant=".$user->getIdTenant().", name_user='".$user->getNameUser()."', "
                     . "id_profile=".$user->getIdProfile().", password_user='".$user->getPasswordUser()."' "
                     . "where id_user=".$user->getIdUser());
             $query->execute();
-            return $query;
+            return $query; 
         }
         
         public function getAllUsers(UserVO $user)

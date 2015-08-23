@@ -339,6 +339,8 @@ class PanelController extends ControllerBase
         //$pass2 = filter_input(INPUT_TYPE, 'pass_user_2');
         $pass1 = $_POST['pass_user_1'];
         $pass2 = $_POST['pass_user_2'];
+        
+        
         //if(isset($_POST['pass_user_1']) && isset($_POST['pass_user_2']))
         if($pass1 !='' && $pass2 !='')
         {
