@@ -66,10 +66,11 @@ class PanelController extends ControllerBase
         $profile_user = filter_input(INPUT_POST, 'cboprofiles');
         
         $password = filter_input(INPUT_POST, 'pass_user');
-        $result_last_code = $model->getLastCodeUser();
-        $values_last_code = $result_last_code->fetch(PDO::FETCH_ASSOC);
+        //$result_last_code = $model->getLastCodeUser();
+        //$values_last_code = $result_last_code->fetch(PDO::FETCH_ASSOC);
 
-        $code_user = $values_last_code["code"] + 1;
+        //$code_user = $values_last_code["code"] + 1;
+        $code_user = Utils::guidv4();
         
         $result = $model->addNewUser($session->id_tenant, $code_user, $name_user, $profile_user, $password);
         $error = $result->errorInfo();
