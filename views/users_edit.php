@@ -33,7 +33,7 @@ if($session->id_tenant != null && $session->id_user != null):
     #dt_filtres input.time_control {
         width: 80px;
         height: 30px;
-    }formModule
+    }
     #dt_filtres textarea{
         width: 300px;
         height: 100px;
@@ -72,6 +72,13 @@ if($session->id_tenant != null && $session->id_user != null):
         <!-- END DEBUG -->
         
         <p class="titulos-form"><?php echo $title; ?></p>
+        <?php 
+        if (isset($error_flag)){
+            if(strlen($error_flag) > 0)
+                echo $error_flag;
+        }
+        ?>
+        
         <?php $data_user = $user->fetch(PDO::FETCH_ASSOC); ?>
         <!-- FORM -->
         <div id="dt_filtres">
@@ -79,8 +86,11 @@ if($session->id_tenant != null && $session->id_user != null):
                 <table class="table_left">
                     <tr>
                         <td>Nombre de Usuario</td>
-                        <td><input class="input_box" type="text" id="name_user" name="name_user" value="<?php echo $data_user[name_user];?>" /></td>
+                        <td><input class="input_box" type="text" id="name_user" name="name_user" value="<?php echo $data_user['name_user'];?>" /></td>
                     </tr>
+                    <?php
+                        if($session->id_profile == 1):
+                    ?>
                     <tr>
                         <td>Perfil</td>
                         <td>
@@ -89,7 +99,7 @@ if($session->id_tenant != null && $session->id_user != null):
                             echo "<option value='noaplica' selected='selected'>Seleccione Perfil</option>\n";
                             while($row = $profiles->fetch(PDO::FETCH_ASSOC))
                             {
-                                if($row[id_profile] == $data_user[id_profile]) 
+                                if($row['id_profile'] == $data_user['id_profile'])
                                 {
                                     echo "<option value='$row[id_profile]' selected>$row[label_profile]</option>\n";
                                 }
@@ -103,6 +113,7 @@ if($session->id_tenant != null && $session->id_user != null):
                             &nbsp;
                         </td>
                     </tr>
+                    <?php endif; ?>
                     <br>
                     <tr>
                         <td colspan="2"><hr></td>
@@ -118,10 +129,12 @@ if($session->id_tenant != null && $session->id_user != null):
                         <td colspan="2" style="text-align: center;">
                             <input class="time_control" type="reset" value="CANCELAR" value="CANCELAR" />
                             &nbsp;&nbsp;
-                            <input class="time_control" type="submit" value="CREAR" />
+                            <input class="time_control" type="submit" value="EDITAR" />
                         </td>
                     </tr>
+                    
                 </table>
+                <input type="hidden" name="id_user" value="<?php echo $data_user['id_user']; ?>" />
             </form>
             <div class="spacer"></div>
         </div>

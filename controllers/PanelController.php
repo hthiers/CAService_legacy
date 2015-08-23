@@ -68,6 +68,7 @@ class PanelController extends ControllerBase
         $password = filter_input(INPUT_POST, 'pass_user');
         $result_last_code = $model->getLastCodeUser();
         $values_last_code = $result_last_code->fetch(PDO::FETCH_ASSOC);
+
         $code_user = $values_last_code["code"] + 1;
         
         $result = $model->addNewUser($session->id_tenant, $code_user, $name_user, $profile_user, $password);
@@ -76,15 +77,15 @@ class PanelController extends ControllerBase
         
         if($error[0] == 00000 && $rows_n > 0){
             #$this->projectsDt(1);
-            header("Location: ".$this->root."?controller=Panel&action=newUserForm&error_flag=1");
+            header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=1");
         }
         elseif($error[0] == 00000 && $rows_n < 1){
             #$this->projectsDt(10, "Ha ocurrido un error grave!");
-            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error grave'");
+            header("Location: ".$this->root."?controller=Customers&action=usersDt&error_flag=10&message='Ha ocurrido un error grave'");
         }
         else{
             #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+            header("Location: ".$this->root."?controller=Customers&action=usersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
         
     }
@@ -246,6 +247,54 @@ class PanelController extends ControllerBase
         require_once 'models/ProfilesModel.php';
         require_once 'vo/UserVO.php';
         
+        #support global messages
+        if(isset($_GET['error_flag']))
+            $error_flag = $_GET['error_flag'];
+        if(isset($_GET['message']))
+            $message = $_GET['message'];
+        
+        $user = new UserVO();
+        //Asegurar que session esta abierta
+        $session = FR_Session::singleton();
+        $id = filter_input(INPUT_GET, 'user_id');
+        $user_model = new UsersModel();
+        $profile_model = new ProfilesModel();
+        $user->setIdUser($id);
+        $pdoProfiles = $profile_model->getAllProfiles();
+        $pdoUser = $user_model->getUserById($user);
+        
+        $data['title'] = "Editar Usuario";
+        $data['profiles'] = $pdoProfiles;
+        $data['user'] = $pdoUser;
+        $data['message'] = $message;
+        //$data['error_flag'] =  $error_flag;
+        /*
+        if($error_flag == 1)
+        {
+            $data['error_flag'] = $this->errorMessage->getError(1);
+        }
+        else{
+            $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
+        }
+        */
+        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
+
+        
+        $this->view->show("users_edit.php", $data);
+    }
+    
+    public function editUserFormSession() 
+    {
+        require_once 'models/UsersModel.php';
+        require_once 'models/ProfilesModel.php';
+        require_once 'vo/UserVO.php';
+
+        #support global messages
+        if(isset($_GET['error_flag']))
+            $error_flag = $_GET['error_flag'];
+        if(isset($_GET['message']))
+            $message = $_GET['message'];
+        
         $user = new UserVO();
         //Asegurar que session esta abierta
         $session = FR_Session::singleton();
@@ -259,6 +308,9 @@ class PanelController extends ControllerBase
         $data['title'] = "Editar Usuario";
         $data['profiles'] = $pdoProfiles;
         $data['user'] = $pdoUser;
+        $data['message'] = $message;
+
+        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
         
         $this->view->show("users_edit.php", $data);
     }
@@ -272,12 +324,16 @@ class PanelController extends ControllerBase
         $session = FR_Session::singleton();
         $model = new UsersModel();
         $user = new UserVO();
-        $user->setIdUser($session->id_user);
-        $user->setCodeUser($session->code_user);
-        $user->setIdTenant($session->id_tenant);
+        $id_user = filter_input(INPUT_POST, 'id_user');
+        $user->setIdUser($id_user);
+        $pdoUser = $model->getUserById($user);
+        $dataUser = $pdoUser->fetch(PDO::FETCH_ASSOC);
+        $user->setCodeUser($dataUser['code_user']);
+        $user->setIdTenant($dataUser['id_tenant']);
         $user->setNameUser(filter_input(INPUT_POST, 'name_user'));
         $user->setIdProfile(filter_input(INPUT_POST, 'cboprofiles')) ;
-        $user->setPasswordUser($session->password_user);
+        //$user->setPasswordUser($dataUser[password_user]);
+        $user->setPasswordUser('');
         //$pass1 = filter_input(INPUT_TYPE, 'pass_user_1');
         //$pass2 = filter_input(INPUT_TYPE, 'pass_user_2');
         $pass1 = $_POST['pass_user_1'];
@@ -287,28 +343,51 @@ class PanelController extends ControllerBase
         {
             if($pass1 == $pass2)
             {
-                $pass1 = md5($pass1);
                 $user->setPasswordUser($pass1);
+                $validacion = $this->validarDatosUsuario($user, 'normal');
+            }
+            else
+            {
+                $user->setPasswordUser('');
+                $validacion = $this->validarDatosUsuario($user, 'distintos');
             }
         }
-        
-        $result = $model->editUser($user);
-        $error = $result->errorInfo();
-        $rows_n = $result->rowCount();
-        
-        if($error[0] == 00000 && $rows_n > 0){
-            #$this->projectsDt(1);
-            header("Location: ".$this->root."?controller=Panel&action=newUserForm&error_flag=1");
+        else if ($pass1 =='' && $pass2 =='')
+        {
+            $user->setPasswordUser($dataUser['password_user']);
+            $validacion = $this->validarDatosUsuario($user, 'md5');
         }
-        elseif($error[0] == 00000 && $rows_n < 1){
-            #$this->projectsDt(10, "Ha ocurrido un error grave!");
-            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error grave'");
+
+        if($validacion["estado"] == true )
+        {
+            if($pass1 == $user->getPasswordUser()){
+                $user->setPasswordUser(md5($user->getPasswordUser()));
+            }
+            else {
+                $user->setPasswordUser($dataUser[password_user]);
+            }
+            
+            $result = $model->editUser($user);
+            $error = $result->errorInfo();
+            $rows_n = $result->rowCount();
+
+            if($error[0] == 00000 && $rows_n > 0){
+                #$this->projectsDt(1);
+                header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=1");
+            }
+            elseif($error[0] == 00000 && $rows_n < 1){
+                #$this->projectsDt(10, "Ha ocurrido un error grave!");
+                header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error grave'");
+            }
+            else{
+                #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+                header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]." ___ ".$id_user."'");
+            }
         }
-        else{
-            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+        else {
+            //$pdoUser = $model->getUserById($user);
+            header("Location: ".$this->root."?controller=Panel&action=editUserForm&error_flag=10&user_id=".$id_user."&message='Ha ocurrido un error: ".$validacion['error']."'");
         }
-        
         
     }
     
@@ -362,5 +441,37 @@ class PanelController extends ControllerBase
     public function removeUserAction()
     {
         
+    }
+    
+    public function validarDatosUsuario(UserVO $user, $tipoPass)
+    {
+        $mensaje['estado'] = true;
+        $mensaje['largoNombre'] = strlen($user->getNameUser());
+        $mensaje['largoPass'] = strlen($user->getPasswordUser());
+
+        // si $tipoPass es normal, el password no es md5
+        // si $tipoPass es md5, el pass tiene formato md5
+
+        if(strlen($user->getNameUser()) < 5 )
+        {
+            $mensaje['error'] = "El nombre de usuario debe tener más de 4 letras";
+            $mensaje['estado'] = false;
+        }
+
+        if($tipoPass == 'normal')
+        {
+            if(strlen($user->getPasswordUser()) < 5 )
+            {
+                $mensaje['error'] = "La contraseña  debe tener más de 4 letras";
+                $mensaje['estado'] = false;
+            }
+        }
+        else if($tipoPass == 'distintos')
+        {
+            $mensaje['error'] = "Los Campos de la contraseña deben ser iguales";
+            $mensaje['estado'] = false;
+        }
+        
+        return $mensaje;
     }
 }

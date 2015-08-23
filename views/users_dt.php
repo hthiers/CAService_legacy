@@ -69,18 +69,17 @@ $(document).ready(function() {
 //        },
         
         "aoColumnDefs": [
-//            { "mDataProp": null, "aTargets": [-1] },
+            { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,2] },
-//            {
-//                "fnRender": function ( oObj ) {
-//                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
-//                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
-//                    //string += '&nbsp; <button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">REVISAR</button>';
-//                    
-//                    return string;
-//                },
-//                "aTargets": [5]
-//            }
+            {
+                "fnRender": function ( oObj ) {
+                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
+                    var string = "<a class=\'btn_edit\' href='?controller=panel&action=editUserForm&user_id="+oObj.aData[0]+"'>EDITAR</button>";
+                    
+                    return string;
+                },
+                "aTargets": [-1]
+            }
 //            {
 //                "fnRender": function ( oObj ) {
 //                    if(oObj.aData[5] != null){
@@ -118,7 +117,21 @@ $(document).ready(function() {
 //            return true;
 //        }
 //    });
+    
 });
+
+function editUser(user){
+    console.log(user);
+    var urlAction = "<?php echo "?controller=panel&action=editUserForm";?>";
+    
+    $('#dt_form').attr('action', urlAction);
+    $('#dt_form').attr('method', 'POST');
+    $('#user_id').val(user);
+    
+    $("#dt_form").submit();
+}
+
+
 </script>
 
 </head>
@@ -149,19 +162,6 @@ require('templates/menu.tpl.php'); #banner & menu
 
         <p class="titulos-form"><?php echo $titulo; ?></p>
 
-        <!--
-        <p style="font-size: 12px; color: #999;">
-            Nota: Esta pantalla permitir&iacute;a gestionar todos los registros existentes en el sistema, en principio, solo para el usuario en sesi&oacute;n. 
-            Una barra azul en la cabecera de la p&aacute;gina muestra diferentes opciones de men&uacute;. En este caso solo funcionan como v&iacute;nculos 
-            el item de "TRABAJOS" y "NUEVO TRABAJO".
-            <br />
-            Sobre la tabla de abajo se encuentran los filtros de informaciÃ³n en la tabla.
-            Un bot&oacute;n de exportar permitir&iacute;a crear un documento Excel con todos los trabajos en vista.
-            Una columna de opciones permitir&iacute;a ejecutar ciertas acciones sobre un trabajo, en este caso se encuentra un v&iacute;nculo "ver"
-            para abrir un registro.
-            Haciendo clic en las cabeceras de la tabla es posible cambiar el orden por columna.
-        </p>
-        -->
         
         <?php 
         if (isset($error_flag)){
@@ -186,6 +186,7 @@ require('templates/menu.tpl.php'); #banner & menu
                             <th>TENANT</th>
                             <th>NOMBRE USUARIO</th>
                             <th>PERFIL</th>
+                            <th>OPCIONES</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -197,6 +198,11 @@ require('templates/menu.tpl.php'); #banner & menu
                 <table>
                     <tr>
                         <td><input id="action_type" type="hidden" name="action_type" value="" /></td>
+                    </tr>
+                </table>
+                <table style="float:left"> <!-- style float solo para perderlo -->
+                    <tr>
+                        <td><input id="user_id" type="hidden" name="user_id" value="" /></td>
                     </tr>
                 </table>
             </form>

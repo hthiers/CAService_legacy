@@ -3,3 +3,9 @@ error_log
 .directory
 config.php~
 nbproject/
+.DS_Store
+.gitignore.swp
+.idea/
+controllers/.DS_Store
+models/.DS_Store
+views/.DS_Store

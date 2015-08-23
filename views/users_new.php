@@ -79,7 +79,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 <table class="table_left">
                     <tr>
                         <td>Nombre de Usuario</td>
-                        <td><input class="input_box" type="text" id="name_user" name="name_user" value="<?php echo $name_user;?>" /></td>
+                        <td><input class="input_box" type="text" id="name_user" name="name_user" value="" /></td>
                     </tr>
                     <tr>
                         <td>Perfil</td>
@@ -98,7 +98,7 @@ if($session->id_tenant != null && $session->id_user != null):
                     </tr>
                     <tr>
                         <td>Contrase&ntilde;a</td>
-                        <td><input class="input_box" type="password" name="password_nuevo_a" id="pass_user" /></td>
+                        <td><input class="input_box" type="password" name="pass_user" id="pass_user" /></td>
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: center;">
