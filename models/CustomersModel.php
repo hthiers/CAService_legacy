@@ -468,4 +468,3 @@ class CustomersModel extends ModelBase
             return $tableName;
         }
 }
-?>

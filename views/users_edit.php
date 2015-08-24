@@ -72,10 +72,12 @@ if($session->id_tenant != null && $session->id_user != null):
         <!-- END DEBUG -->
         
         <p class="titulos-form"><?php echo $title; ?></p>
+        
         <?php 
         if (isset($error_flag)){
-            if(strlen($error_flag) > 0)
+            if(strlen($error_flag) > 0){
                 echo $error_flag;
+            }
         }
         ?>
         
@@ -88,9 +90,7 @@ if($session->id_tenant != null && $session->id_user != null):
                         <td>Nombre de Usuario</td>
                         <td><input class="input_box" type="text" id="name_user" name="name_user" value="<?php echo $data_user['name_user'];?>" /></td>
                     </tr>
-                    <?php
-                        if($session->id_profile == 1):
-                    ?>
+                    <?php if($session->id_profile == 1): ?>
                     <tr>
                         <td>Perfil</td>
                         <td>
@@ -114,10 +114,11 @@ if($session->id_tenant != null && $session->id_user != null):
                         </td>
                     </tr>
                     <?php endif; ?>
-                    <br>
+                    <br />
                     <tr>
                         <td colspan="2"><hr></td>
                     </tr>
+                    <tr>
                         <td>Ingrese nueva Contrase&ntilde;a</td>
                         <td><input class="input_box" type="password" name="pass_user_1" id="pass_user_1" /></td>
                     </tr>

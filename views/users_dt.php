@@ -70,7 +70,7 @@ $(document).ready(function() {
         
         "aoColumnDefs": [
             { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [0,2] },
+            { "bVisible": false, "aTargets": [0,1,2] },
             {
                 "fnRender": function ( oObj ) {
                     //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';

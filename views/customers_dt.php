@@ -70,7 +70,7 @@ $(document).ready(function() {
         
         "aoColumnDefs": [
 //            { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [0,2] },
+            { "bVisible": false, "aTargets": [0,1,2] }
 //            {
 //                "fnRender": function ( oObj ) {
 //                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
@@ -165,11 +165,10 @@ require('templates/menu.tpl.php'); #banner & menu
         
         <?php 
         if (isset($error_flag)){
-            if(strlen($error_flag) > 0)
+            if(strlen($error_flag) > 0){
                 echo $error_flag;
+            }
         }
-        else
-            echo "aaaa";
         ?>
 
         <!-- CUSTOM FILTROS -->
@@ -185,7 +184,7 @@ require('templates/menu.tpl.php'); #banner & menu
                             <th>NUMERO</th>
                             <th>TENANT</th>
                             <th>NOMBRE</th>
-                            <th>DATOS</th>
+                            <th>DESCRIPCION</th>
 <!--                            <th>CONTACTO</th>
                             <th>TELEFONO</th>
                             <th>CORREO</th>-->

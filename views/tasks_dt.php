@@ -217,10 +217,6 @@ $(document).ready(function() {
                     if(oObj.aData[1] === null || oObj.aData[1] === ""){
                         return "<input type='button' id=\'btn_view\' class=\'input\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='VER' />";
                     }
-                    else if(oObj.aData[1] !== null && oObj.aData[1] !== ""){
-                        //return "<input type='button' id=\'btn_edit\' class=\'input\' name='"+oObj.aData[7]+"' onclick='editTask("+oObj.aData[7]+")' value='EDITAR' />";
-                        return '';
-                    }
                     else {
                         return '';
                     }
@@ -241,16 +237,6 @@ $(document).ready(function() {
     // año
     var dteNow = new Date();
     var intYear = dteNow.getFullYear();
-    /*
-    $('#cboAnio')
-         .append($("<option selected></option>")
-         .attr("value", "")
-         .text(intYear));
-    $('#cboAnio')
-         .append($("<option></option>")
-         .attr("value",intYear-1)
-         .text(intYear-1)); 
-    */
 
     // listeners de filtros para dataTable
     $('#cboAnio').change(function() { oTable.fnDraw(); } );
@@ -265,9 +251,8 @@ $(document).ready(function() {
 </head>
 <body id="dt_example" class="ex_highlight_row">
 
-<?php
-require('templates/menu.tpl.php'); #banner & menu
-?>
+    <?php require('templates/menu.tpl.php'); #banner & menu ?>
+    
     <!-- CENTRAL -->
     <div id="central">
     <div id="contenido">
@@ -294,8 +279,9 @@ require('templates/menu.tpl.php'); #banner & menu
         
         <?php 
         if (isset($error_flag)){
-            if(strlen($error_flag) > 0)
+            if(strlen($error_flag) > 0){
                 echo $error_flag;
+            }
         }
         ?>
          <!--CUSTOM FILTROS--> 

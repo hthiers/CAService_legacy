@@ -137,10 +137,12 @@ class TasksModel extends ModelBase
                 ORDER BY a.label_task
                 LIMIT 1");
 
-        if($consulta->execute(array($id_tenant, $id_task)))
+        if($consulta->execute(array($id_tenant, $id_task))){
             return $consulta;
-        else
+        }
+        else{
             return null;
+        }
     }
 
     /**
@@ -201,7 +203,7 @@ class TasksModel extends ModelBase
                 INNER JOIN cas_tenant B
                 ON A.id_tenant = B.id_tenant
                 WHERE B.id_tenant = $id_tenant
-                  AND A.code_task = $code_task
+                  AND A.code_task = '$code_task'
                 LIMIT 1");
 
         $consulta->execute();
@@ -247,7 +249,7 @@ class TasksModel extends ModelBase
                 INNER JOIN cas_tenant B
                 ON A.id_tenant = B.id_tenant
                 WHERE B.id_tenant = $id_tenant
-                  AND A.code_task = $code_task
+                  AND A.code_task = '$code_task'
                 LIMIT 1");
 
         $consulta->execute();
@@ -719,4 +721,3 @@ class TasksModel extends ModelBase
 //        return $consulta;
 //    }
 }
-?>

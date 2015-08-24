@@ -1076,6 +1076,81 @@ class TasksController extends ControllerBase
     }
 
     /*
+     * Remove a task
+     */
+    public function tasksRemove()
+    {
+        $session = FR_Session::singleton();
+        $id_task = $_REQUEST['id_task'];
+        
+        if($id_task != null){
+            require_once 'models/TasksModel.php';
+            $model = new TasksModel();
+
+            $pdoTask = $model->getTaskById($session->id_tenant, $id_task);
+            $values = $pdoTask->fetch(PDO::FETCH_ASSOC);
+            
+            $result = null;
+            $status = 9; // 9 removed status
+
+            if($values['status_task'] == 1){
+                // remove in-progress task
+                
+                // current time
+                $now = date("Y/m/d H:i:s");
+                $currentDateTime = new DateTime($now);
+                $timezone = new DateTimeZone($session->timezone);
+                $currentDateTime = $currentDateTime->setTimezone($timezone);
+                $current_date = $currentDateTime->format("Y-m-d H:i:s");
+
+                // total time (s)
+                $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S');
+
+                // total real time (s)
+                if($values['time_paused'] != null && empty($values['time_paused']) == false){
+                    $total_progress = $total_progress - $values['time_paused'];
+                }
+                else{
+                    $total_progress = $total_progress;
+                }
+                
+                // remove
+                $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
+                    , $values['label_task'], $values['date_ini'], $current_date, $total_progress
+                    , $values['desc_task'], $status, $values['cas_project_id_project'], $values['cas_customer_id_customer']
+                    , $values['date_pause'], $values['time_paused']);
+            }
+            else{
+                // remove a finished task
+                
+                // remove
+                $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
+                    , $values['label_task'], $values['date_ini'], $values['date_end'], $values['time_total']
+                    , $values['desc_task'], $status, $values['cas_project_id_project'], $values['cas_customer_id_customer']
+                    , $values['date_pause'], $values['time_paused']);
+            }      
+
+            if($result != null){
+                $error = $result->errorInfo();
+                $numr = $result->rowCount();
+
+                if($error[0] == 00000 && $numr > 0){
+                    header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=1");
+                }
+                else{
+                    header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='No se lograron aplicar cambios: ".$error[2]."'");
+                }
+            }
+            else{
+                header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no se ha podido eliminar!");
+            }
+        }
+        else{
+            header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: este trabajo ya no existe!");
+        }
+    }
+    
+    /*
      * Update task data (forced new datetime end)
      */
     public function tasksUpdate()
@@ -1283,12 +1358,13 @@ class TasksController extends ControllerBase
         
         // Get month from parameters
         $requestedMonth = Utils::getMonths($_GET['filMes']);
+        $requestedYear = Utils::getMonths($_GET['filAnio']);
         
         // Title (first row)
         $currentDatetime = date('dmY-His');
         
         $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.date('Y').' - Fecha exportación: '.date('d-m-Y H:i:s'))
+                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.$requestedYear.' - Fecha exportación: '.date('d-m-Y H:i:s'))
                 ->mergeCells('A1:G1')
                 ->getRowDimension(1)->setRowHeight(30);
         $objPHPExcel->setActiveSheetIndex(0)

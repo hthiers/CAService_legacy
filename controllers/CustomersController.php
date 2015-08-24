@@ -212,26 +212,7 @@ class CustomersController extends ControllerBase
         //Import models
         require_once 'models/CustomersModel.php';
 
-        //Models objects
-//        $model = new ClientesModel();
-//
-//        //lista tipos
-//        $data['lista_tipos'] = $model->getAllTiposCliente();
-//        $data['lista_channels'] = $model->getAllChannels();
-//        $data['lista_buyerclass'] = $model->getAllBuyerClass();
-//
-//        //codigo manual
-//        $data['new_code'] = "";
-//
-        //Finalmente presentamos nuestra plantilla
         $data['titulo'] = "Nuevo Cliente";
-//
-//        $data['controller'] = "clientes";
-//        $data['action'] = "clientesAdd";
-//        $data['action_b'] = "clientesDt";
-//
-//        //Posible error
-//        $data['error_flag'] = $this->errorMessage->getError($error_flag);
 
         $this->view->show("customers_new.php", $data);
     }
@@ -242,19 +223,14 @@ class CustomersController extends ControllerBase
 
         $label_customer = $_POST['customer_name'];
         $detail_customer = $_POST['customer_detail'];
-        #$code_customer = rand(1, 100);
-        #$code_customer = "c".$code_customer;
+        
+        $code_customer = Utils::guidv4();
         
         //Incluye el modelo que corresponde
         require_once 'models/CustomersModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new CustomersModel();
-        
-        $result = $model->getLastCustomer($session->id_tenant);
-        $values = $result->fetch(PDO::FETCH_ASSOC);
-        $code_customer = $values['code_customer'];
-        $code_customer = (int)$code_customer + 1;
         
         //Le pedimos al modelo todos los items
         $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer, $detail_customer);
@@ -263,15 +239,12 @@ class CustomersController extends ControllerBase
         $rows_n = $result->rowCount();
         
         if($error[0] == 00000 && $rows_n > 0){
-            #$this->projectsDt(1);
             header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=1");
         }
         elseif($error[0] == 00000 && $rows_n < 1){
-            #$this->projectsDt(10, "Ha ocurrido un error grave!");
             header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error grave'");
         }
         else{
-            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
             header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
     }

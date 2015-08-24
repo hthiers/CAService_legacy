@@ -5,8 +5,8 @@
  */
 ?>
 <!-- Confirm action -->
-<div id="dialog-confirm" title="Confirmar acci&oacute;n" style="visibility: hidden;">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 2px 10px 0;"></span>Este usuario ser&aacute; eliminado para siempre. &iquest;Desea seguir?</p>
+<div id="dialog-confirm" title="Confirmar acci&oacute;n">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 2px 10px 0;"></span>¿Esta seguro que quiere eliminar este trabajo?</p>
 </div>
 <!-- END Confirm action -->
 
