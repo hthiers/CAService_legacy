@@ -73,6 +73,13 @@ if($session->id_tenant != null && $session->id_user != null):
         
         <p class="titulos-form"><?php echo $titulo; ?></p>
         
+        <?php 
+        if (isset($error_flag)){
+            if(strlen($error_flag) > 0)
+                echo $error_flag;
+        }
+        ?>
+        
         <!-- FORM -->
         <div id="dt_filtres">
             <form id="moduleForm" name="form1" method="post" action="?controller=panel&amp;action=newUserAdd">

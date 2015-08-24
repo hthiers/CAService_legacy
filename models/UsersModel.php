@@ -406,6 +406,15 @@ class UsersModel extends ModelBase
             return $query;
         }
         
+        public function getBoolUsername(UserVO $user)
+        {
+            $query = $this->db->prepare("SELECT if(COUNT(*)>0,'true','false') AS result FROM cas_user "
+                    . "WHERE id_tenant= ".$user->getIdTenant()." AND name_user LIKE '".$user->getNameUser()."'");
+            
+            $query->execute();
+            return $query;
+        }
+        
         public function removeUserAction()
         {
         

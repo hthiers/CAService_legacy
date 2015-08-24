@@ -42,6 +42,12 @@ class PanelController extends ControllerBase
         //incluye el modelo que corresponde
         require_once 'models/ProfilesModel.php';
         
+        #support global messages
+        if(isset($_GET['error_flag']))
+            $error_flag = $_GET['error_flag'];
+        if(isset($_GET['message']))
+            $message = $_GET['message'];
+        
         $data['titulo'] = "Nuevo Usuario";
         
         //Se crea una instancia del "modelo"
@@ -50,6 +56,9 @@ class PanelController extends ControllerBase
         $pdoProfiles = $model->getAllProfiles();
         $data['profiles'] = $pdoProfiles;
         
+        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
+
+        
         $this->view->show("users_new.php", $data);
     }
     
@@ -57,9 +66,11 @@ class PanelController extends ControllerBase
     {
         //Incluye el modelo que corresponde
         require_once 'models/UsersModel.php'; 
+        require_once 'vo/UserVO.php';
         
         $session = FR_Session::singleton();
         $model = new UsersModel();
+        $user = new UserVO();
         $profile_user = null; //Daclaración de variable antes de capturar el valor de un combobox
         
         $name_user = filter_input(INPUT_POST, 'name_user');
@@ -72,22 +83,42 @@ class PanelController extends ControllerBase
         //$code_user = $values_last_code["code"] + 1;
         $code_user = Utils::guidv4();
         
-        $result = $model->addNewUser($session->id_tenant, $code_user, $name_user, $profile_user, $password);
-        $error = $result->errorInfo();
-        $rows_n = $result->rowCount();
+        $user->setNameUser($name_user);
+        $user->setPasswordUser($password);
+        $user->setIdTenant($session->id_tenant);
         
-        if($error[0] == 00000 && $rows_n > 0){
-            #$this->projectsDt(1);
-            header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=1");
+        $result_val= $model->getBoolUsername($user);
+        $boolean_name_user = $result_val->fetch(PDO::FETCH_ASSOC);
+        
+        $validacion = $this->validarDatosUsuario($user, 'normal', $boolean_name_user['result']);
+
+        
+        if($validacion['estado'] == true )
+        {
+            $result = $model->addNewUser($session->id_tenant, $code_user, $name_user, $profile_user, $password);
+            $error = $result->errorInfo();
+            $rows_n = $result->rowCount();
+        
+            if($error[0] == 00000 && $rows_n > 0){
+                #$this->projectsDt(1);
+                header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=1");
+            }
+            elseif($error[0] == 00000 && $rows_n < 1){
+                #$this->projectsDt(10, "Ha ocurrido un error grave!");
+                header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error grave'");
+            }
+            else{
+                #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+                header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+            }
         }
-        elseif($error[0] == 00000 && $rows_n < 1){
-            #$this->projectsDt(10, "Ha ocurrido un error grave!");
-            header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error grave'");
+        
+        else {
+            //$pdoUser = $model->getUserById($user);
+            header("Location: ".$this->root."?controller=Panel&action=newUserForm&error_flag=10&user_id=".$id_user."&message='Ha ocurrido un error: ".$validacion['error']."'");
         }
-        else{
-            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
-        }
+        
+        
         
     }
     
@@ -268,16 +299,7 @@ class PanelController extends ControllerBase
         $data['profiles'] = $pdoProfiles;
         $data['user'] = $pdoUser;
         $data['message'] = $message;
-        //$data['error_flag'] =  $error_flag;
-        /*
-        if($error_flag == 1)
-        {
-            $data['error_flag'] = $this->errorMessage->getError(1);
-        }
-        else{
-            $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
-        }
-        */
+        
         $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
 
         
@@ -339,7 +361,10 @@ class PanelController extends ControllerBase
         //$pass2 = filter_input(INPUT_TYPE, 'pass_user_2');
         $pass1 = $_POST['pass_user_1'];
         $pass2 = $_POST['pass_user_2'];
-        
+
+        $result_val= $model->getBoolUsername($user);
+        $boolean_name_user = $result_val->fetch(PDO::FETCH_ASSOC);
+
         
         //if(isset($_POST['pass_user_1']) && isset($_POST['pass_user_2']))
         if($pass1 !='' && $pass2 !='')
@@ -347,18 +372,18 @@ class PanelController extends ControllerBase
             if($pass1 == $pass2)
             {
                 $user->setPasswordUser($pass1);
-                $validacion = $this->validarDatosUsuario($user, 'normal');
+                $validacion = $this->validarDatosUsuario($user, 'normal', $boolean_name_user['result']);
             }
             else
             {
                 $user->setPasswordUser('');
-                $validacion = $this->validarDatosUsuario($user, 'distintos');
+                $validacion = $this->validarDatosUsuario($user, 'distintos', $boolean_name_user['result']);
             }
         }
         else if ($pass1 =='' && $pass2 =='')
         {
             $user->setPasswordUser($dataUser['password_user']);
-            $validacion = $this->validarDatosUsuario($user, 'md5');
+            $validacion = $this->validarDatosUsuario($user, 'md5', $boolean_name_user['result']);
         }
 
         if($validacion["estado"] == true )
@@ -446,12 +471,15 @@ class PanelController extends ControllerBase
         
     }
     
-    public function validarDatosUsuario(UserVO $user, $tipoPass)
+    public function validarDatosUsuario(UserVO $user, $tipoPass, $boolean_name_user)
     {
+        
         $mensaje['estado'] = true;
         $mensaje['largoNombre'] = strlen($user->getNameUser());
         $mensaje['largoPass'] = strlen($user->getPasswordUser());
 
+        //echo "user: ".$user->getNameUser();
+        //exit();
         // si $tipoPass es normal, el password no es md5
         // si $tipoPass es md5, el pass tiene formato md5
 
@@ -459,6 +487,15 @@ class PanelController extends ControllerBase
         {
             $mensaje['error'] = "El nombre de usuario debe tener más de 4 letras";
             $mensaje['estado'] = false;
+        }
+
+        else
+        {
+            if ($boolean_name_user != 'false')
+            {
+                $mensaje['error'] = "El nombre de ya existe, debe ingresar un nombre de usuario nuevo.";
+                $mensaje['estado'] = false;
+            }
         }
 
         if($tipoPass == 'normal')
