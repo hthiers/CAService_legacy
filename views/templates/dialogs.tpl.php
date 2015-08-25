@@ -10,6 +10,12 @@
 </div>
 <!-- END Confirm action -->
 
+<!-- Dialog remove task -->
+<div id="dialog-remove" title="Confirmar acci&oacute;n">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 2px 10px 0;"></span>¿Seguro que quieres eliminar este trabajo?</p>
+</div>
+<!-- END Dialog remove task -->
+
 <!-- New Customer -->
 <div id="dialog-new-customer" title="Nuevo Cliente">
     <form action="?controller=customers&amp;action=ajaxCustomersAdd" method="POST">
@@ -84,6 +90,7 @@
 <!-- KEEP DIALOGS CLOSED -->
 <script type="text/javascript" language="javascript">
     $("#dialog-confirm").dialog({ autoOpen: false});
+    $("#dialog-remove").dialog({ autoOpen: false});
     $("#dialog-new-customer").dialog({ autoOpen: false});
     $("#dialog-new-type").dialog({ autoOpen: false});
     $("#dialog-project").dialog({ autoOpen: false});

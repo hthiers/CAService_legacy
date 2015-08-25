@@ -73,7 +73,7 @@ body{
 }
 #central{
     /*background-color:#FFFFFF;*/
-    width:1000px; 
+    width:70%; 
     height:auto; 
     padding-bottom:50px;
     padding-top: 5px;
@@ -277,6 +277,7 @@ h4.error_page {
     color: #000;
     margin: 2px auto;
     font-size: 12px;
+    padding: 5px;
 }
 
 #dt_filtres th {

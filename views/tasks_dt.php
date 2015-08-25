@@ -20,7 +20,6 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/jquery-tableTools.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
-
 TableTools.BUTTONS.download = {
     "sAction": "text",
     "sTag": "default",
@@ -96,12 +95,53 @@ function editTask(task){
     
     $("#dt_form").submit();
 }
+
+function removeTask(task){   
+    var urlAction = "<?php echo "?controller=".$controller."&action=tasksRemove";?>";
+    
+    $( "#dialog-remove" ).dialog({
+            height: 200,
+            width: 350,
+            modal: true,
+            buttons: {
+            "Eliminar": function() {
+                console.log("borrando: #"+task);
+                
+                $('#dt_form').attr('action', urlAction);
+                $('#dt_form').attr('method', 'POST');
+                $('#task_id').val(task);
+
+                $("#dt_form").submit();
+                
+                //$( this ).dialog( "close" );
+            },
+            "Cancelar": function() {
+              $( this ).dialog( "close" );
+            }
+          }
+    });
+    
+    $("#dialog-remove")
+            .data('task_id', task)
+            .dialog("open");
+}
+    
+function hideErrorBox(){
+    $("#errorbox_success").fadeToggle( "slow", "linear" );
+}
     
 $(document).ready(function() {
+    
+    //Hide errorbox
+    setTimeout(function() {
+        hideErrorBox();
+    }, 2000);
+    
     var oTable = $('#example').dataTable({
         //Initial server side params
         "bProcessing": true,
         "bServerSide": true,
+        "bAutoWidth": false,
         "sAjaxSource": '?controller=tasks&action=ajaxTasksDt',
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
             $.getJSON(sSource, aoData, function(json) {
@@ -213,13 +253,16 @@ $(document).ready(function() {
             {
                 "fnRender": function ( oObj ) {
                     //console.log(oObj.aData[1]);
+                    
+                    var dt_tools = "";
                 
                     if(oObj.aData[1] === null || oObj.aData[1] === ""){
-                        return "<input type='button' id=\'btn_view\' class=\'input\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='VER' />";
+                        dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
                     }
-                    else {
-                        return '';
-                    }
+
+                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")' value='' />";
+                    
+                    return dt_tools;
                 },
                 "aTargets": [-1]
             }
@@ -251,6 +294,7 @@ $(document).ready(function() {
 </head>
 <body id="dt_example" class="ex_highlight_row">
 
+    <?php require('templates/dialogs.tpl.php'); #banner & menu ?>
     <?php require('templates/menu.tpl.php'); #banner & menu ?>
     
     <!-- CENTRAL -->

@@ -95,7 +95,7 @@ class TasksController extends ControllerBase
 
         $this->view->show("tasks_dt.php", $data);
     }
-    
+
     public function ajaxTasksDt()
     {
         $session = FR_Session::singleton();
@@ -249,6 +249,19 @@ class TasksController extends ControllerBase
             }
 
             $sWhere .= " a.status_task = '".$_GET['filEstado']."' ";
+        }
+        if ($_GET['filEstado'] == "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+            
+            $sWhere .= " a.status_task < 9 "; # avoid deleted tasks (status = 9)
         }
         if( isset($_GET['filUser']) && $_GET['filUser'] != "")
         {
@@ -1082,6 +1095,14 @@ class TasksController extends ControllerBase
     {
         $session = FR_Session::singleton();
         $id_task = $_REQUEST['id_task'];
+        
+        // Support POST & GET
+        if(filter_input(INPUT_POST, 'task_id') != ''){
+            $id_task = filter_input(INPUT_POST, 'task_id');
+        }
+        else{
+            $id_task = filter_input(INPUT_GET, 'task_id');
+        }
         
         if($id_task != null){
             require_once 'models/TasksModel.php';

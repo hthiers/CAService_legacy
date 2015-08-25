@@ -1,9 +1,8 @@
 @charset "utf-8";
 /* CSS Document por Hexagram www.hexagram.cl */
 
+/*
 .input{
-	/*background-color:#FFFFFF;*/
-	/*border:#0b2d60 1px solid;*/
 	padding:2px;
 	background-position: left;
 	font-family:Verdana, Arial, Helvetica, sans-serif;
@@ -17,7 +16,6 @@
 
 .input:hover{
 	background-color:#CCCCCC;
-	/*border:#0b2d60 1px solid;*/
 	text-transform:uppercase;
 }
 
@@ -27,6 +25,7 @@
 	text-transform:uppercase;
 	text-align: right;
 }
+*/
 
 select{
         background-color:#FFFFFF;
