@@ -136,6 +136,7 @@ if($session->id_tenant != null && $session->id_user != null):
                     
                 </table>
                 <input type="hidden" name="id_user" value="<?php echo $data_user['id_user']; ?>" />
+                <input type="hidden" name="original_name_user" value="<?php echo $data_user['name_user']; ?>" />
             </form>
             <div class="spacer"></div>
         </div>
