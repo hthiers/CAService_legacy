@@ -113,7 +113,7 @@ function removeTask(task){
 
                 $("#dt_form").submit();
                 
-                //$( this ).dialog( "close" );
+                $(this).dialog("close");
             },
             "Cancelar": function() {
               $( this ).dialog( "close" );
@@ -253,21 +253,21 @@ $(document).ready(function() {
             {
                 "fnRender": function ( oObj ) {
                     //console.log(oObj.aData[1]);
-                    
+
                     var dt_tools = "";
-                
+
                     if(oObj.aData[1] === null || oObj.aData[1] === ""){
                         dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
                     }
 
                     dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")' value='' />";
-                    
+
                     return dt_tools;
                 },
                 "aTargets": [-1]
             }
         ],
-        
+
         "sPaginationType": "full_numbers",
         "aaSorting": [[0, "asc"]]
     });
