@@ -361,9 +361,23 @@ class PanelController extends ControllerBase
         //$pass2 = filter_input(INPUT_TYPE, 'pass_user_2');
         $pass1 = $_POST['pass_user_1'];
         $pass2 = $_POST['pass_user_2'];
-
-        $result_val= $model->getBoolUsername($user);
-        $boolean_name_user = $result_val->fetch(PDO::FETCH_ASSOC);
+        
+        /*  Obtiene nombre de usuario original para comparar al momento de validar si nombre de
+           usuario existe o no */
+        $original_name_user = filter_input(INPUT_POST, 'original_name_user');
+        
+        
+        if($original_name_user != $user->getNameUser())
+        {
+            $result_val= $model->getBoolUsername($user);
+            $boolean_name_user = $result_val->fetch(PDO::FETCH_ASSOC);
+            $boolean_name_user_result = $boolean_name_user['result'];
+        }
+        else 
+        {
+            $boolean_name_user_result = 'false';
+        }
+        
 
         
         //if(isset($_POST['pass_user_1']) && isset($_POST['pass_user_2']))
@@ -372,18 +386,18 @@ class PanelController extends ControllerBase
             if($pass1 == $pass2)
             {
                 $user->setPasswordUser($pass1);
-                $validacion = $this->validarDatosUsuario($user, 'normal', $boolean_name_user['result']);
+                $validacion = $this->validarDatosUsuario($user, 'normal', $boolean_name_user_result);
             }
             else
             {
                 $user->setPasswordUser('');
-                $validacion = $this->validarDatosUsuario($user, 'distintos', $boolean_name_user['result']);
+                $validacion = $this->validarDatosUsuario($user, 'distintos', $boolean_name_user_result);
             }
         }
         else if ($pass1 =='' && $pass2 =='')
         {
             $user->setPasswordUser($dataUser['password_user']);
-            $validacion = $this->validarDatosUsuario($user, 'md5', $boolean_name_user['result']);
+            $validacion = $this->validarDatosUsuario($user, 'md5', $boolean_name_user_result);
         }
 
         if($validacion["estado"] == true )
@@ -405,7 +419,7 @@ class PanelController extends ControllerBase
             }
             elseif($error[0] == 00000 && $rows_n < 1){
                 #$this->projectsDt(10, "Ha ocurrido un error grave!");
-                header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error grave'");
+                header("Location: ".$this->root."?controller=Panel&action=usersDt&error_flag=10&message='Ha ocurrido un error grave: '".$error[2]." ___ ".$id_user."'");
             }
             else{
                 #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
