@@ -1,8 +1,9 @@
 <?php
 require('templates/header_index.tpl.php');
 
-if(isset($_GET['errorCode']))
+if(isset($_GET['errorCode'])){
     $error_code = $_GET['errorCode'];
+}
 ?>
 
 <!-- AGREGAR JS & CSS AQUI -->
@@ -36,7 +37,7 @@ $(document).ready(function(){
             
             <h2 class="menuinicio">Inicio de sesión</h2>
             <p class="submenu">
-                Versi&oacute;n 0.2.1
+                Versi&oacute;n <?php echo $config->get('version'); ?>
             </p>
             
             <div style="margin-top: 10px;">

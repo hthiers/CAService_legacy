@@ -111,9 +111,8 @@ function removeTask(task){
                 $('#dt_form').attr('method', 'POST');
                 $('#task_id').val(task);
 
+                $( this ).dialog( "close" );
                 $("#dt_form").submit();
-                
-                $(this).dialog("close");
             },
             "Cancelar": function() {
               $( this ).dialog( "close" );
@@ -129,8 +128,11 @@ function removeTask(task){
 function hideErrorBox(){
     $("#errorbox_success").fadeToggle( "slow", "linear" );
 }
-    
+
 $(document).ready(function() {
+    
+    var s_id_user = null;
+    var s_id_profile = null;
     
     //Hide errorbox
     setTimeout(function() {
@@ -146,6 +148,9 @@ $(document).ready(function() {
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
             $.getJSON(sSource, aoData, function(json) {
                 var total_seconds = json.iTotalTime;
+                s_id_user = json.iIdUser;
+                s_id_profile = json.iIdProfile;
+                
                 var total_time = secondsToTime(total_seconds);
                 
                 $("#footer p").text('Tiempo total: '+total_time['h']+':'+total_time['m']+':'+total_time['s']);
@@ -251,23 +256,36 @@ $(document).ready(function() {
                 "aTargets": [6]
             },
             {
-                "fnRender": function ( oObj ) {
-                    //console.log(oObj.aData[1]);
-
+                "fnRender": function ( oObj ) {                    
                     var dt_tools = "";
+                
+                    if(s_id_profile > 1){
+                        //mostrar opciones solo para tareas propias
+                        
+                        if(s_id_user === oObj.aData[11]){
+                            if(oObj.aData[1] === null || oObj.aData[1] === ""){
+                                dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
+                            }
 
-                    if(oObj.aData[1] === null || oObj.aData[1] === ""){
-                        dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
+                            dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")' value='' />";
+                        }
                     }
+                    else{
+                        //mostrar opciones para las tareas de todos los usuarios
+                        
+                        if(oObj.aData[1] === null || oObj.aData[1] === ""){
+                                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
+                        }
 
-                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")' value='' />";
+                        dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")' value='' />";
+                    }
 
                     return dt_tools;
                 },
                 "aTargets": [-1]
             }
         ],
-
+        
         "sPaginationType": "full_numbers",
         "aaSorting": [[0, "asc"]]
     });

@@ -21,7 +21,7 @@ $navegador = substr($navegador,25,8);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
-<title>Control tiempos de trabajo - Beta v0.2.1</title>
+<title>Control tiempos de trabajo - Beta v<?php echo $config->get('version'); ?></title>
 <!-- @import "views/css/custom-theme/jquery-ui-1.8.20.custom.css"; -->
 <style type="text/css">
     @import "views/css/custom-theme-blue/jquery-ui-1.8.23.custom.css";
@@ -31,10 +31,12 @@ $navegador = substr($navegador,25,8);
     @import "views/css/formularios.css";
     @import "views/css/texto.css";
     <?php 
-    if($navegador == 'MSIE 6.0')  
+    if($navegador == 'MSIE 6.0'){
             echo '@import "views/css/menuie6.css";';
-    else
+    }
+    else{
             echo '@import "views/css/menu2.css";';
+    }
     ?>
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.js"></script>
@@ -62,8 +64,8 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 });
 </script>
 <?php
-	if($navegador == 'MSIE 6.0')
+	if($navegador == 'MSIE 6.0'){
 		echo '<script type="text/javascript" language="javascript" src="views/lib/menuie6.js"></script>';
+        }
 	
 endif; #session
-?>

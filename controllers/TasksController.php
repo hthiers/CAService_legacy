@@ -15,10 +15,12 @@ class TasksController extends ControllerBase
         $session = FR_Session::singleton();
         
         #support global messages
-        if(isset($_GET['error_flag']))
+        if(isset($_GET['error_flag'])){
             $error_flag = $_GET['error_flag'];
-        if(isset($_GET['message']))
+        }
+        if(isset($_GET['message'])){
             $message = $_GET['message'];
+        }
         
         //Incluye el modelo que corresponde
 //        require_once 'models/ProjectsModel.php';
@@ -32,12 +34,6 @@ class TasksController extends ControllerBase
         //Le pedimos al modelo todos los items
         $pdoTask = $taskModel->getAllTasksByTenant($session->id_tenant);
         $pdoCustomer = $customerModel->getAllCustomers($session->id_tenant);
-        
-        // Obtener permisos de edición
-//        $permisos = $userModel->getUserModulePrivilegeByModule($session->id, 7);
-//        if($row = $permisos->fetch(PDO::FETCH_ASSOC)){
-//            $data['permiso_editar'] = $row['EDITAR'];
-//        }
         
         // meses
         $arrayDates = Utils::getMonths();
@@ -88,7 +84,6 @@ class TasksController extends ControllerBase
 
         $data['controller'] = "tasks";
         $data['action'] = "tasksView";
-//        $data['action_b'] = "trabajosDt";
 
         //Posible error
         $data['error_flag'] = $this->errorMessage->getError($error_flag, $message);
@@ -401,7 +396,9 @@ class TasksController extends ControllerBase
             "iTotalRecords" => $iTotal,
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array(),
-            "iTotalTime" => $iTotalTime
+            "iTotalTime" => $iTotalTime,
+            "iIdUser" => $session->id_user,
+            "iIdProfile" => $session->id_profile
         );
 
         $k = 1;

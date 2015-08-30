@@ -17,4 +17,3 @@ class IndexController extends ControllerBase
         $this->view->show("home.php", $vars);
     }
 }
-?>
