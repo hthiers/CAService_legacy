@@ -3,8 +3,9 @@ header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 header("Content-Type: text/html; charset=UTF-8");
 
-//session vars
+//general vars
 $session = FR_Session::singleton();
+$constants = Constants::singleton();
 
 #system vars for view level
 $config = Config::singleton();
@@ -26,7 +27,7 @@ $navegador = substr($navegador,25,8);
 <meta http-equiv="expires" content="0" />
 <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
 <meta http-equiv="pragma" content="no-cache" />
-<title>Control tiempos de trabajo - Beta v<?php echo $config->get('version'); ?></title>
+<title>Control tiempos de trabajo - Beta v<?php echo $constants->getSysVersion(); ?></title>
 <!-- @import "views/css/custom-theme/jquery-ui-1.8.20.custom.css"; -->
 <style type="text/css">
     @import "views/css/custom-theme-blue/jquery-ui-1.8.23.custom.css";

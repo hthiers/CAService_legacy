@@ -10,6 +10,7 @@ class FrontController
 		//Incluimos algunas clases:
 		
 		require 'libs/Config.php'; //de configuracion
+                require 'libs/Constants.php'; //de constantes generales
                 require 'libs/FR_Session.php'; //de sesiones
 		require 'libs/SPDO.php'; //PDO con singleton
 		require 'libs/ControllerBase.php'; //Clase controlador base
@@ -34,18 +35,22 @@ class FrontController
 		}
 		
 		//Lo mismo sucede con las acciones, si no hay accion, tomamos index como accion
-		if(! empty($_GET['action']))
+		if(! empty($_GET['action'])){
 		      $actionName = $_GET['action'];
-		else
+                }
+		else{
 		      $actionName = "index";
+                }
 		
 		$controllerPath = $config->get('controllersFolder') . $controllerName . '.php';
 			
 		//Incluimos el fichero que contiene nuestra clase controladora solicitada	
-		if(is_file($controllerPath))
+		if(is_file($controllerPath)){
 		      require $controllerPath;
-		else
+                }
+		else{
 		      die('El controlador no existe - 404 not found: '.$controllerPath.", ".$controllerName);
+                }
 		
 		//Si no existe la clase que buscamos y su accion, tiramos un error 404
 		if (is_callable(array($controllerName, $actionName)) == false) 
@@ -58,4 +63,3 @@ class FrontController
 		$controller->$actionName();
 	}
 }
-?>

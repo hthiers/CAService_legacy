@@ -37,7 +37,7 @@ $(document).ready(function(){
             
             <h2 class="menuinicio">Inicio de sesión</h2>
             <p class="submenu">
-                Versi&oacute;n <?php echo $config->get('version'); ?>
+                Versi&oacute;n <?php echo $constants->getSysVersion(); ?>
             </p>
             
             <div style="margin-top: 10px;">
