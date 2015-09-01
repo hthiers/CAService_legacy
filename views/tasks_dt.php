@@ -383,7 +383,7 @@ $(document).ready(function() {
             <!-- CH - creación de filtro por día-->
             <label style="float:none;">D&iacute;a: </label>
             <select id="cboDia">
-                <option value="0">Todos</option>
+                <option value="">Todos</option>
             </select>
             <!-- CH - fin creación de filtro por día-->
             

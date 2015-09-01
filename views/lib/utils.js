@@ -200,7 +200,7 @@ function getLastDay(idMonth, idYear, cboResult) {
     }
     var dayFinal = i-1;
     
-    if(dayAux == 0) {
+    if(dayAux === 0) {
         cbo.value = 0;
     }
     else if(dayAux <= dayFinal) {

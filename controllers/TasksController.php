@@ -219,6 +219,19 @@ class TasksController extends ControllerBase
 
             $sWhere .= " MONTH(a.date_ini) = '".$_GET['filMes']."' ";
         }
+        if( isset($_GET['filDia']) && $_GET['filDia'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " DAY(a.date_ini) = '".$_GET['filDia']."' ";
+        }
         if( isset($_GET['filType']) && $_GET['filType'] != "")
         {
             if ( $sWhere == "" )
