@@ -181,6 +181,36 @@ function formatTime(seconds)
     return time;
 }
 
+function getLastDay(idMonth, idYear, cboResult) {
+    
+    var month=document.getElementById(idMonth).value;
+    var year=document.getElementById(idYear).value;
+    var dayAux = document.getElementById(cboResult).value;
+    var cbo = document.getElementById(cboResult);
+    var day = new Date(year, month, 0);  
+    
+    cbo.length = 1;
+    day = day.getDate();
+    var i = 1;
+    for (i; i <= day; i++) {
+        var option = document.createElement('option');
+        option.value = i;
+        option.text = i;
+        cbo.add(option);
+    }
+    var dayFinal = i-1;
+    
+    if(dayAux == 0) {
+        cbo.value = 0;
+    }
+    else if(dayAux <= dayFinal) {
+        cbo.value = dayAux;
+    }
+    else {
+        cbo.value = i-1;
+    }
+}
+
 /**
  * Get time clock by custom init params
  * #progress_clock ID element needed!

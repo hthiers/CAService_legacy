@@ -43,6 +43,7 @@ TableTools.BUTTONS.download = {
             { "name": "filAnio", "value": $('#cboAnio').val() },
             { "name": "filCliente", "value": $('#cboCliente').val() },
             { "name": "filMes", "value": $('#cboMes').val() },
+            { "name": "filDia", "value": $('#cboDia').val() },
             { "name": "filType", "value": $('#cboType').val() },
             { "name": "filEstado", "value": $('#cboEstado').val() },
             { "name": "filUser", "value": $('#cboUser').val() }
@@ -195,6 +196,7 @@ $(document).ready(function() {
 		{ "name": "filAnio", "value": $('#cboAnio').val() },                
 		{ "name": "filCliente", "value": $('#cboCliente').val() },
                 { "name": "filMes", "value": $('#cboMes').val() },
+                { "name": "filDia", "value": $('#cboDia').val() },
                 { "name": "filType", "value": $('#cboType').val() },
                 { "name": "filEstado", "value": $('#cboEstado').val() },
                 { "name": "filUser", "value": $('#cboUser').val() }
@@ -301,12 +303,18 @@ $(document).ready(function() {
 
     // listeners de filtros para dataTable
     $('#cboAnio').change(function() { oTable.fnDraw(); } );
-    $('#cboCliente').change(function() { oTable.fnDraw(); } );
+    $('#cboCliente').change(function() { oTable.fnDraw(); } ); 
     $('#cboMes').change(function() { oTable.fnDraw(); } );
+  
+    $('#cboDia').change(function() { oTable.fnDraw(); } );
+    
     $('#cboType').change(function() { oTable.fnDraw(); } );
     $('#cboEstado').change(function() { oTable.fnDraw(); } );
     $('#cboUser').change(function() { oTable.fnDraw(); } );
+    
+    getLastDay('cboMes', 'cboAnio', 'cboDia');
 });
+
 </script>
 
 </head>
@@ -350,7 +358,7 @@ $(document).ready(function() {
         
         <div id="dt_filtres" style="float:left;margin-top:10px;">
 	    <label style="float:none;">Año: </label>
-            <select id="cboAnio">
+            <select id="cboAnio" onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')">
                 <?php
                 echo "<option selected value=".date('Y').">". date('Y') ."</option>";
                 echo "<option value=".date('Y',strtotime('-1 year')).">". date('Y',strtotime('-1 year')) ."</option>";
@@ -358,7 +366,7 @@ $(document).ready(function() {
             </select>
 
             <label style="float:none;">Mes: </label>
-            <select id="cboMes">
+            <select id="cboMes" onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')">
                 <?php
                 for ($i=0; $i<=sizeof($arrayDates); $i++){
                     if($i == date("m")){
@@ -371,6 +379,13 @@ $(document).ready(function() {
                 }
                 ?>
             </select>
+            
+            <!-- CH - creación de filtro por día-->
+            <label style="float:none;">D&iacute;a: </label>
+            <select id="cboDia">
+                <option value="0">Todos</option>
+            </select>
+            <!-- CH - fin creación de filtro por día-->
             
             <label style="float:none;">Estado: </label>
             <select id="cboEstado">
