@@ -1390,7 +1390,7 @@ class TasksController extends ControllerBase
         // Get month from parameters
         $requestedDay = Utils::getMonths($_GET['filDia']);
         $requestedMonth = Utils::getMonths($_GET['filMes']);
-        $requestedYear = Utils::getMonths($_GET['filAnio']);
+        $requestedYear = $_GET['filAnio'];
         
         // Title (first row)
         $currentDatetime = date('dmY-His');
