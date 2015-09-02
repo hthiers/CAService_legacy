@@ -128,6 +128,7 @@ function removeTask(task){
     
 function hideErrorBox(){
     $("#errorbox_success").fadeToggle( "slow", "linear" );
+    $("#errorbox_failure").fadeToggle( "slow", "linear" );
 }
 
 $(document).ready(function() {

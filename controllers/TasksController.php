@@ -205,7 +205,7 @@ class TasksController extends ControllerBase
             }
 
             $sWhere .= " YEAR(a.date_ini) = '".$_GET['filAnio']."' ";
-        }        
+        }    
 	if( isset($_GET['filMes']) && $_GET['filMes'] != "")
         {
             if ( $sWhere == "" )
@@ -1327,8 +1327,8 @@ class TasksController extends ControllerBase
         $data = $obj->{'aaData'};
         
         // total time from source
-        $dataTotalTime = $obj->{'iTotalTime'};
-        $dataTotalTime = Utils::formatTime($dataTotalTime);
+        $dataTotalTimeRAW = $obj->{'iTotalTime'};
+        $dataTotalTime = Utils::formatTime($dataTotalTimeRAW);
         
         // Styles Arrays
         $style_content = array(
@@ -1388,6 +1388,7 @@ class TasksController extends ControllerBase
                                     ->setCategory("trabajos");
         
         // Get month from parameters
+        $requestedDay = Utils::getMonths($_GET['filDia']);
         $requestedMonth = Utils::getMonths($_GET['filMes']);
         $requestedYear = Utils::getMonths($_GET['filAnio']);
         
@@ -1601,6 +1602,19 @@ class TasksController extends ControllerBase
 
             $sWhere .= " c.id_customer = '".$_GET['filCliente']."' ";
         }
+        if( isset($_GET['filAnio']) && $_GET['filAnio'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " YEAR(a.date_ini) = '".$_GET['filAnio']."' ";
+        }
         if( isset($_GET['filMes']) && $_GET['filMes'] != "")
         {
             if ( $sWhere == "" )
@@ -1613,6 +1627,19 @@ class TasksController extends ControllerBase
             }
 
             $sWhere .= " MONTH(a.date_ini) = '".$_GET['filMes']."' ";
+        }
+        if( isset($_GET['filDia']) && $_GET['filDia'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " DAY(a.date_ini) = '".$_GET['filDia']."' ";
         }
         if( isset($_GET['filType']) && $_GET['filType'] != "")
         {
@@ -1639,6 +1666,32 @@ class TasksController extends ControllerBase
             }
 
             $sWhere .= " a.status_task = '".$_GET['filEstado']."' ";
+        }
+        if ($_GET['filEstado'] == "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+            
+            $sWhere .= " a.status_task < 9 "; # avoid deleted tasks (status = 9)
+        }
+        if( isset($_GET['filUser']) && $_GET['filUser'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " e.id_user = '".$_GET['filUser']."' ";
         }
         
         # TENANT
