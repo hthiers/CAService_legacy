@@ -1442,7 +1442,7 @@ class TasksController extends ControllerBase
             foreach ($caso as $col => $valor) {
                 
                 if($col <= $last_col){
-                    if($col == 6){
+                    if($col == 7){
                         $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue($colArray[$col].''.$row, Utils::formatTime($valor));
                     }
@@ -1453,7 +1453,7 @@ class TasksController extends ControllerBase
                 }
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':G'.$row)->applyFromArray($style_content);
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':H'.$row)->applyFromArray($style_content);
             $row++;
         }
 
