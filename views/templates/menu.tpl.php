@@ -16,13 +16,11 @@ $url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER
 
 <div class="fin" id="banner">
     <div class="banner_welcome">
-        Bienvenido <?php echo "<a href='#'>".$session->name_user."</a>"; ?>
-        |
-        <a href="?controller=Panel&amp;action=editUserForm&user_id=<?php echo $session->id_user; ?>">Editar mi perfil</a>
+        Bienvenido <a href="?controller=Panel&amp;action=editUserForm&user_id=<?php echo $session->id_user;?>"><?php echo $session->name_user;?></a>
         |
         <a href="?controller=users&amp;action=logOut">Cerrar Sesi&oacute;n</a>
-        |
-        <a href="#">Ayuda</a>
+        
+        <!--<a href="#">Ayuda</a>-->
     </div>
     <div class="banner_title"></div>
 </div>

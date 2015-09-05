@@ -1397,21 +1397,22 @@ class TasksController extends ControllerBase
         
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.$requestedYear.' - Fecha exportación: '.date('d-m-Y H:i:s'))
-                ->mergeCells('A1:G1')
+                ->mergeCells('A1:H1')
                 ->getRowDimension(1)->setRowHeight(30);
         $objPHPExcel->setActiveSheetIndex(0)
-                ->getStyle('A1:G1')->applyFromArray($style_title);
+                ->getStyle('A1:H1')->applyFromArray($style_title);
         
         // Cols title
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A2', 'Inicio')
                 ->setCellValue('B2', 'Fin')
                 ->setCellValue('C2', 'Cliente')
-                ->setCellValue('D2', 'Gestion')
-                ->setCellValue('E2', 'Materia')
-                ->setCellValue('F2', 'Responsable')
-                ->setCellValue('G2', 'Tiempo')
-                ->getStyle('A2:G2')->applyFromArray($style_subtitle);
+                ->setCellValue('D2', 'Materia')
+                ->setCellValue('E2', 'Gestion')
+                ->setCellValue('F2', 'Descripcion')
+                ->setCellValue('G2', 'Responsable')
+                ->setCellValue('H2', 'Tiempo')
+                ->getStyle('A2:H2')->applyFromArray($style_subtitle);
         
         // first row (custom starting row)
         $row = 3;
@@ -1459,13 +1460,13 @@ class TasksController extends ControllerBase
         // Set tasks total time on last row
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($colArray[5].''.$row, 'Tiempo total')
-                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
+                    ->getStyle('A'.$row.':H'.$row)->applyFromArray($style_subtitle);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($colArray[6].''.$row, $dataTotalTime)
-                    ->getStyle('A'.$row.':G'.$row)->applyFromArray($style_subtitle);
+                    ->getStyle('A'.$row.':H'.$row)->applyFromArray($style_subtitle);
 
         // Set autosize ON for each col
-        foreach(range('A','G') as $columnID) {
+        foreach(range('A','H') as $columnID) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
                     ->setAutoSize(true);
         }
@@ -1530,9 +1531,11 @@ class TasksController extends ControllerBase
         $sIndexColumn = "code_task";
         $aTotalColumns = count($aColumns);
 
-        /******************** Paging */
+        /******************** Paging *
         if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
             $sLimit = "LIMIT ".$_GET['iDisplayStart'].", ".$_GET['iDisplayLength'];
+         * 
+         */
 
         /******************** Ordering */
         $sOrder = "";
