@@ -1519,6 +1519,7 @@ class TasksController extends ControllerBase
             , 'c.label_customer'
             , 'a.label_task'
             , 'g.label_type'
+            , 'a.desc_task'
             , 'e.name_user'
             , 'a.time_total'
             , 'a.id_task'
