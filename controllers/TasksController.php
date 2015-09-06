@@ -1418,7 +1418,7 @@ class TasksController extends ControllerBase
         $row = 3;
         
         // last col (custom last column to export)
-        $last_col = 6;
+        $last_col = 7;
         
         // cols
         $colArray = array (
