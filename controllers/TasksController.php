@@ -104,8 +104,8 @@ class TasksController extends ControllerBase
         $sTable = "cas_task";
 
         $aColumns = array(
-            'a.date_ini'
-            , 'a.date_end'
+            'DATE_FORMAT(a.date_ini, "%d/%m/%Y %H:%i")'
+            , 'DATE_FORMAT(a.date_end, "%d/%m/%Y %H:%i")'
             , 'c.label_customer'
             , 'a.label_task'
             , 'g.label_type'
@@ -1517,8 +1517,8 @@ class TasksController extends ControllerBase
             'a.date_ini'
             , 'a.date_end'
             , 'c.label_customer'
-            , 'a.label_task'
             , 'g.label_type'
+            , 'a.label_task'
             , 'a.desc_task'
             , 'e.name_user'
             , 'a.time_total'
