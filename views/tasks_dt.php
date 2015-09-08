@@ -172,6 +172,7 @@ $(document).ready(function() {
             "sInfo": "_START_ a _END_ de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando 0 registros",
             "sSearch": "Buscar",
+            "sProcessing": "",
             "oPaginate": {
                 "sFirst": "Primera",
                 "sNext": "Siguiente",
@@ -446,8 +447,8 @@ $(document).ready(function() {
                             <th>INICIO</th>
                             <th>FIN</th>
                             <th>CLIENTE</th>
-                            <th>GESTION</th>
                             <th>MATERIA</th>
+                            <th>GESTION</th>
                             <th>RESPONSABLE</th>
                             <!--<th>PROYECTO</th>-->
 <!--                            <th>INICIO_ORIGEN</th>

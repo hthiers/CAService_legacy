@@ -412,3 +412,11 @@ noscript p {
 #i2, #ia2 {
     color: red;
 }
+
+#loader_dt {
+    background: url('../img/loader_b.gif');
+    /*background-position: right bottom, left top;*/
+    background-repeat: no-repeat;
+    width: 64px;
+    height: 64px;
+}

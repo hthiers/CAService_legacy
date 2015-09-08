@@ -51,6 +51,7 @@ $(document).ready(function() {
             "sInfo": "_START_ a _END_ de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando 0 registros",
             "sSearch": "Buscar",
+            "sProcessing": "",
             "oPaginate": {
                 "sFirst": "Primera",
                 "sNext": "Siguiente",
@@ -58,66 +59,13 @@ $(document).ready(function() {
                 "sLast": "&Uacute;ltima"
             }
         },
-        
-        //Custom filters params
-//        "fnServerParams": function ( aoData ){
-//            aoData.push(
-//                { "name": "filCliente", "value": $('#cboCliente').val() },
-//                { "name": "filMes", "value": $('#cboMes').val() },
-//                { "name": "filEstado", "value": $('#cboEstado').val() }
-//            );
-//        },
-        
         "aoColumnDefs": [
-//            { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,1,2] }
-//            {
-//                "fnRender": function ( oObj ) {
-//                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
-//                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
-//                    //string += '&nbsp; <button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">REVISAR</button>';
-//                    
-//                    return string;
-//                },
-//                "aTargets": [5]
-//            }
-//            {
-//                "fnRender": function ( oObj ) {
-//                    if(oObj.aData[5] != null){
-//                        var seconds = oObj.aData[5];
-//                        var total = secondsToTime(seconds);
-//
-//                        return total['h']+':'+total['m']+':'+total['s'];
-//                    }
-//                    else{
-//                        return '';
-//                    }
-//                },
-//                "aTargets": [5]
-//            },
         ],
         
         "sPaginationType": "full_numbers",
         "aaSorting": [[0, "asc"]]
     });
-    
-//    $('#cboCliente').change(function() { oTable.fnDraw(); } );
-//    $('#cboMes').change(function() { oTable.fnDraw(); } );
-//    $('#cboEstado').change(function() { oTable.fnDraw(); } );
-//    
-//    // form submition handling
-//    $('#dt_form').submit( function() {
-//        var sData = oTable.$('input').serialize();
-//        var actionType = $('#action_type').val();
-//        var urlAction = "";
-//        
-//        if(actionType == 'edit_form'){
-//            urlAction = "<?php #echo "?controller=".$controller."&amp;action=".$action;?>";
-//            $('#action_type').val("");
-//            
-//            return true;
-//        }
-//    });
 });
 </script>
 
@@ -140,28 +88,12 @@ require('templates/menu.tpl.php'); #banner & menu
             print_r($titulo); print('<br />');
             print_r($listado); print('<br />');
             print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
-//            print_r($arrayDates);print('<br />');
-            #print_r($permiso_editar); print('<br />');
             print('</div>');
         }
         ?>
         <!-- END DEBUG -->
 
         <p class="titulos-form"><?php echo $titulo; ?></p>
-
-        <!--
-        <p style="font-size: 12px; color: #999;">
-            Nota: Esta pantalla permitir&iacute;a gestionar todos los registros existentes en el sistema, en principio, solo para el usuario en sesi&oacute;n. 
-            Una barra azul en la cabecera de la p&aacute;gina muestra diferentes opciones de men&uacute;. En este caso solo funcionan como v&iacute;nculos 
-            el item de "TRABAJOS" y "NUEVO TRABAJO".
-            <br />
-            Sobre la tabla de abajo se encuentran los filtros de informaciÃ³n en la tabla.
-            Un bot&oacute;n de exportar permitir&iacute;a crear un documento Excel con todos los trabajos en vista.
-            Una columna de opciones permitir&iacute;a ejecutar ciertas acciones sobre un trabajo, en este caso se encuentra un v&iacute;nculo "ver"
-            para abrir un registro.
-            Haciendo clic en las cabeceras de la tabla es posible cambiar el orden por columna.
-        </p>
-        -->
         
         <?php 
         if (isset($error_flag)){
@@ -185,10 +117,6 @@ require('templates/menu.tpl.php'); #banner & menu
                             <th>TENANT</th>
                             <th>NOMBRE</th>
                             <th>DESCRIPCION</th>
-<!--                            <th>CONTACTO</th>
-                            <th>TELEFONO</th>
-                            <th>CORREO</th>-->
-<!--                            <th>OPCIONES</th>-->
                         </tr>
                     </thead>
                     <tbody>

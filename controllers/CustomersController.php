@@ -137,21 +137,6 @@ class CustomersController extends ControllerBase
             }
         }
 
-        /******************** Custom Filtering */
-//        if( isset($_GET['filResponsable']) && $_GET['filResponsable'] != "")
-//        {
-//            if ( $sWhere == "" )
-//            {
-//                    $sWhere = "WHERE ";
-//            }
-//            else
-//            {
-//                    $sWhere .= " AND ";
-//            }
-//
-//            $sWhere .= " A.TIPO LIKE '%".mysql_real_escape_string($_GET['filTipo'])."%' ";
-//        }
-
         /********************** Create Query */
         $sql = "
             SELECT SQL_CALC_FOUND_ROWS 
@@ -203,6 +188,7 @@ class CustomersController extends ControllerBase
             $k++;
         }
 
+        #echo $sql;
         echo json_encode( $output );
     }
     
