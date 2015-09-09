@@ -17,6 +17,7 @@ if($session->id_tenant != null && $session->id_user != null):
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/jquery.jeditable.js"></script>
 <script type="text/javascript">
 function submitToForm(){
     $('#action_type').val("view");
@@ -64,7 +65,27 @@ $(document).ready(function() {
         ],
         
         "sPaginationType": "full_numbers",
-        "aaSorting": [[0, "asc"]]
+        "aaSorting": [[0, "asc"]],
+        
+        "fnDrawCallback": function () {
+            $('#example tbody td').editable( '?controller=customers&action=ajaxCustomersUpdate', {
+                
+                "callback": function( sValue, y ) {
+                    console.log(" waaaaasaaaaaa " + sValue + " _ " + y);
+                    /* Redraw the table from the new data on the server */
+                    //oTable.fnDraw();
+                    var aPos = oTable.fnGetPosition( this );
+                    oTable.fnUpdate( sValue, aPos[0], aPos[1] );
+                },
+                "submitdata": function ( value, settings ) {
+                    return {
+                        "row_id": this.parentNode.getAttribute('id'),
+                        "column": oTable.fnGetPosition( this )[2]
+                    };
+                },
+                "height": "14px"
+            } );
+        }
     });
 });
 </script>
