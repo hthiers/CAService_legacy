@@ -311,7 +311,7 @@ class CustomersController extends ControllerBase
             if($targetCustomer != null && $targetCustomer != false){
                 //apply change
                 $result = $model->updateCustomer(
-                        $targetCustomer['code_customer']
+                        $targetCustomer['id_customer']
                         , $targetCustomer['code_customer']
                         , $targetCustomer['id_tenant']
                         , $new_value
@@ -320,6 +320,7 @@ class CustomersController extends ControllerBase
                 if($result){
                     $error = $result->errorInfo();
                     $rows_n = $result->rowCount();
+                    #$query = $result->debugDumpParams();
 
                     if($error[0] == 00000 && $rows_n > 0){
                         print 'actualizacion correcta';
