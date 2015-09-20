@@ -181,6 +181,7 @@ class CustomersController extends ControllerBase
             {
 //                $row[] = utf8_encode($aRow[ $i ]);
                 $row[] = $aRow[$i];
+                $row['DT_RowId'] = $aRow[0];
             }
 
             $output['aaData'][] = $row;
@@ -236,7 +237,7 @@ class CustomersController extends ControllerBase
     }
     
     public function ajaxCustomersAdd()
-    {   
+    {
         $session = FR_Session::singleton();
 
         if(isset($_POST['name']) && $_POST['name'] != ""):
@@ -253,8 +254,10 @@ class CustomersController extends ControllerBase
 
             $result = $model->getLastCustomer($session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
-            $code_customer = $values['code_customer'];
-            $code_customer = (int)$code_customer + 1;
+            
+            // UUID code
+            $code_customer = Utils::guidv4();
+            
             $new_customer[] = null;
 
             //Le pedimos al modelo todos los items
@@ -283,6 +286,59 @@ class CustomersController extends ControllerBase
 
             print json_encode($new_customer);
 
+            return true;
+        else:
+            return false;
+        endif;
+    }
+    
+    public function ajaxCustomersUpdate()
+    {
+        $session = FR_Session::singleton();
+
+        if(isset($_POST['row_id']) && $_POST['row_id'] != ""):
+
+            //Incluye el modelo que corresponde
+            require_once 'models/CustomersModel.php';
+
+            //Creamos una instancia de nuestro "modelo"
+            $model = new CustomersModel();
+            $targetCustomerPdo = $model->getCustomerByID($session->id_tenant, filter_input(INPUT_POST, 'row_id'));
+            
+            $new_value = filter_input(INPUT_POST, 'value');
+            
+            $targetCustomer = $targetCustomerPdo->fetch(PDO::FETCH_ASSOC);
+            if($targetCustomer != null && $targetCustomer != false){
+                //apply change
+                $result = $model->updateCustomer(
+                        $targetCustomer['code_customer']
+                        , $targetCustomer['code_customer']
+                        , $targetCustomer['id_tenant']
+                        , $new_value
+                        , $targetCustomer['detail_customer']);
+                
+                if($result){
+                    $error = $result->errorInfo();
+                    $rows_n = $result->rowCount();
+
+                    if($error[0] == 00000 && $rows_n > 0){
+                        print 'actualizacion correcta';
+                    }
+                    elseif($error[0] == 00000 && $rows_n < 1){
+                        print 'no se actualizaron datos';
+                    }
+                    else{
+                        print 'error en actualizacion: '. $error[2];
+                    }
+                }
+                else{
+                    print 'hubo un error al intentar ejecutar la sentencia';
+                }
+            }
+            else{
+                print 'no se encontro elemento a actualizar';
+            }
+            
             return true;
         else:
             return false;

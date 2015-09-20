@@ -71,7 +71,7 @@ $(document).ready(function() {
             $('#example tbody td').editable( '?controller=customers&action=ajaxCustomersUpdate', {
                 
                 "callback": function( sValue, y ) {
-                    console.log(" waaaaasaaaaaa " + sValue + " _ " + y);
+                    console.log("valor: "+ sValue);
                     /* Redraw the table from the new data on the server */
                     //oTable.fnDraw();
                     var aPos = oTable.fnGetPosition( this );
