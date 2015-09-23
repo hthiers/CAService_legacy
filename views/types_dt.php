@@ -17,6 +17,7 @@ if($session->id_tenant != null && $session->id_user != null):
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/jquery.jeditable.js"></script>
 <script type="text/javascript">
 function submitToForm(){
     $('#action_type').val("view");
@@ -25,11 +26,11 @@ function submitToForm(){
 }
     
 $(document).ready(function() {
-    var oTable = $('#users_table').dataTable({
+    var oTable = $('#table').dataTable({
         //Initial server side params
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": <?php echo "'?controller=panel&action=ajaxUsersDt'";?>,
+        "sAjaxSource": <?php echo "'?controller=types&action=ajaxTypesDt'";?>,
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
             $.ajax({
                 "dataType": 'json', 
@@ -69,17 +70,7 @@ $(document).ready(function() {
 //        },
         
         "aoColumnDefs": [
-            { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [0,1,2] },
-            {
-                "fnRender": function ( oObj ) {
-                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
-                    var string = "<a class=\'btn_edit\' href='?controller=panel&action=editUserForm&user_id="+oObj.aData[0]+"'>EDITAR</button>";
-                    
-                    return string;
-                },
-                "aTargets": [-1]
-            }
+            { "bVisible": false, "aTargets": [0,1,2] }
 //            {
 //                "fnRender": function ( oObj ) {
 //                    if(oObj.aData[5] != null){
@@ -97,39 +88,34 @@ $(document).ready(function() {
         ],
         
         "sPaginationType": "full_numbers",
-        "aaSorting": [[0, "asc"]]
+        "aaSorting": [[0, "asc"]],
+
+        "fnDrawCallback": function () {
+            $('#table tbody td').editable( '?controller=types&action=ajaxTypesUpdate', {
+                
+                "callback": function( sValue, y ) {
+                    console.log("valor: "+ sValue);
+                    /* Redraw the table from the new data on the server */
+                    //oTable.fnDraw();
+                    var aPos = oTable.fnGetPosition( this );
+                    oTable.fnUpdate( sValue, aPos[0], aPos[1] );
+                },
+                "submitdata": function ( value, settings ) {
+                    return {
+                        "row_id": this.parentNode.getAttribute('id'),
+                        "column": oTable.fnGetPosition( this )[2]
+                    };
+                },
+                "height": "14px"
+            } );
+        }
     });
     
-//    $('#cboCliente').change(function() { oTable.fnDraw(); } );
-//    $('#cboMes').change(function() { oTable.fnDraw(); } );
-//    $('#cboEstado').change(function() { oTable.fnDraw(); } );
-//    
-//    // form submition handling
-//    $('#dt_form').submit( function() {
-//        var sData = oTable.$('input').serialize();
-//        var actionType = $('#action_type').val();
-//        var urlAction = "";
-//        
-//        if(actionType == 'edit_form'){
-//            urlAction = "<?php #echo "?controller=".$controller."&amp;action=".$action;?>";
-//            $('#action_type').val("");
-//            
-//            return true;
-//        }
-//    });
-    
-});
+    $("#create-type").click(function() {
+    console.log("Hola");
+    });
 
-function editUser(user){
-    console.log(user);
-    var urlAction = "<?php echo "?controller=panel&action=editUserForm";?>";
-    
-    $('#dt_form').attr('action', urlAction);
-    $('#dt_form').attr('method', 'POST');
-    $('#user_id').val(user);
-    
-    $("#dt_form").submit();
-}
+});
 
 
 </script>
@@ -138,7 +124,8 @@ function editUser(user){
 <body id="dt_example" class="ex_highlight_row">
 
 <?php
-require('templates/menu.tpl.php'); #banner & menu
+    require('templates/dialogs.tpl.php');
+    require('templates/menu.tpl.php'); #banner & menu
 ?>
     <!-- CENTRAL -->
     <div id="central">
@@ -160,14 +147,23 @@ require('templates/menu.tpl.php'); #banner & menu
         ?>
         <!-- END DEBUG -->
 
-        <p class="titulos-form"><?php echo $titulo; ?></p>
-
+        <p class="titulos-form" style="float:left;"><?php echo $titulo; ?></p>
+        <input type="text" name="new_type_label" style="margin-left: 30%; margin-top: 10px;" />
+        <button id="create-type">Añadir</button>
+        
+        <!--<div class="new-type" >
+            Nueva Materia
+            <input type="text" name="new_type_label" />
+            <button id="create-type">Crear</button>
+            <br />
+        </div>-->
         
         <?php 
         if (isset($error_flag)){
             if(strlen($error_flag) > 0)
                 echo $error_flag;
         }
+            
         ?>
 
         <!-- CUSTOM FILTROS -->
@@ -175,16 +171,14 @@ require('templates/menu.tpl.php'); #banner & menu
 
         <!-- DATATABLE -->
         <div id="dynamic">
-            <form id="dt_form" method="POST" action="<?php echo "?controller=panel&amp;action=ajaxUsersDt";?>">
-                <table class="display" id="users_table">
+            <form id="dt_form" method="POST" action="<?php echo "?controller=types&amp;action=ajaxTypesDt";?>">
+                <table class="display" id="table">
                     <thead>
                         <tr class="headers">
                             <th>ID</th>
-                            <th>CODIGO USUARIO</th>
+                            <th>CODIGO MATERIA  </th>
                             <th>TENANT</th>
-                            <th>NOMBRE USUARIO</th>
-                            <th>PERFIL</th>
-                            <th>OPCIONES</th>
+                            <th>MATERIA</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,7 +194,7 @@ require('templates/menu.tpl.php'); #banner & menu
                 </table>
                 <table style="float:left"> <!-- style float solo para perderlo -->
                     <tr>
-                        <td><input id="user_id" type="hidden" name="user_id" value="" /></td>
+                        <td><input id="type_id" type="hidden" name="type_id" value="" /></td>
                     </tr>
                 </table>
             </form>

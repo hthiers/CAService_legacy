@@ -56,7 +56,7 @@ class PanelController extends ControllerBase
         $pdoProfiles = $model->getAllProfiles();
         $data['profiles'] = $pdoProfiles;
         
-        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
+        //$data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
 
         
         $this->view->show("users_new.php", $data);
@@ -298,6 +298,8 @@ class PanelController extends ControllerBase
         $data['title'] = "Editar Usuario";
         $data['profiles'] = $pdoProfiles;
         $data['user'] = $pdoUser;
+        $message = '';
+        $error_flag = '';
         $data['message'] = $message;
         
         $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
@@ -474,7 +476,7 @@ class PanelController extends ControllerBase
         $data['action'] = "editUserForm";
 
         //Posible error
-        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
+        //$data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
 
         //Finalmente presentamos nuestra plantilla
         $this->view->show("users_dt.php", $data);
