@@ -112,10 +112,41 @@ $(document).ready(function() {
     });
     
     $("#create-type").click(function() {
-    console.log("Hola");
+        
+        console.log("Hola");
+        guardarMateria();
     });
 
 });
+
+function guardarMateria() {
+    var label_type = $('#new_type_label').val();
+    console.log(label_type);
+    var param= "{label_type:'"+label_type+"'}";
+    console.log(param);
+    $.ajax(
+            {
+                type: "POST",
+                url: "?controller=types&action=typesAdd",
+                data: param,
+                cache: false,
+                //contentType: "application/json; charset=utf-8",
+                dataType: "json"
+                
+            }).done(function(response){
+        if(response !== null){
+            console.log(response);
+            
+        }
+        else{
+            console.log(response);
+            alert("response null");
+        }
+        }).fail(function(jqXHR, textStatus){
+        console.log(textStatus);
+        alert("ajax error: "+textStatus);
+    });
+}
 
 
 </script>
@@ -148,7 +179,7 @@ $(document).ready(function() {
         <!-- END DEBUG -->
 
         <p class="titulos-form" style="float:left;"><?php echo $titulo; ?></p>
-        <input type="text" name="new_type_label" style="margin-left: 30%; margin-top: 10px;" />
+        <input type="text" id="new_type_label" name="new_type_label" style="margin-left: 30%; margin-top: 10px;" />
         <button id="create-type">Añadir</button>
         
         <!--<div class="new-type" >

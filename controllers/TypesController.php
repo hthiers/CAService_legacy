@@ -195,14 +195,18 @@ class TypesController extends ControllerBase
         $this->view->show("types_new.php", $data);
     }
     
+    
+    
     public function typesAdd()
     {
         $session = FR_Session::singleton();
-
-        $label_customer = $_POST['customer_name'];
-        $detail_customer = $_POST['customer_detail'];
         
-        $code_customer = Utils::guidv4();
+        $label_type = $_POST["label_type"];
+        //$label_type = filter_input(INPUT_POST, "label_type");
+        //$label_type = "Ejemplo";
+        $code_type = Utils::guidv4();
+        echo "Label: ".$label_type;
+        exit();
         
         //Incluye el modelo que corresponde
         require_once 'models/TypesModel.php';
@@ -210,12 +214,15 @@ class TypesController extends ControllerBase
         //Creamos una instancia de nuestro "modelo"
         $model = new TypesModel();
         
+        
         //Le pedimos al modelo todos los items
         $result = $model->addNewType(null, $code_type, $session->id_tenant, $label_type);
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
         
+        return "hola ".$label_type;
+        /*
         if($error[0] == 00000 && $rows_n > 0){
             header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=1");
         }
@@ -225,6 +232,10 @@ class TypesController extends ControllerBase
         else{
             header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
+         
+         */
+         
+        
     }
     
     public function ajaxTypesAdd()
