@@ -7,7 +7,7 @@
  */
 class Constants {
     
-    private $system_version = "0.2.5";
+    private $system_version = "0.2.6";
     private static $instance;
         
     public static function singleton()

@@ -83,6 +83,7 @@ $(document).ready(function() {
                         "column": oTable.fnGetPosition( this )[2]
                     };
                 },
+                "placeholder" : "",
                 "height": "14px"
             } );
         }

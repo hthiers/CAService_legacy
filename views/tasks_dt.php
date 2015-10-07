@@ -97,7 +97,7 @@ function editTask(task){
     $("#dt_form").submit();
 }
 
-function removeTask(task){   
+function removeTask(task){
     var urlAction = "<?php echo "?controller=".$controller."&action=tasksRemove";?>";
     
     $( "#dialog-remove" ).dialog({
@@ -450,9 +450,6 @@ $(document).ready(function() {
                             <th>MATERIA</th>
                             <th>GESTION</th>
                             <th>RESPONSABLE</th>
-                            <!--<th>PROYECTO</th>-->
-<!--                            <th>INICIO_ORIGEN</th>
-                            <th>FIN_ORIGEN</th>-->
                             <th>TIEMPO</th>
                             <th>ID TASK</th>
                             <th>ID TENANT</th>
@@ -460,8 +457,6 @@ $(document).ready(function() {
                             <th>ID CUSTOMER</th>
                             <th>ID USER</th>
                             <th>OPCIONES</th>
-                            <!--<th>OTRA COL</th>-->
-                            <!--<th>OTRA COL 2</th>-->
                         </tr>
                     </thead>
                     <tbody>
@@ -492,4 +487,3 @@ $(document).ready(function() {
 #endif; #privs
 endif; #session
 require('templates/footer.tpl.php');
-?>

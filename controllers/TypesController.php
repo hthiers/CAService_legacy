@@ -6,7 +6,7 @@ class TypesController extends ControllerBase
     *******************************************************************************/
 
     //DT
-    public function typesDt()
+    public function typesDt($error_flag = 0, $message = "")
     { 
         $session = FR_Session::singleton();
         
@@ -36,7 +36,7 @@ class TypesController extends ControllerBase
         $data['action'] = "typesEditForm";
 
         //Posible error
-        //$data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
+        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
 
         //Finalmente presentamos nuestra plantilla
         $this->view->show("types_dt.php", $data);
@@ -234,8 +234,6 @@ class TypesController extends ControllerBase
         }
          
          */
-         
-        
     }
     
     public function ajaxTypesAdd()
@@ -244,9 +242,6 @@ class TypesController extends ControllerBase
 
         if(isset($_POST['label_type']) && $_POST['label_type'] != ""):
             $label_type = $_POST['label_type'];
-            #$detail_customer = $_POST['desc'];
-            #$code_customer = rand(1, 100);
-            #$code_customer = "c".$code_customer;
 
             //Incluye el modelo que corresponde
             require_once 'models/TypesModel.php';
@@ -342,6 +337,52 @@ class TypesController extends ControllerBase
         endif;
     }
 
-    
+    /*
+     * Remove a type
+     */
+    public function typesRemove()
+    {
+        $session = FR_Session::singleton();
+        
+        // Support POST & GET
+        if(filter_input(INPUT_POST, 'task_id') != ''){
+            $id_type = filter_input(INPUT_POST, 'type_id');
+        }
+        else{
+            $id_type = filter_input(INPUT_GET, 'type_id');
+        }
+        
+        if($id_type != null){
+            require_once 'models/TypesModel.php';
+            $model = new TypesModel();
+
+            $pdoTask = $model->getTaskById($session->id_tenant, $id_type);
+            $values = $pdoTask->fetch(PDO::FETCH_ASSOC);
+            
+            $result = null;
+            $status = 9; // 9 removed status
+
+            // remove
+            $result = $model->updateStatusType($id_type, $session->id_tenant, $status);
+
+            if($result != null){
+                $error = $result->errorInfo();
+                $numr = $result->rowCount();
+
+                if($error[0] == 00000 && $numr > 0){
+                    header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=1");
+                }
+                else{
+                    header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=10&message='No se lograron aplicar cambios: ".$error[2]."'");
+                }
+            }
+            else{
+                header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=10&message='Error: no se ha podido eliminar!");
+            }
+        }
+        else{
+            header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=10&message='Error: esta materia ya no existe!");
+        }
+    }    
 }
 ?>

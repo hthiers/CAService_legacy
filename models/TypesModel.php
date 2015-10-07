@@ -182,6 +182,28 @@ class TypesModel extends ModelBase
 	}
         
         /**
+         * Cambia el estado de una materia (type)
+         * @param type $id_type
+         * @param type $id_tenant
+         * @param type $status_type
+         * @return PDO
+         */
+        public function updateStatusType($id_type, $id_tenant, $status_type)
+	{            
+            $this->db->exec("set names utf8");
+            
+            $consulta = $this->db->prepare("UPDATE cas_type 
+                        SET 
+                            status_type = $status_type
+                        WHERE id_tenant = $id_tenant
+                          AND id_type = $id_type");
+
+            $consulta->execute();
+
+            return $consulta;
+	}
+        
+        /**
          * Get PDO object from custom sql query
          * NOTA: Esta función impide tener un control de la consulta sql (depende desde donde se llame).
          * @param string $sql

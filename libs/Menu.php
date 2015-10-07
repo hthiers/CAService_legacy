@@ -101,8 +101,14 @@ class Menu extends ModelBase
             $menuFullString = '<ul id="menu">';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
                 $menuFullString.= '</li>';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO TRABAJO</a>';
+                
+                $menuFullString.= '<li><input type="button" style="width:22px;height:22px;display:inline;" class="ui-icon ui-icon-circle-plus" />';
                 $menuFullString.= '</li>';
+                
+                //$menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO TRABAJO</a>';
+                //$menuFullString.= '</li>';
+                
+                
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
                 $menuFullString.= '</li>';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersAddForm">NUEVO CLIENTE</a>';

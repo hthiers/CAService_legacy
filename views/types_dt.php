@@ -19,14 +19,46 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.jeditable.js"></script>
 <script type="text/javascript">
+
+var oTable = null;
+    
 function submitToForm(){
     $('#action_type').val("view");
 
     return false;
 }
+
+function removeType(type){
+    var urlAction = "<?php echo "?controller=".$controller."&action=tasksRemove";?>";
+    
+    $( "#dialog-remove" ).dialog({
+            height: 200,
+            width: 350,
+            modal: true,
+            buttons: {
+            "Eliminar": function() {
+                console.log("borrando: #"+type);
+                
+                $('#dt_form').attr('action', urlAction);
+                $('#dt_form').attr('method', 'POST');
+                $('#type_id').val(type);
+
+                $( this ).dialog( "close" );
+                $("#dt_form").submit();
+            },
+            "Cancelar": function() {
+              $( this ).dialog( "close" );
+            }
+          }
+    });
+    
+    $("#dialog-remove")
+            .data('type_id', type)
+            .dialog("open");
+}
     
 $(document).ready(function() {
-    var oTable = $('#table').dataTable({
+    oTable = $('#table').dataTable({
         //Initial server side params
         "bProcessing": true,
         "bServerSide": true,
@@ -61,34 +93,24 @@ $(document).ready(function() {
         },
         
         //Custom filters params
-//        "fnServerParams": function ( aoData ){
-//            aoData.push(
-//                { "name": "filCliente", "value": $('#cboCliente').val() },
-//                { "name": "filMes", "value": $('#cboMes').val() },
-//                { "name": "filEstado", "value": $('#cboEstado').val() }
-//            );
-//        },
         
         "aoColumnDefs": [
-            { "bVisible": false, "aTargets": [0,1,2] }
-//            {
-//                "fnRender": function ( oObj ) {
-//                    if(oObj.aData[5] != null){
-//                        var seconds = oObj.aData[5];
-//                        var total = secondsToTime(seconds);
-//
-//                        return total['h']+':'+total['m']+':'+total['s'];
-//                    }
-//                    else{
-//                        return '';
-//                    }
-//                },
-//                "aTargets": [5]
-//            },
+            { "sClass": "td_options", "aTargets": [-1] },
+            { "mDataProp": null, "aTargets": [-1] },
+            { "bVisible": false, "aTargets": [0,1,2] },
+            {
+                "fnRender": function ( oObj ) {                    
+                    var dt_tools = "";                
+                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[0]+"' onclick='removeTask("+oObj.aData[0]+")' value='' />";
+
+                    return dt_tools;
+                },
+                "aTargets": [-1]
+            }
         ],
         
         "sPaginationType": "full_numbers",
-        "aaSorting": [[0, "asc"]],
+        "aaSorting": [[3, "asc"]],
 
         "fnDrawCallback": function () {
             $('#table tbody td').editable( '?controller=types&action=ajaxTypesUpdate', {
@@ -111,40 +133,34 @@ $(document).ready(function() {
         }
     });
     
+    // boton nueva materia
     $("#create-type").click(function() {
-        
-        console.log("Hola");
         guardarMateria();
     });
 
 });
 
 function guardarMateria() {
-    var label_type = $('#new_type_label').val();
-    console.log(label_type);
-    var param= "{label_type:'"+label_type+"'}";
-    console.log(param);
+    var label = $('#new_type_label').val();
+
     $.ajax(
             {
                 type: "POST",
-                url: "?controller=types&action=typesAdd",
-                data: param,
+                url: "?controller=types&action=ajaxTypesAdd",
+                data: { label_type: label},
                 cache: false,
                 //contentType: "application/json; charset=utf-8",
                 dataType: "json"
-                
             }).done(function(response){
         if(response !== null){
             console.log(response);
-            
+            oTable.fnDraw();
         }
         else{
-            console.log(response);
-            alert("response null");
+            console.log("response null");
         }
         }).fail(function(jqXHR, textStatus){
-        console.log(textStatus);
-        alert("ajax error: "+textStatus);
+            console.log(textStatus);
     });
 }
 
@@ -179,8 +195,9 @@ function guardarMateria() {
         <!-- END DEBUG -->
 
         <p class="titulos-form" style="float:left;"><?php echo $titulo; ?></p>
+        
         <input type="text" id="new_type_label" name="new_type_label" style="margin-left: 30%; margin-top: 10px;" />
-        <button id="create-type">Añadir</button>
+        <input type="button" id="create-type" style="width:22px;height:22px;display:inline;" class="ui-icon ui-icon-circle-plus" />
         
         <!--<div class="new-type" >
             Nueva Materia
@@ -191,8 +208,9 @@ function guardarMateria() {
         
         <?php 
         if (isset($error_flag)){
-            if(strlen($error_flag) > 0)
+            if(strlen($error_flag) > 0){
                 echo $error_flag;
+            }
         }
             
         ?>
@@ -210,6 +228,7 @@ function guardarMateria() {
                             <th>CODIGO MATERIA  </th>
                             <th>TENANT</th>
                             <th>MATERIA</th>
+                            <th>OPCIONES</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -241,4 +260,3 @@ function guardarMateria() {
 #endif; #privs
 endif; #session
 require('templates/footer.tpl.php');
-?>
