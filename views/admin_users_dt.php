@@ -18,7 +18,7 @@ if($session->privilegio == 1):
         $('#example').dataTable({
             "sDom": '<"top"lpfi>rt<"clear">',
             "oLanguage": {
-                "sInfo": "_TOTAL_ records",
+                "sInfo": "_START_ a _END_ de _TOTAL_ registros",
                 "sInfoEmpty": "0 records",
                 "sInfoFiltered": "(from _MAX_ total records)"
             },
