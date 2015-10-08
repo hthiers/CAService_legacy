@@ -12,7 +12,7 @@
 
 <!-- Dialog remove task -->
 <div id="dialog-remove" title="Confirmar acci&oacute;n">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 2px 10px 0;"></span>¿Seguro que quieres eliminar este trabajo?</p>
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 2px 10px 0;"></span>¿Seguro que quieres eliminarlo?</p>
 </div>
 <!-- END Dialog remove task -->
 

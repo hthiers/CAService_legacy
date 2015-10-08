@@ -12,8 +12,9 @@ if($session->id_tenant != null && $session->id_user != null):
 <style type="text/css" title="currentStyle">
     @import "views/css/datatable.css";
     table.dataTable, table.filtres {
-        width: 800px;
+        width: 500px;
     }
+    #central { width: 50%;}
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
@@ -29,7 +30,7 @@ function submitToForm(){
 }
 
 function removeType(type){
-    var urlAction = "<?php echo "?controller=".$controller."&action=tasksRemove";?>";
+    var urlAction = "<?php echo "?controller=types&action=typesRemove";?>";
     
     $( "#dialog-remove" ).dialog({
             height: 200,
@@ -57,7 +58,17 @@ function removeType(type){
             .dialog("open");
 }
     
+function hideErrorBox(){
+    $("#errorbox_success").fadeToggle( "slow", "linear" );
+    $("#errorbox_failure").fadeToggle( "slow", "linear" );
+}
+    
 $(document).ready(function() {
+    //Hide errorbox
+    setTimeout(function() {
+        hideErrorBox();
+    }, 2000);
+    
     oTable = $('#table').dataTable({
         //Initial server side params
         "bProcessing": true,
@@ -98,10 +109,12 @@ $(document).ready(function() {
             { "sClass": "td_options", "aTargets": [-1] },
             { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,1,2] },
+            { "sWidth": "80%", "aTargets": [3] },
+            { "sWidth": "20%", "aTargets": [-1] },
             {
                 "fnRender": function ( oObj ) {                    
                     var dt_tools = "";                
-                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[0]+"' onclick='removeTask("+oObj.aData[0]+")' value='' />";
+                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[0]+"' onclick='removeType("+oObj.aData[0]+")' value='' />";
 
                     return dt_tools;
                 },
@@ -113,7 +126,7 @@ $(document).ready(function() {
         "aaSorting": [[3, "asc"]],
 
         "fnDrawCallback": function () {
-            $('#table tbody td').editable( '?controller=types&action=ajaxTypesUpdate', {
+            $('#table tbody td:eq(0)').editable( '?controller=types&action=ajaxTypesUpdate', {
                 
                 "callback": function( sValue, y ) {
                     console.log("valor: "+ sValue);
