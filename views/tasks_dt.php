@@ -161,7 +161,7 @@ $(document).ready(function() {
             });
         },
         
-        "sDom": 'T<"top"lpf>rt<"clear">',
+        "sDom": 'T<"top"lpfi>rt<"clear">',
         
         "oLanguage": {
             "sInfo": "_TOTAL_ registros",
