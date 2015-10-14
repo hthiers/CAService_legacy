@@ -14,7 +14,7 @@ if($session->id_tenant != null && $session->id_user != null):
     table.dataTable, table.filtres {
         width: 500px;
     }
-    #central { width: 50%;}
+    #central { width: 60%;}
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>

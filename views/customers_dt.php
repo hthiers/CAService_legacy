@@ -65,15 +65,14 @@ $(document).ready(function() {
         ],
         
         "sPaginationType": "full_numbers",
-        "aaSorting": [[0, "asc"]],
+        "aaSorting": [[0, "asc"]]
         
-        "fnDrawCallback": function () {
+        /*"fnDrawCallback": function () {
             $('#example tbody td').editable( '?controller=customers&action=ajaxCustomersUpdate', {
                 
                 "callback": function( sValue, y ) {
                     console.log("valor: "+ sValue);
-                    /* Redraw the table from the new data on the server */
-                    //oTable.fnDraw();
+
                     var aPos = oTable.fnGetPosition( this );
                     oTable.fnUpdate( sValue, aPos[0], aPos[1] );
                 },
@@ -86,7 +85,7 @@ $(document).ready(function() {
                 "placeholder" : "",
                 "height": "14px"
             } );
-        }
+        }*/
     });
 });
 </script>
