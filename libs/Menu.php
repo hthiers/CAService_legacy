@@ -100,23 +100,28 @@ class Menu extends ModelBase
         {
             $menuFullString = '<ul id="menu">';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
-                $menuFullString.= '</li>';
                 
-                $menuFullString.= '<li><input type="button" style="width:22px;height:22px;display:inline;" class="ui-icon ui-icon-circle-plus" />';
-                $menuFullString.= '</li>';
-                
-                //$menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO TRABAJO</a>';
-                //$menuFullString.= '</li>';
-                
+                    $menuFullString.= '<ul>';
+                        $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">NUEVO '
+                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
+                    $menuFullString.= '</ul>';
                 
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
-                $menuFullString.= '</li>';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersAddForm">NUEVO CLIENTE</a>';
+                    
+                    $menuFullString.= '<ul>';
+                        $menuFullString.= '<li><a href="?controller=customers&amp;action=customersAddForm">NUEVO '
+                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
+                    $menuFullString.= '</ul>';
+                
                 $menuFullString.= '</li>';
 
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=panel&amp;action=usersDt">USUARIOS</a>';
-                $menuFullString.= '</li>';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=panel&amp;action=newUserForm">NUEVO USUARIO</a>';
+                
+                    $menuFullString.= '<ul>';
+                        $menuFullString.= '<li><a href="?controller=panel&amp;action=newUserForm">NUEVO '
+                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
+                    $menuFullString.= '</ul>';
+                
                 $menuFullString.= '</li>';
                 
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=types&amp;action=typesDt">MATERIAS</a>';

@@ -84,7 +84,7 @@ $(document).ready(function() {
             });
         },
         
-        "sDom": '<"top"lpf>rt<"clear">',
+        "sDom": '<"top"lpfi>rt<"clear">',
         
         "oLanguage": {
             "sInfo": "_TOTAL_ registros",

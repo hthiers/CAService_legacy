@@ -109,6 +109,16 @@ class TypesController extends ControllerBase
             $sWhere = substr_replace( $sWhere, "", -3 );
             $sWhere .= ')';
         }
+        if ( $sWhere == "" )
+        {
+                $sWhere = "WHERE ";
+        }
+        else
+        {
+                $sWhere .= " AND ";
+        }
+
+        $sWhere .= " a.status_type < 9 "; # avoid deleted tasks (status = 9)
 
         /********************* Individual column filtering */
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -343,9 +353,10 @@ class TypesController extends ControllerBase
     public function typesRemove()
     {
         $session = FR_Session::singleton();
+        $id_type = null;
         
         // Support POST & GET
-        if(filter_input(INPUT_POST, 'task_id') != ''){
+        if(filter_input(INPUT_POST, 'type_id') != ''){
             $id_type = filter_input(INPUT_POST, 'type_id');
         }
         else{
@@ -355,11 +366,7 @@ class TypesController extends ControllerBase
         if($id_type != null){
             require_once 'models/TypesModel.php';
             $model = new TypesModel();
-
-            $pdoTask = $model->getTaskById($session->id_tenant, $id_type);
-            $values = $pdoTask->fetch(PDO::FETCH_ASSOC);
             
-            $result = null;
             $status = 9; // 9 removed status
 
             // remove
@@ -370,7 +377,7 @@ class TypesController extends ControllerBase
                 $numr = $result->rowCount();
 
                 if($error[0] == 00000 && $numr > 0){
-                    header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=1");
+                    header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=1'");
                 }
                 else{
                     header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=10&message='No se lograron aplicar cambios: ".$error[2]."'");
@@ -385,4 +392,3 @@ class TypesController extends ControllerBase
         }
     }    
 }
-?>

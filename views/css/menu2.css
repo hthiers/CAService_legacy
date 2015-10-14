@@ -38,11 +38,11 @@ ul#menu  ul {
   margin: 0;
   border: 0 none;
   padding: 0;
-  width: 160px;
+  width: 100px;
   list-style: none;
   display: none;
   position: absolute;
-  top: 25px;
+  top: 30px;
   left: 0px;
   background: #eee;
   border: none;
@@ -61,7 +61,7 @@ ul#menu ul:after /*From IE 7 lack of compliance*/{
 }
 
 ul#menu ul li {
-  width: 160px;
+  width: 100px;
   float: left; /*For IE 7 lack of compliance*/
   display: block !important;
   display: inline; /*For IE*/
