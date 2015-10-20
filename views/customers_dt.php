@@ -65,9 +65,9 @@ $(document).ready(function() {
         ],
         
         "sPaginationType": "full_numbers",
-        "aaSorting": [[0, "asc"]]
+        "aaSorting": [[0, "asc"]],
         
-        /*"fnDrawCallback": function () {
+        "fnDrawCallback": function () {
             $('#example tbody td').editable( '?controller=customers&action=ajaxCustomersUpdate', {
                 
                 "callback": function( sValue, y ) {
@@ -85,7 +85,7 @@ $(document).ready(function() {
                 "placeholder" : "",
                 "height": "14px"
             } );
-        }*/
+        }
     });
 });
 </script>

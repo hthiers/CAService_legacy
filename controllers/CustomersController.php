@@ -306,16 +306,32 @@ class CustomersController extends ControllerBase
             $targetCustomerPdo = $model->getCustomerByID($session->id_tenant, filter_input(INPUT_POST, 'row_id'));
             
             $new_value = filter_input(INPUT_POST, 'value');
+            $column_updated = filter_input(INPUT_POST, 'column');
             
             $targetCustomer = $targetCustomerPdo->fetch(PDO::FETCH_ASSOC);
             if($targetCustomer != null && $targetCustomer != false){
                 //apply change
-                $result = $model->updateCustomer(
+                
+                if($column_updated == 3)
+                {
+                    $result = $model->updateCustomer(
                         $targetCustomer['id_customer']
                         , $targetCustomer['code_customer']
                         , $targetCustomer['id_tenant']
                         , $new_value
                         , $targetCustomer['detail_customer']);
+                }
+                else if($column_updated == 4)
+                {
+                    $result = $model->updateCustomer(
+                        $targetCustomer['id_customer']
+                        , $targetCustomer['code_customer']
+                        , $targetCustomer['id_tenant']
+                        , $targetCustomer['label_customer']
+                        , $new_value);
+                }
+                
+                
                 
                 if($result){
                     $error = $result->errorInfo();
