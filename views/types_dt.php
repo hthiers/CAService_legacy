@@ -107,6 +107,7 @@ $(document).ready(function() {
         
         "aoColumnDefs": [
             { "sClass": "td_options", "aTargets": [-1] },
+            { "sClass": "td_editable", "aTargets": [3] },
             { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,1,2] },
             { "sWidth": "80%", "aTargets": [3] },
@@ -126,7 +127,7 @@ $(document).ready(function() {
         "aaSorting": [[3, "asc"]],
 
         "fnDrawCallback": function () {
-            $('#table tbody td:eq(0)').editable( '?controller=types&action=ajaxTypesUpdate', {
+            $('#table tbody td:.td_editable').editable( '?controller=types&action=ajaxTypesUpdate', {
                 
                 "callback": function( sValue, y ) {
                     console.log("valor: "+ sValue);
@@ -141,6 +142,8 @@ $(document).ready(function() {
                         "column": oTable.fnGetPosition( this )[2]
                     };
                 },
+                
+                "placeholder" : "",
                 "height": "14px"
             } );
         }
@@ -152,6 +155,7 @@ $(document).ready(function() {
     });
 
 });
+
 
 function guardarMateria() {
     var label = $('#new_type_label').val();
