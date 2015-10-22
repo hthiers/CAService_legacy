@@ -57,7 +57,9 @@ class TypesController extends ControllerBase
 
         //Creamos una instancia de nuestro "modelo"
         $model = new TypesModel();
-
+            
+        $status_column = "status_type";
+        
         /*
         * Build up dynamic query
         */
@@ -155,7 +157,7 @@ class TypesController extends ControllerBase
 
         $found_rows = $model->goCustomQuery("SELECT FOUND_ROWS()");
 
-        $total_rows = $model->goCustomQuery("SELECT COUNT(`".$sIndexColumn."`) FROM $sTable");
+        $total_rows = $model->goCustomQuery("SELECT COUNT(`".$sIndexColumn."`) FROM $sTable where $status_column < 9");
 
         /*
         * Output

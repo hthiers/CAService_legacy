@@ -18,7 +18,8 @@ class TypesModel extends ModelBase
                             , a.code_type
                             , a.label_type
                         from cas_type a
-                        where a.id_tenant = $id_tenant
+                        where a.id_tenant = $id_tenant 
+                        and a.status_type < 9
                         order by a.label_type asc");
 
 		$consulta->execute();
