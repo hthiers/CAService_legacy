@@ -315,9 +315,19 @@ $(document).ready(function() {
     $('#cboUser').change(function() { oTable.fnDraw(); } );
     
     getLastDay('cboMes', 'cboAnio', 'cboDia');
+    
+    
+    $('#cboCliente').select2({
+        allowClear:'true'
+    });
+    $('#cboType').select2({
+        allowClear:'false'
+    });
 });
 
 </script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 
 </head>
 <body id="dt_example" class="ex_highlight_row">
@@ -399,7 +409,7 @@ $(document).ready(function() {
             </select>
             
             <label style="float:none;">Cliente: </label>
-            <select id="cboCliente">
+            <select id="cboCliente" class="js-example-responsive">
                 <?php
                 echo "<option selected value=''>Todos</option>";
                 for ($i=0; $i<sizeof($clientes); $i++){
