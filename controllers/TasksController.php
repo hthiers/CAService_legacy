@@ -1400,7 +1400,7 @@ class TasksController extends ControllerBase
                 ->mergeCells('B2:G2')
                 ->getRowDimension(1)->setRowHeight(30);
         $objPHPExcel->setActiveSheetIndex(0)
-                ->getStyle('A1:H1')->applyFromArray($style_title);
+                ->getStyle('B2:G2')->applyFromArray($style_title);
 
         // Cols title
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1420,19 +1420,18 @@ class TasksController extends ControllerBase
         
         // cols
         $colArray = array (
-            0 => 'A',
-            1 => 'B',
-            2 => 'C',
-            3 => 'D',
-            4 => 'E',
-            5 => 'F',
-            6 => 'G',
-            7 => 'H',
-            8 => 'I',
-            9 => 'J',
-            10 => 'K',
-            11 => 'L',
-            12 => 'M'
+            0 => 'B',
+            1 => 'C',
+            2 => 'D',
+            3 => 'E',
+            4 => 'F',
+            5 => 'G',
+            6 => 'H',
+            7 => 'I',
+            8 => 'J',
+            9 => 'K',
+            10 => 'L',
+            11 => 'M'
         );
 
         // Set content from data
