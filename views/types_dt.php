@@ -69,6 +69,8 @@ $(document).ready(function() {
         hideErrorBox();
     }, 2000);
     
+    
+    
     oTable = $('#table').dataTable({
         //Initial server side params
         "bProcessing": true,
@@ -153,7 +155,10 @@ $(document).ready(function() {
     $("#create-type").click(function() {
         guardarMateria();
     });
-
+    
+    //Add Class to search field
+    //$(".dataTables_filter input").addClass("search_input");
+    
 });
 
 
