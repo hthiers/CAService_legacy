@@ -321,12 +321,15 @@ $(document).ready(function() {
     
     $('#cboCliente').select2({
         placeholder: {
-            id: "-1",
+            id: "",
             text: "Todos"},
         allowClear:true
         
     });
     $('#cboType').select2({
+        placeholder: {
+            id: "",
+            text: "Todos"},
         allowClear:true
     });
 });
