@@ -11,6 +11,7 @@ if($session->id_tenant != null && $session->id_user != null):
 <!-- AGREGAR JS & CSS AQUI -->
 <link rel="stylesheet" href="views/css/datatable.css">
 <link rel="stylesheet" href="views/css/dataTables.tableTools.min.css">
+<link rel="stylesheet" href="views/css/select2.css">
 <style type="text/css" title="currentStyle">
     table.dataTable, table.filtres {
         width: 100%;
@@ -19,6 +20,7 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery-tableTools.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
 <script type="text/javascript">
 TableTools.BUTTONS.download = {
     "sAction": "text",
@@ -318,16 +320,18 @@ $(document).ready(function() {
     
     
     $('#cboCliente').select2({
-        allowClear:'true'
+        placeholder: {
+            id: "-1",
+            text: "Todos"},
+        allowClear:true
+        
     });
     $('#cboType').select2({
-        allowClear:'false'
+        allowClear:true
     });
 });
 
 </script>
-<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
-<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 
 </head>
 <body id="dt_example" class="ex_highlight_row">
