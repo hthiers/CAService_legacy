@@ -9,6 +9,7 @@ if($session->id_tenant != null && $session->id_user != null):
 ?>
 
 <!-- AGREGAR JS & CSS AQUI -->
+<link rel="stylesheet" href="views/css/select2.css">
 <style type="text/css" title="currentStyle">
     .table_left {
         margin-bottom: 10px;
@@ -67,6 +68,7 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.timepicker.min.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
 <script type="text/javascript">
     // JQDialog window
     var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
@@ -203,6 +205,20 @@ if($session->id_tenant != null && $session->id_user != null):
             else{
                 $(".hdn_row").hide();
             }
+        });
+        
+        $('#cbocustomers').select2({
+            placeholder: {
+                id: "",
+                text: "Sin Cliente"},
+            allowClear:true
+        
+        });
+        $('#cbotypes').select2({
+            placeholder: {
+                id: "",
+                text: "Sin Materia"},
+            allowClear:true
         });
     });
     
