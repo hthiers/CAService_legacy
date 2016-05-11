@@ -164,12 +164,14 @@ $(document).ready(function() {
 
 function guardarMateria() {
     var label = $('#new_type_label').val();
-
+    var customer = $('#cbocustomers').val();
+    
+    alert("cliente: "+customer);
     $.ajax(
             {
                 type: "POST",
                 url: "?controller=types&action=ajaxTypesAdd",
-                data: { label_type: label},
+                data: { label_type: label, id_customer: customer },
                 cache: false,
                 //contentType: "application/json; charset=utf-8",
                 dataType: "json"
@@ -219,6 +221,16 @@ function guardarMateria() {
         <p class="titulos-form" style="float:left;"><?php echo $titulo; ?></p>
         
         <input type="text" id="new_type_label" name="new_type_label" style="margin-left: 30%; margin-top: 10px;" />
+        <?php
+        echo "<select class='input_box_cliente' id='cbocustomers' name='cbocustomers'>\n";
+        echo "<option value='noaplica' selected='selected'>Sin Cliente</option>\n";
+        while($row = $listadoClientes->fetch(PDO::FETCH_ASSOC))
+        {
+            echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
+        }
+        echo "</select>\n";
+        ?>
+        &nbsp;
         <input type="button" id="create-type" style="width:22px;height:22px;display:inline;" class="ui-icon ui-icon-circle-plus" />
         
         <!--<div class="new-type" >

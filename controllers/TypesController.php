@@ -18,15 +18,23 @@ class TypesController extends ControllerBase
         
         //Incluye el modelo que corresponde
         require_once 'models/TypesModel.php';
+        require_once 'models/CustomersModel.php';
         
         //Creamos una instancia de nuestro "modelo"
         $model = new TypesModel();
+        
+        //Creamos una instancia del modelo de los clientes
+        $clientModel = new CustomersModel();
+        
+        //Cargar listado de clientes
+        $listadoClientes = $clientModel->getAllCustomers($session->id_tenant);
         
         //Le pedimos al modelo todos los items
         $listado = $model->getAllTypesByTenant($session->id_tenant);
 
         //Pasamos a la vista toda la información que se desea representar
         $data['listado'] = $listado;
+        $data['listadoClientes'] = $listadoClientes;
         
         //Titulo pagina
         $data['titulo'] = "Materias";
@@ -86,7 +94,7 @@ class TypesController extends ControllerBase
                     if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
                     {
                             $sOrder .= "".$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]." ".
-                                    mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+                                     $_GET['sSortDir_'.$i] .", ";
                     }
             }
 
@@ -214,10 +222,11 @@ class TypesController extends ControllerBase
         $session = FR_Session::singleton();
         
         $label_type = $_POST["label_type"];
+        $id_customer = $_POST["id_customer"];
         //$label_type = filter_input(INPUT_POST, "label_type");
         //$label_type = "Ejemplo";
         $code_type = Utils::guidv4();
-        echo "Label: ".$label_type;
+        echo "Label: ".$label_type. " - Customer: ".$id_customer;
         exit();
         
         //Incluye el modelo que corresponde
@@ -228,7 +237,7 @@ class TypesController extends ControllerBase
         
         
         //Le pedimos al modelo todos los items
-        $result = $model->addNewType(null, $code_type, $session->id_tenant, $label_type);
+        $result = $model->addNewType(null, $code_type, $session->id_tenant, $label_type, $id_customer);
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
@@ -254,7 +263,7 @@ class TypesController extends ControllerBase
 
         if(isset($_POST['label_type']) && $_POST['label_type'] != ""):
             $label_type = $_POST['label_type'];
-
+            $id_customer = $_POST["id_customer"];
             //Incluye el modelo que corresponde
             require_once 'models/TypesModel.php';
 
@@ -265,7 +274,7 @@ class TypesController extends ControllerBase
             $new_type[] = null;
 
             //Le pedimos al modelo todos los items
-            $resultPdo = $model->addNewType(null, $code_type, $session->id_tenant, $label_type);
+            $resultPdo = $model->addNewType(null, $code_type, $session->id_tenant, $label_type, $id_customer);
 
             $error = $resultPdo->errorInfo();
             $rows_n = $resultPdo->rowCount();

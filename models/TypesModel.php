@@ -29,6 +29,30 @@ class TypesModel extends ModelBase
 	}
         
         /**
+         * Get all types by tenant
+         * @param int $id_tenant
+         * @return pdo
+         */
+	public function getAllTypesByCustomer($id_tenant, $id_customer)
+	{
+                $consulta = $this->db->prepare("
+                        select 
+                            a.id_type
+                            , a.code_type
+                            , a.label_type
+                        from cas_type a
+                        where a.id_tenant = $id_tenant 
+                        and a.id_customer = $id_customer 
+                        and a.status_type < 9
+                        order by a.label_type asc");
+
+		$consulta->execute();
+		
+		//devolvemos la coleccion para que la vista la presente.
+		return $consulta;
+	}
+        
+        /**
          * Get typw por código de type
          * @param int $id_tenant
          * @param varchar $code_type
@@ -80,7 +104,7 @@ class TypesModel extends ModelBase
          * @param varchar $label_customer
          * @return pdo
          */
-        public function addNewType($id_type, $code_type, $id_tenant, $label_type)
+        public function addNewType($id_type, $code_type, $id_tenant, $label_type, $id_customer)
 	{            
             $this->db->exec("set names utf8");
             
@@ -89,12 +113,16 @@ class TypesModel extends ModelBase
                             (id_type
                             , code_type
                             , id_tenant
-                            , label_type) 
+                            , label_type
+                            , id_customer) 
                     VALUES 
                             (NULL
                             ,'$code_type'
                             ,$id_tenant
-                            ,'$label_type')"
+                            ,'$label_type'
+                            ,$id_customer
+                            )"
+                    
                     , array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 
             $consulta->execute();
