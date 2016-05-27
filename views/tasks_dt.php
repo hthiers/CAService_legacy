@@ -323,14 +323,37 @@ $(document).ready(function() {
         placeholder: {
             id: "",
             text: "Todos"},
-        allowClear:true
         
+        allowClear:true,
+        theme: "classic"
     });
     $('#cboType').select2({
         placeholder: {
             id: "",
             text: "Todos"},
-        allowClear:true
+        
+        allowClear:true,
+        theme: "classic"
+    });
+    $('#cboUser').select2({
+        allowClear:true,
+        theme: "classic"
+    });
+    $('#cboAnio').select2({
+        allowClear:true,
+        theme: "classic"
+    });
+    $('#cboMes').select2({
+        allowClear:true,
+        theme: "classic"
+    });
+    $('#cboDia').select2({
+        allowClear:true,
+        theme: "classic"
+    });
+    $('#cboEstado').select2({
+        allowClear:true,
+        theme: "classic"
     });
 });
 
@@ -373,9 +396,9 @@ $(document).ready(function() {
             }
         }
         ?>
-         <!--CUSTOM FILTROS--> 
         
-        <div id="dt_filtres" style="float:left;margin-top:10px;">
+         <!--CUSTOM FILTROS--> 
+        <div id="dt_filtres" style="float:none;margin-top:10px;">
 	    <label style="float:none;">Año: </label>
             <select id="cboAnio" onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')">
                 <?php
@@ -385,7 +408,12 @@ $(document).ready(function() {
             </select>
 
             <label style="float:none;">Mes: </label>
-            <select id="cboMes" onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')">
+            <select 
+                id="cboMes" 
+                onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')"
+                class="js-example-responsive"
+                style="width:10%">
+
                 <?php
                 for ($i=0; $i<=sizeof($arrayDates); $i++){
                     if($i == date("m")){
@@ -394,7 +422,7 @@ $(document).ready(function() {
                     else {
                         echo "<option value='$i'>". $arrayDates[$i] . "</option>"; 
                     }
-                    
+
                 }
                 ?>
             </select>
@@ -416,7 +444,10 @@ $(document).ready(function() {
             </select>
             
             <label style="float:none;">Cliente: </label>
-            <select id="cboCliente" class="js-example-responsive">
+            <select 
+                id="cboCliente" 
+                class="js-example-responsive"
+                style="width:15%">
                 <?php
                 echo "<option selected value=''>Todos</option>";
                 for ($i=0; $i<sizeof($clientes); $i++){
@@ -426,7 +457,10 @@ $(document).ready(function() {
             </select>
             
             <label style="float:none;">Materia: </label>
-            <select id="cboType">
+            <select 
+                id="cboType"
+                class="js-example-responsive"
+                style="width:15%">
                 <?php
                 echo "<option selected value=''>Todas</option>";
                 for ($i=0; $i<sizeof($types); $i++){
@@ -436,7 +470,10 @@ $(document).ready(function() {
             </select>
             
             <label style="float:none;">Responsable: </label>
-            <select id="cboUser">
+            <select 
+                id="cboUser"
+                class="js-example-responsive"
+                style="width:15%">
                 <?php
                 echo "<option value=''>Todos</option>";
                 
