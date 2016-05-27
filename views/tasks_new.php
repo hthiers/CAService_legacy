@@ -82,6 +82,35 @@ if($session->id_tenant != null && $session->id_user != null):
         $("#btn_play").click(function (event){
             iniTrabajo();
         });
+        
+        $("#cbocustomers").change(function(e) {
+            //$("#ciudad,#provincias").attr('disabled', true);
+            if ($(this).val().trim() != "") {
+                //alert("se cambio :" + $(this).val());
+                ejecutar($(this), $("#cbotypes"));
+            }
+          });
+          
+        function ejecutar(obj1, obj2) {
+        
+            var idCustomer = $(obj1).val();
+
+            $.ajax({
+              type: "POST",
+              url: "?controller=types&action=ajaxGetTypesByCustomer",
+              dataType: "html",
+              data: { id_customer : idCustomer},
+              success: function(msg) {
+                //$(obj1).next('img').remove();
+                $(obj2).html(msg).attr("disabled", false);
+                
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                $(obj1).next('img').remove();
+                alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+              }
+            });
+        }
                 
         // JQDialog Submit - Add new customer
         $(".dlgSbmCstr").click(function(){
@@ -292,6 +321,8 @@ if($session->id_tenant != null && $session->id_user != null):
                         return true;
                 }
         }
+        
+        
 
         $( "#dialog-new-customer" ).dialog({
                 autoOpen: false,
@@ -363,6 +394,8 @@ if($session->id_tenant != null && $session->id_user != null):
             $( "#dialog-new-type" ).dialog( "open" );
         });
     });
+    
+    
 </script>
 
 </head>

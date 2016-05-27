@@ -33,7 +33,7 @@ class TypesModel extends ModelBase
          * @param int $id_tenant
          * @return pdo
          */
-	public function getAllTypesByCustomer($id_tenant, $id_customer)
+	public function getTypesByCustomer($id_tenant, $id_customer)
 	{
                 $consulta = $this->db->prepare("
                         select 

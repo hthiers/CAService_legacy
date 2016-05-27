@@ -401,5 +401,43 @@ class TypesController extends ControllerBase
         else{
             header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=10&message='Error: esta materia ya no existe!");
         }
-    }    
+    }   
+    
+    public function ajaxGetTypesByCustomer() {
+        $session = FR_Session::singleton();
+        require_once 'models/TypesModel.php';
+        $model = new TypesModel();
+        
+        $id_customer = $_POST["id_customer"];
+        
+        //Le pedimos al modelo todos los items
+        $listadoPDO = $model->getTypesByCustomer($session->id_tenant, $id_customer);
+        
+        $respuesta = "<option value=''>Seleccione Materia</option>";
+        while($materia = $listadoPDO->fetch(PDO::FETCH_ASSOC))
+        {
+            $respuesta .= "<option value='".$materia['id_type']."'>".$materia['label_type']."</option>";
+        }
+        /*
+        foreach($listado as $materia) {
+            $respuesta .= "<option value='".$materia['id_type']."'>".$materia['label_type']."</option>";
+        }
+        */
+        echo $respuesta;
+    }
+    
+    public function getTypesByCustomer($id_customer)
+    { 
+        $session = FR_Session::singleton();
+        
+        require_once 'models/TypesModel.php';
+        
+        //Creamos una instancia de nuestro "modelo"
+        $model = new TypesModel();
+        
+        //Le pedimos al modelo todos los items
+        $listado = $model->getTypesByCustomer($session->id_tenant, $id_customer);
+
+        return $listado;
+    }
 }

@@ -166,7 +166,7 @@ function guardarMateria() {
     var label = $('#new_type_label').val();
     var customer = $('#cbocustomers').val();
     
-    alert("cliente: "+customer);
+    //alert("cliente: "+customer);
     $.ajax(
             {
                 type: "POST",
