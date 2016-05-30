@@ -220,7 +220,7 @@ function guardarMateria() {
 
         <p class="titulos-form" style="float:left;"><?php echo $titulo; ?></p>
         
-        <input type="text" id="new_type_label" name="new_type_label" style="margin-left: 30%; margin-top: 10px;" />
+        <input type="text" id="new_type_label" name="new_type_label" style="margin-left: 20%; margin-top: 10px;" />
         <?php
         echo "<select class='input_box_cliente' id='cbocustomers' name='cbocustomers'>\n";
         echo "<option value='noaplica' selected='selected'>Sin Cliente</option>\n";
