@@ -1396,36 +1396,45 @@ class TasksController extends ControllerBase
         $currentDatetime = date('dmY-His');
         
         $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('B2', 'Reporte de trabajos - Período: '.$requestedMonth.', '.$requestedYear.' - Fecha exportación: '.date('d-m-Y H:i:s'))
-                ->mergeCells('B2:G2')
+                ->setCellValue('A1', 'Reporte de trabajos - PerÃ­odo: '.$requestedMonth.', '.$requestedYear.' - Fecha exportaciÃ³n: '.date('d-m-Y H:i:s'))
+                ->mergeCells('A1:H1')
                 ->getRowDimension(1)->setRowHeight(30);
         $objPHPExcel->setActiveSheetIndex(0)
-                ->getStyle('B2:G2')->applyFromArray($style_title);
+                ->getStyle('A1:H1')->applyFromArray($style_title);
 
         // Cols title
         $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('B3', 'Inicio')
-                ->setCellValue('C3', 'Materia')
-                ->setCellValue('D3', 'Gestion')
-                ->setCellValue('E3', 'Descripcion')
-                ->setCellValue('F3', 'Responsable')
-                ->setCellValue('G3', 'Tiempo')
-                ->getStyle('B3:G3')->applyFromArray($style_subtitle);
+                ->setCellValue('A2', 'Inicio')
+                ->setCellValue('B2', 'Fin')
+                ->setCellValue('C2', 'Cliente')
+                ->setCellValue('D2', 'Materia')
+                ->setCellValue('E2', 'Gestion')
+                ->setCellValue('F2', 'Descripcion')
+                ->setCellValue('G2', 'Responsable')
+                ->setCellValue('H2', 'Tiempo')
+                ->getStyle('A2:H2')->applyFromArray($style_subtitle);
         
         // first row (custom starting row)
-        $row = 4;
+        $row = 3;
         
         // last col (custom last column to export)
         $last_col = 7;
         
         // cols
         $colArray = array (
-            0 => 'B',
-            3 => 'C',
-            9 => 'D',
+            0 => 'A',
+            1 => 'B',
+            2 => 'C',
+            3 => 'D',
             4 => 'E',
             5 => 'F',
-            6 => 'G'
+            6 => 'G',
+            7 => 'H',
+            8 => 'I',
+            9 => 'J',
+            10 => 'K',
+            11 => 'L',
+            12 => 'M'
         );
 
         // Set content from data
@@ -1444,20 +1453,20 @@ class TasksController extends ControllerBase
                 }
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('B'.$row.':G'.$row)->applyFromArray($style_content);
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':H'.$row)->applyFromArray($style_content);
             $row++;
         }
 
         // Set tasks total time on last row
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($colArray[6].''.$row, 'Tiempo total')
-                    ->getStyle('B'.$row.':G'.$row)->applyFromArray($style_subtitle);
+                    ->getStyle('A'.$row.':H'.$row)->applyFromArray($style_subtitle);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($colArray[7].''.$row, $dataTotalTime)
-                    ->getStyle('B'.$row.':G'.$row)->applyFromArray($style_subtitle);
+                    ->getStyle('A'.$row.':H'.$row)->applyFromArray($style_subtitle);
 
         // Set autosize ON for each col
-        foreach(range('B','G') as $columnID) {
+        foreach(range('A','H') as $columnID) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
                     ->setAutoSize(true);
         }
@@ -1488,8 +1497,12 @@ class TasksController extends ControllerBase
         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header ('Pragma: public'); // HTTP/1.0
 
+        // Get system (apache) full path
+        $config = Config::singleton();
+        $systemPath = $config->get('apachePath');
+        
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        Utils::SaveViaTempFile($objWriter, '/var/zpanel/temp/');
+        Utils::SaveViaTempFile($objWriter, $systemPath);
         exit;
     }
 

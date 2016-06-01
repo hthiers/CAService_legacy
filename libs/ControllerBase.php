@@ -23,4 +23,3 @@ abstract class ControllerBase {
         $this->timezone = $config->get('timezone');
     }
 }
-?>

@@ -51,4 +51,3 @@ class Config
  echo $config2->get('nombre');
  
 */
-?>
