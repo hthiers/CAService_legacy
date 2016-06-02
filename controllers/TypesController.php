@@ -76,7 +76,10 @@ class TypesController extends ControllerBase
         $aColumns = array('a.id_type'
                     , 'a.code_type'
                     , 'b.id_tenant'
-                    , 'a.label_type');
+                    , 'a.label_type'
+                    , 'a.id_customer'
+                    , 'c.label_customer'
+            );
         
         $sIndexColumn = "id_type";
 
@@ -157,6 +160,7 @@ class TypesController extends ControllerBase
             ON (a.id_tenant = b.id_tenant
                 AND 
                 b.id_tenant = $session->id_tenant)
+            LEFT JOIN cas_customer c ON (a.id_customer = c.id_customer)
             $sWhere
             $sOrder
             $sLimit";

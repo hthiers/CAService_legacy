@@ -111,8 +111,9 @@ $(document).ready(function() {
             { "sClass": "td_options", "aTargets": [-1] },
             { "sClass": "td_editable", "aTargets": [3] },
             { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [0,1,2] },
-            { "sWidth": "80%", "aTargets": [3] },
+            { "bVisible": false, "aTargets": [0,1,2,4] },
+            { "sWidth": "40%", "aTargets": [3] },
+            { "sWidth": "40%", "aTargets": [5] },
             { "sWidth": "20%", "aTargets": [-1] },
             {
                 "fnRender": function ( oObj ) {                    
@@ -262,6 +263,8 @@ function guardarMateria() {
                             <th>CODIGO MATERIA  </th>
                             <th>TENANT</th>
                             <th>MATERIA</th>
+                            <th>IDCLIENTE</th>
+                            <th>CLIENTE</th>
                             <th>OPCIONES</th>
                         </tr>
                     </thead>

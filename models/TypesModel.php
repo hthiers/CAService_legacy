@@ -17,7 +17,10 @@ class TypesModel extends ModelBase
                             a.id_type
                             , a.code_type
                             , a.label_type
+                            , a.id_customer
+                            , b.label_customer
                         from cas_type a
+                        left join cas_customer b on (b.id_customer = a.id_customer)
                         where a.id_tenant = $id_tenant 
                         and a.status_type < 9
                         order by a.label_type asc");
