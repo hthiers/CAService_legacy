@@ -1397,10 +1397,10 @@ class TasksController extends ControllerBase
         
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', 'Reporte de trabajos - PerÃ­odo: '.$requestedMonth.', '.$requestedYear.' - Fecha exportaciÃ³n: '.date('d-m-Y H:i:s'))
-                ->mergeCells('A1:H1')
+                ->mergeCells('A1:I1')
                 ->getRowDimension(1)->setRowHeight(30);
         $objPHPExcel->setActiveSheetIndex(0)
-                ->getStyle('A1:H1')->applyFromArray($style_title);
+                ->getStyle('A1:I1')->applyFromArray($style_title);
 
         // Cols title
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1412,7 +1412,8 @@ class TasksController extends ControllerBase
                 ->setCellValue('F2', 'Descripcion')
                 ->setCellValue('G2', 'Responsable')
                 ->setCellValue('H2', 'Tiempo')
-                ->getStyle('A2:H2')->applyFromArray($style_subtitle);
+                ->setCellValue('I2', 'Tiempo (Dec)')
+                ->getStyle('A2:I2')->applyFromArray($style_subtitle);
         
         // first row (custom starting row)
         $row = 3;
@@ -1436,6 +1437,9 @@ class TasksController extends ControllerBase
             11 => 'L',
             12 => 'M'
         );
+        
+        // Total time (decimal) variable
+        $total_decimal = 0;
 
         // Set content from data
         foreach ($data as $fila => $caso) {
@@ -1445,6 +1449,20 @@ class TasksController extends ControllerBase
                     if($col == 7){
                         $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue($colArray[$col].''.$row, Utils::formatTime($valor));
+                        
+                        // create decimal format values for time
+                        $array_time = split(":", Utils::formatTime($valor));
+                        $decimal_hour = $array_time[0];
+                        $decimal_minutes = $array_time[1]/60;
+                        $decimal_seconds = $array_time[2]/1200;
+                        
+                        // get total decimal time
+                        $decimal_time = round($decimal_hour+$decimal_minutes+$decimal_seconds, 2);
+                        $total_decimal += $decimal_time;
+                        
+                        // set decimal time value to active cell
+                        $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue($colArray[$col+1].''.$row, $decimal_time);
                     }
                     else{
                         $objPHPExcel->setActiveSheetIndex(0)
@@ -1453,7 +1471,7 @@ class TasksController extends ControllerBase
                 }
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':H'.$row)->applyFromArray($style_content);
+            $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':I'.$row)->applyFromArray($style_content);
             $row++;
         }
 
@@ -1464,9 +1482,12 @@ class TasksController extends ControllerBase
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue($colArray[7].''.$row, $dataTotalTime)
                     ->getStyle('A'.$row.':H'.$row)->applyFromArray($style_subtitle);
-
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($colArray[8].''.$row, $total_decimal)
+                    ->getStyle('A'.$row.':I'.$row)->applyFromArray($style_subtitle);
+        
         // Set autosize ON for each col
-        foreach(range('A','H') as $columnID) {
+        foreach(range('A','I') as $columnID) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
                     ->setAutoSize(true);
         }
