@@ -171,12 +171,13 @@ function guardarMateria() {
     $.ajax(
             {
                 type: "POST",
-                url: "?controller=types&action=ajaxTypesAdd",
+                url: "?controller=types&action=ajaxTypesAddWithCustomer",
                 data: { label_type: label, id_customer: customer },
                 cache: false,
                 //contentType: "application/json; charset=utf-8",
                 dataType: "json"
             }).done(function(response){
+                
         if(response !== null){
             console.log(response);
             oTable.fnDraw();

@@ -159,6 +159,7 @@ if($session->id_tenant != null && $session->id_user != null):
 
         // JQDialog Submit - Add new type
         $(".dlgSbmCstr_type").click(function(){
+            var customer = $("#cbocustomers").val();
             var label_type = $("#dlgSbm_name_type").val();
             //var dataString = 'name='+ name + '&desc=' + desc;
             if(label_type === '')
@@ -171,8 +172,8 @@ if($session->id_tenant != null && $session->id_user != null):
                 //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
                     type: "POST",
-                    url: "?controller=types&action=ajaxTypesAdd",
-                    data: {label_type:label_type},
+                    url: "?controller=types&action=ajaxTypesAddWithCustomer",
+                    data: {label_type:label_type, id_customer: customer},
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
@@ -198,6 +199,10 @@ if($session->id_tenant != null && $session->id_user != null):
             }
 
             return false;
+	});
+        
+        $(".dlgSbmErr_type").click(function(){
+            $("#dialog-error-add-type").dialog("close");
 	});
         
         var date_ini = "<?php echo $current_date; ?>";
@@ -385,13 +390,27 @@ if($session->id_tenant != null && $session->id_user != null):
                 width: 350,
                 modal: true
         });
+        
+        $( "#dialog-error-add-type" ).dialog({
+                autoOpen: false,
+                height: 300,
+                width: 350,
+                modal: true
+        });
 
 //        $( "#create-user" ).click(function() {
 //                $( "#dialog-form" ).dialog( "open" );
 //        });
         $( "#create-type" ).click(function() {
 //            console.log("dialog para project.");
-            $( "#dialog-new-type" ).dialog( "open" );
+            if ($("#cbocustomers option:selected").text() != "Sin Cliente") 
+            {   
+                $( "#dialog-new-type" ).dialog( "open" );
+            }
+            else {
+                $( "#dialog-error-add-type" ).dialog( "open" );;
+               
+            }
         });
     });
     

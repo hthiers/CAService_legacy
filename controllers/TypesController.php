@@ -267,6 +267,53 @@ class TypesController extends ControllerBase
 
         if(isset($_POST['label_type']) && $_POST['label_type'] != ""):
             $label_type = $_POST['label_type'];
+            //Incluye el modelo que corresponde
+            require_once 'models/TypesModel.php';
+
+            //Creamos una instancia de nuestro "modelo"
+            $model = new TypesModel();
+
+            $code_type = Utils::guidv4();
+            $new_type[] = null;
+
+            //Le pedimos al modelo todos los items
+            $resultPdo = $model->addNewType(null, $code_type, $session->id_tenant, $label_type);
+
+            $error = $resultPdo->errorInfo();
+            $rows_n = $resultPdo->rowCount();
+
+            if($error[0] == 00000 && $rows_n > 0){
+                $result = $model->getLastType($session->id_tenant);
+                $values = $result->fetch(PDO::FETCH_ASSOC);
+
+                $id_type = $values['id_type'];
+
+                $new_type[0] = $id_type;
+                $new_type[1] = $label_type;
+            }
+            elseif($error[0] == 00000 && $rows_n < 1){
+                $new_type[0] = "0";
+                $new_type[1] = "No se ha podido ingresar el registro";
+            }
+            else{
+                $new_type[0] = "0";
+                $new_type[1] = $error[2];
+            }
+
+            print json_encode($new_type);
+
+            return true;
+        else:
+            return false;
+        endif;
+    }
+    
+    public function ajaxTypesAddWithCustomer()
+    {   
+        $session = FR_Session::singleton();
+
+        if(isset($_POST['label_type']) && $_POST['label_type'] != ""):
+            $label_type = $_POST['label_type'];
             $id_customer = $_POST["id_customer"];
             //Incluye el modelo que corresponde
             require_once 'models/TypesModel.php';
@@ -278,7 +325,7 @@ class TypesController extends ControllerBase
             $new_type[] = null;
 
             //Le pedimos al modelo todos los items
-            $resultPdo = $model->addNewType(null, $code_type, $session->id_tenant, $label_type, $id_customer);
+            $resultPdo = $model->addNewTypeWithCustomer(null, $code_type, $session->id_tenant, $label_type, $id_customer);
 
             $error = $resultPdo->errorInfo();
             $rows_n = $resultPdo->rowCount();

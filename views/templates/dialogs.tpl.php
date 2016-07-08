@@ -43,6 +43,16 @@
 </div>
 <!-- END New Type -->
 
+<!-- Can't Add Type -->
+<div id="dialog-error-add-type" title="Nueva Materia">
+        <fieldset style="padding:0; border:0; margin-top:25px;">
+            <label>Primero debe seleccionar un cliente</label>
+            <br />
+            <input class="dlgSbmErr_type" type="submit" value="VOLVER" style="width:80px;height:40px;font-family:inherit;font-size:12px;" />
+        </fieldset>
+</div>
+<!-- END Can't Add Type -->
+
 
 <!-- KEEP DIALOGS CLOSED -->
 <script type="text/javascript" language="javascript">
@@ -50,4 +60,5 @@
     $("#dialog-remove").dialog({ autoOpen: false});
     $("#dialog-new-customer").dialog({ autoOpen: false});
     $("#dialog-new-type").dialog({ autoOpen: false});
+    $("#dialog-error-add-type").dialog({ autoOpen: false});
 </script>

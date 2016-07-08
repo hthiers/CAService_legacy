@@ -420,3 +420,7 @@ noscript p {
     width: 64px;
     height: 64px;
 }
+
+.select2-container, .select2-drop, .select2-search, .select2-search input {
+    font-size: 12px;
+}

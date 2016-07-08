@@ -107,7 +107,39 @@ class TypesModel extends ModelBase
          * @param varchar $label_customer
          * @return pdo
          */
-        public function addNewType($id_type, $code_type, $id_tenant, $label_type, $id_customer)
+        public function addNewType($id_type, $code_type, $id_tenant, $label_type)
+	{            
+            $this->db->exec("set names utf8");
+            
+            $consulta = $this->db->prepare("
+                    INSERT INTO cas_type
+                            (id_type
+                            , code_type
+                            , id_tenant
+                            , label_type) 
+                    VALUES 
+                            (NULL
+                            ,'$code_type'
+                            ,$id_tenant
+                            ,'$label_type'
+                            )"
+                    
+                    , array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+
+            $consulta->execute();
+
+            return $consulta;
+	}
+        
+        /**
+         * Add new customer
+         * @param int $id_customer
+         * @param varchar $code_customer
+         * @param int $id_tenant
+         * @param varchar $label_customer
+         * @return pdo
+         */
+        public function addNewTypeWithCustomer($id_type, $code_type, $id_tenant, $label_type, $id_customer)
 	{            
             $this->db->exec("set names utf8");
             
