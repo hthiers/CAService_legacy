@@ -16,6 +16,14 @@ if($session->id_tenant != null && $session->id_user != null):
     table.dataTable, table.filtres {
         width: 100%;
     }
+    
+    .select2-container--default .select2-selection--single {
+        font-size: 0.8em;
+    }
+    
+    .select2-results .select2-result-label {
+        font-size: 0.8em;
+    }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery-tableTools.min.js"></script>
@@ -399,96 +407,111 @@ $(document).ready(function() {
         
          <!--CUSTOM FILTROS--> 
         <div id="dt_filtres" style="float:none;margin-top:10px;">
-	    <label style="float:none;">Año: </label>
-            <select id="cboAnio" onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')">
-                <?php
-                echo "<option selected value=".date('Y').">". date('Y') ."</option>";
-                echo "<option value=".date('Y',strtotime('-1 year')).">". date('Y',strtotime('-1 year')) ."</option>";
-                ?>
-            </select>
+            <label>
+                <span>Año: </span>
+                <select id="cboAnio" onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')">
+                    <?php
+                    echo "<option selected value=".date('Y').">". date('Y') ."</option>";
+                    echo "<option value=".date('Y',strtotime('-1 year')).">". date('Y',strtotime('-1 year')) ."</option>";
+                    ?>
+                </select>
+            </label>
 
-            <label style="float:none;">Mes: </label>
-            <select 
-                id="cboMes" 
-                onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')"
-                class="js-example-responsive"
-                style="width:10%">
+            <label>
+                <span>Mes: </span>
+                <select 
+                    id="cboMes" 
+                    onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')"
+                    class="js-example-responsive"
+                    >
 
-                <?php
-                for ($i=0; $i<=sizeof($arrayDates); $i++){
-                    if($i == date("m")){
-                        echo "<option selected value='$i'>". $arrayDates[$i] . "</option>";
-                    }
-                    else {
-                        echo "<option value='$i'>". $arrayDates[$i] . "</option>"; 
-                    }
-
-                }
-                ?>
-            </select>
-            
-            <!-- CH - creación de filtro por día-->
-            <label style="float:none;">D&iacute;a: </label>
-            <select id="cboDia">
-                <option value="">Todos</option>
-            </select>
-            <!-- CH - fin creación de filtro por día-->
-            
-            <label style="float:none;">Estado: </label>
-            <select id="cboEstado">
-                <?php
-                echo "<option selected value=''>Todos</option>";
-                echo "<option value=1>En curso</option>";
-                echo "<option value=2>Terminado</option>";
-                ?>
-            </select>
-            
-            <label style="float:none;">Cliente: </label>
-            <select 
-                id="cboCliente" 
-                class="js-example-responsive"
-                style="width:15%">
-                <?php
-                echo "<option selected value=''>Todos</option>";
-                for ($i=0; $i<sizeof($clientes); $i++){
-                        echo "<option value=".$clientes[$i][0].">". $clientes[$i][3] . "</option>";
-                }
-                ?>
-            </select>
-            
-            <label style="float:none;">Materia: </label>
-            <select 
-                id="cboType"
-                class="js-example-responsive"
-                style="width:15%">
-                <?php
-                echo "<option selected value=''>Todas</option>";
-                for ($i=0; $i<sizeof($types); $i++){
-                        echo "<option value=".$types[$i][0].">". $types[$i][2] . "</option>";
-                }
-                ?>
-            </select>
-            
-            <label style="float:none;">Responsable: </label>
-            <select 
-                id="cboUser"
-                class="js-example-responsive"
-                style="width:15%">
-                <?php
-                echo "<option value=''>Todos</option>";
-                
-                for ($i=0; $i<sizeof($users); $i++){
-                    
-                        //check if item is current user
-                        $selected = "";
-                        if($users[$i][0] == $session->id_user){
-                            $selected = "selected";
+                    <?php
+                    for ($i=0; $i<=sizeof($arrayDates); $i++){
+                        if($i == date("m")){
+                            echo "<option selected value='$i'>". $arrayDates[$i] . "</option>";
                         }
-                        
-                        echo "<option ".$selected." value=".$users[$i][0].">". $users[$i][3] . "</option>";
-                }
-                ?>
-            </select>
+                        else {
+                            echo "<option value='$i'>". $arrayDates[$i] . "</option>"; 
+                        }
+
+                    }
+                    ?>
+                </select>
+            </label>
+                
+            <!-- CH - creación de filtro por día-->
+            <label>
+                <span>D&iacute;a:</span>
+                <select id="cboDia">
+                    <option value="">Todos</option>
+                </select>
+                <!-- CH - fin creación de filtro por día-->
+            </label>
+            
+            <label>
+                <span>Estado:</span>
+                <select id="cboEstado">
+                    <?php
+                    echo "<option selected value=''>Todos</option>";
+                    echo "<option value=1>En curso</option>";
+                    echo "<option value=2>Terminado</option>";
+                    ?>
+                </select>
+            </label>
+            
+            <label>
+                <span>Cliente:</span>
+                <select 
+                    id="cboCliente" 
+                    class="js-example-responsive"
+                    style="width:15%">
+                    <?php
+                    echo "<option selected value=''>Todos</option>";
+                    for ($i=0; $i<sizeof($clientes); $i++){
+                            echo "<option value=".$clientes[$i][0].">". $clientes[$i][3] . "</option>";
+                    }
+                    ?>
+                </select>
+            </label>
+            
+            <label>
+                <span>Materia:</span>
+                <select 
+                    id="cboType"
+                    class="js-example-responsive"
+                    style="width:15%">
+                    <?php
+                    echo "<option selected value=''>Todas</option>";
+                    for ($i=0; $i<sizeof($types); $i++){
+                            echo "<option value=".$types[$i][0].">". $types[$i][2] . "</option>";
+                    }
+                    ?>
+                </select>
+            </label>
+            
+            <label>
+                <span>Responsable:</span>
+                <select 
+                    id="cboUser"
+                    class="js-example-responsive"
+                    style="width:15%">
+                    <?php
+                    echo "<option value=''>Todos</option>";
+
+                    for ($i=0; $i<sizeof($users); $i++){
+
+                            //check if item is current user
+                            $selected = "";
+                            if($users[$i][0] == $session->id_user){
+                                $selected = "selected";
+                            }
+
+                            echo "<option ".$selected." value=".$users[$i][0].">". $users[$i][3] . "</option>";
+                    }
+                    ?>
+                </select>
+            </label>
+                
         </div>
         <!--END CUSTOM FILTROS--> 
          

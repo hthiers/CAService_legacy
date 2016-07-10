@@ -90,9 +90,6 @@ body{
     /*width:1000px; */
     height:auto;
 }
-#contenido label {
-    float: left;
-}
 
 #exportar{
     text-align:right;
