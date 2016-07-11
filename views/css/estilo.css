@@ -421,3 +421,7 @@ noscript p {
 .select2-container, .select2-drop, .select2-search, .select2-search input {
     font-size: 12px;
 }
+
+#dummy {
+    background: none;
+}
