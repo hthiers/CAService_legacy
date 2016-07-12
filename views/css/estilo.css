@@ -1,14 +1,14 @@
 body{
     margin:0 auto;
 /*    background-color:#f6f6f6; */
-    text-transform:none; 
-    background-repeat:repeat-x; 
+    text-transform:none;
+    background-repeat:repeat-x;
 }
 #cabecera{
-    width:1020px; 
+    width:1020px;
     /*height:90px; */
-    border-left:#CCCCCC 1px solid; 
-    border-right:#CCCCCC 1px solid; 
+    border-left:#CCCCCC 1px solid;
+    border-right:#CCCCCC 1px solid;
     margin:0 auto;
     /*background-image:url(../img/header.png);*/
 }
@@ -37,23 +37,23 @@ body{
 }
 #salir{
     width:40px;
-    height:20px; 
-    text-align:left; 
-    padding-top:3px; 
-    padding-left:5px; 
-    border-left:#CCCCCC 1px solid; 
-    border-right:#CCCCCC 1px solid; 
+    height:20px;
+    text-align:left;
+    padding-top:3px;
+    padding-left:5px;
+    border-left:#CCCCCC 1px solid;
+    border-right:#CCCCCC 1px solid;
     margin:0 auto;
     background-color:#476085;
 }
 #menu{
     width:1020px;
-    height:25px; 
-    text-align:left; 
-    padding-top:3px; 
+    height:25px;
+    text-align:left;
+    padding-top:3px;
     /*padding-left:5px; */
-    border-left:#CCCCCC 1px solid; 
-    border-right:#CCCCCC 1px solid; 
+    border-left:#CCCCCC 1px solid;
+    border-right:#CCCCCC 1px solid;
     margin:0 auto;
     background-color:#476085;
 }
@@ -61,11 +61,11 @@ body{
 #menu_div{
     color: #ffffff;
     /*width:1020px;*/
-    height:30px; 
-    text-align:left; 
+    height:30px;
+    text-align:left;
     /*padding:3px;*/
     /*padding-left:5px; */
-    border-left:#CCCCCC 1px solid; 
+    border-left:#CCCCCC 1px solid;
     border-right:#CCCCCC 1px solid;
     border-top: #CCCCCC 1px solid;
     margin:0 auto;
@@ -73,12 +73,12 @@ body{
 }
 #central{
     /*background-color:#FFFFFF;*/
-    width:70%; 
-    height:auto; 
+    width:70%;
+    height:auto;
     padding-bottom:50px;
     padding-top: 5px;
-    /*border-bottom:#CCCCCC 1px solid; 
-    border-left:#CCCCCC 1px solid; 
+    /*border-bottom:#CCCCCC 1px solid;
+    border-left:#CCCCCC 1px solid;
     border-right:#CCCCCC 1px solid; */
     margin:auto;
 }
@@ -95,13 +95,13 @@ body{
     text-align:right;
     margin-right:25px;
     background-color:#FFFFFF;
-    width:960px; 
+    width:960px;
     height:auto;
 }
 #info{
     /*width:1020px; */
     /*height:50px; */
-    margin:0 auto; 
+    margin:0 auto;
     padding:5px 0;
     background-color:#476085;
     border: 1px solid #476085;
@@ -135,7 +135,7 @@ input.bien{
     background-repeat: no-repeat;
     background-position: center right;
     padding-right: 25px;
-} 
+}
 .botonedit{
 	/*background-color:#476085;*/
 width:60px;
@@ -154,7 +154,7 @@ width:60px;
 
     -moz-border-radius:10px 10px 10px 10px;
     -webkit-border-radius: 10px 10px 10px 10px;
-}	
+}
 .a
 {
     font-size:10px;
@@ -169,8 +169,8 @@ width:60px;
     background: #476085;
 }
 th{
-    color:#fff; 
-    text-align:center; 
+    color:#fff;
+    text-align:center;
 /*    border:#FFF 1px solid;*/
 }
 
@@ -186,15 +186,15 @@ a{
 text-align:left;
 float:left;
 background-color:#FFFFFF;
-width:600px; 
-height:400px; 
+width:600px;
+height:400px;
 }
 #infoindex{
 text-align:left;
 
 background-color:#FFFFFF;
-width:400px; 
-height:400px; 
+width:400px;
+height:400px;
 }
 
 #oculto{
@@ -227,7 +227,7 @@ div.message{
 #sms{
 	width:400px;
 	height:30px;
-	border: #000 1px solid;	
+	border: #000 1px solid;
 }
 
 h4.error_page {
@@ -422,6 +422,6 @@ noscript p {
     font-size: 12px;
 }
 
-#dummy {
-    background: none;
+.select2-results .select2-result-label {
+  padding: 1px 0 2px;
 }
