@@ -9,3 +9,4 @@ nbproject/
 controllers/.DS_Store
 models/.DS_Store
 views/.DS_Store
+libs/FrontController.php
