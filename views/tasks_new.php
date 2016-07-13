@@ -97,7 +97,6 @@ if($session->id_tenant != null && $session->id_user != null):
                         tareas.push(value);
                     });
                 });
-                console.log(tareas);
                 $("#gestion").autocomplete({
                     source: tareas
                 });
@@ -107,26 +106,6 @@ if($session->id_tenant != null && $session->id_user != null):
                 alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
               }
         });
-        
-        
-        
-        
-        /*
-        $("#gestion").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    type: "POST",
-                    url: "?controller=tasks&action=getTasksName",
-                    dataType: "json",
-                    success: function(data){
-                        var array = $.parseJSON(data);
-                        console.log(array);
-                       response(array);
-                    }
-                });
-            }
-        });
-        */
         
         $("#cbocustomers").change(function(e) {
             //$("#ciudad,#provincias").attr('disabled', true);
@@ -181,19 +160,16 @@ if($session->id_tenant != null && $session->id_user != null):
                         if(response[0] !== 0){
                             $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
                             //$("#flash").hide();
-                            console.log(response);
                             alert("Cliente agregado!");
                         }
                         else
                             alert("Error: "+response[1]);
                     }
                     else{
-//                        console.log("no llego nulo");
                         alert("Ha ocurrido un error! (nulo)");
                     }
                     $("#dialog-new-customer").dialog("close");
                 }).fail(function(){
-//                    console.log("fail de ajax");
                     alert("Ha ocurrido un error!");
                 });
             }
@@ -226,19 +202,16 @@ if($session->id_tenant != null && $session->id_user != null):
                         if(response[0] !== 0){
                             $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
                             //$("#flash").hide();
-                            console.log(response);
                             alert("Materia agregada!");
                         }
                         else
                             alert("Error: "+response[1]);
                     }
                     else{
-//                        console.log("no llego nulo");
                         alert("Ha ocurrido un error! (nulo)");
                     }
                     $("#dialog-new-type").dialog("close");
                 }).fail(function(){
-//                    console.log("fail de ajax");
                     alert("Ha ocurrido un error!");
                 });
             }
@@ -385,7 +358,7 @@ if($session->id_tenant != null && $session->id_user != null):
 //                $( "#dialog-form" ).dialog( "open" );
 //        });
         $( "#create-customer" ).click(function() {
-//            console.log("dialog para project.");
+//            //console.log("dialog para project.");
             $( "#dialog-new-customer" ).dialog( "open" );
         });
     });
@@ -447,7 +420,7 @@ if($session->id_tenant != null && $session->id_user != null):
 //                $( "#dialog-form" ).dialog( "open" );
 //        });
         $( "#create-type" ).click(function() {
-//            console.log("dialog para project.");
+//            //console.log("dialog para project.");
             if ($("#cbocustomers option:selected").text() != "Sin Cliente") 
             {   
                 $( "#dialog-new-type" ).dialog( "open" );
