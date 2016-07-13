@@ -425,3 +425,7 @@ noscript p {
 .select2-results .select2-result-label {
   padding: 1px 0 2px;
 }
+
+.ui-menu .ui-menu-item a {
+    font-size: 12px;
+}

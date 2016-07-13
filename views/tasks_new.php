@@ -83,15 +83,24 @@ if($session->id_tenant != null && $session->id_user != null):
             iniTrabajo();
         });
         
-        var tareas = "";
+        var tareas = new Array();
         
         $.ajax({
               type: "POST",
               url: "?controller=tasks&action=getTasksName",
               dataType: "json",
               success: function(data) {
-                tareas = data;
-                console.log(data);
+                //tareas = data;
+                //tareas = $.parseJSON(data);
+                $.each(data , function( index, obj ) {
+                    $.each(obj, function( key, value ) {
+                        tareas.push(value);
+                    });
+                });
+                console.log(tareas);
+                $("#gestion").autocomplete({
+                    source: tareas
+                });
               },
               error: function(jqXHR, textStatus, errorThrown) {
                 
@@ -99,9 +108,25 @@ if($session->id_tenant != null && $session->id_user != null):
               }
         });
         
-        $("·gestion").autocomplete({
-            source: tareas['label_task']
+        
+        
+        
+        /*
+        $("#gestion").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    type: "POST",
+                    url: "?controller=tasks&action=getTasksName",
+                    dataType: "json",
+                    success: function(data){
+                        var array = $.parseJSON(data);
+                        console.log(array);
+                       response(array);
+                    }
+                });
+            }
         });
+        */
         
         $("#cbocustomers").change(function(e) {
             //$("#ciudad,#provincias").attr('disabled', true);

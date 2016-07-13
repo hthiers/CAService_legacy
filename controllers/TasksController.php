@@ -1881,12 +1881,19 @@ class TasksController extends ControllerBase
 
         $modelTask = new TasksModel();
         
-        $listado = $modelTask->getAllTasksNameByTenant($session->id_tenant);
         
-        if($listado->rowCount() > 0){
-            echo json_encode($listado->fetchAll(PDO::FETCH_ASSOC));
-            
+        $pdo_listado = $modelTask->getAllTasksNameByTenant($session->id_tenant);
+       
+        if($pdo_listado->rowCount() > 0){
+           $listado = $pdo_listado->fetchAll(PDO::FETCH_ASSOC);
+           $result = json_encode($listado);
+           
+           //print_r($result);
+           //exit();
+           
+           echo $result;
         }
+       
         else{
             return false;
             
