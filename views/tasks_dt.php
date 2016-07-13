@@ -16,13 +16,14 @@ if($session->id_tenant != null && $session->id_user != null):
     table.dataTable, table.filtres {
         width: 100%;
     }
-    
+
     .select2-container--default .select2-selection--single {
         font-size: 0.8em;
     }
-    
+
     .select2-results .select2-result-label {
         font-size: 0.8em;
+        padding: 1px 0 2px;
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
@@ -87,29 +88,29 @@ function viewTask(task){
     console.log(task);
 
     var urlAction = "<?php echo "?controller=".$controller."&action=tasksView";?>";
-    
+
     $('#dt_form').attr('action', urlAction);
     $('#dt_form').attr('method', 'POST');
     $('#task_id').val(task);
-    
+
     $("#dt_form").submit();
 }
 
 function editTask(task){
     console.log(task);
-    
+
     var urlAction = "<?php echo "?controller=".$controller."&action=tasksEditForm";?>";
-    
+
     $('#dt_form').attr('action', urlAction);
     $('#dt_form').attr('method', 'POST');
     $('#task_id').val(task);
-    
+
     $("#dt_form").submit();
 }
 
 function removeTask(task){
     var urlAction = "<?php echo "?controller=".$controller."&action=tasksRemove";?>";
-    
+
     $( "#dialog-remove" ).dialog({
             height: 200,
             width: 350,
@@ -117,7 +118,7 @@ function removeTask(task){
             buttons: {
             "Eliminar": function() {
                 console.log("borrando: #"+task);
-                
+
                 $('#dt_form').attr('action', urlAction);
                 $('#dt_form').attr('method', 'POST');
                 $('#task_id').val(task);
@@ -130,27 +131,27 @@ function removeTask(task){
             }
           }
     });
-    
+
     $("#dialog-remove")
             .data('task_id', task)
             .dialog("open");
 }
-    
+
 function hideErrorBox(){
     $("#errorbox_success").fadeToggle( "slow", "linear" );
     $("#errorbox_failure").fadeToggle( "slow", "linear" );
 }
 
 $(document).ready(function() {
-    
+
     var s_id_user = null;
     var s_id_profile = null;
-    
+
     //Hide errorbox
     setTimeout(function() {
         hideErrorBox();
     }, 2000);
-    
+
     var oTable = $('#example').dataTable({
         //Initial server side params
         "bProcessing": true,
@@ -162,17 +163,17 @@ $(document).ready(function() {
                 var total_seconds = json.iTotalTime;
                 s_id_user = json.iIdUser;
                 s_id_profile = json.iIdProfile;
-                
+
                 var total_time = secondsToTime(total_seconds);
-                
+
                 $("#footer p").text('Tiempo total: '+total_time['h']+':'+total_time['m']+':'+total_time['s']);
-                
+
                 fnDrawCallback(json);
             });
         },
-        
+
         "sDom": 'T<"top"lpfi>rt<"clear">',
-        
+
         "oLanguage": {
             "sInfo": "_TOTAL_ registros",
             "sInfoEmpty": "0 registros",
@@ -190,7 +191,7 @@ $(document).ready(function() {
                 "sLast": "&Uacute;ltima"
             }
         },
-                
+
         "oTableTools": {
             "sSwfPath": "views/media/swf/copy_csv_xls_pdf.swf",
             "aButtons": [
@@ -201,11 +202,11 @@ $(document).ready(function() {
                 }
             ]
         },
-        
+
         //Custom filters params
         "fnServerParams": function ( aoData ){
             aoData.push(
-		{ "name": "filAnio", "value": $('#cboAnio').val() },                
+		{ "name": "filAnio", "value": $('#cboAnio').val() },
 		{ "name": "filCliente", "value": $('#cboCliente').val() },
                 { "name": "filMes", "value": $('#cboMes').val() },
                 { "name": "filDia", "value": $('#cboDia').val() },
@@ -214,7 +215,7 @@ $(document).ready(function() {
                 { "name": "filUser", "value": $('#cboUser').val() }
             );
         },
-        
+
         "aoColumnDefs": [
             {
                 "sClass": "td_options", "aTargets": [-1]
@@ -232,7 +233,7 @@ $(document).ready(function() {
                     if(oObj.aData[0] !== null){
                         var db_date = oObj.aData[0];
                         var string_date = formatDateTimeString(db_date);
-                        
+
                         return string_date;
                     }
                     else{
@@ -246,7 +247,7 @@ $(document).ready(function() {
                     if(oObj.aData[1] !== null){
                         var db_date = oObj.aData[1];
                         var string_date = formatDateTimeString(db_date);
-                        
+
                         return string_date;
                     }
                     else{
@@ -270,12 +271,12 @@ $(document).ready(function() {
                 "aTargets": [6]
             },
             {
-                "fnRender": function ( oObj ) {                    
+                "fnRender": function ( oObj ) {
                     var dt_tools = "";
-                
+
                     if(s_id_profile > 1){
                         //mostrar opciones solo para tareas propias
-                        
+
                         if(s_id_user === oObj.aData[11]){
                             if(oObj.aData[1] === null || oObj.aData[1] === ""){
                                 dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
@@ -286,7 +287,7 @@ $(document).ready(function() {
                     }
                     else{
                         //mostrar opciones para las tareas de todos los usuarios
-                        
+
                         if(oObj.aData[1] === null || oObj.aData[1] === ""){
                                     dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
                         }
@@ -299,11 +300,11 @@ $(document).ready(function() {
                 "aTargets": [-1]
             }
         ],
-        
+
         "sPaginationType": "full_numbers",
         "aaSorting": [[0, "asc"]]
     });
-     
+
     ahora = new Date();
     ahoraDay = ahora.getDate();
     ahoraMonth = ahora.getMonth();
@@ -315,23 +316,23 @@ $(document).ready(function() {
 
     // listeners de filtros para dataTable
     $('#cboAnio').change(function() { oTable.fnDraw(); } );
-    $('#cboCliente').change(function() { oTable.fnDraw(); } ); 
+    $('#cboCliente').change(function() { oTable.fnDraw(); } );
     $('#cboMes').change(function() { oTable.fnDraw(); } );
-  
+
     $('#cboDia').change(function() { oTable.fnDraw(); } );
-    
+
     $('#cboType').change(function() { oTable.fnDraw(); } );
     $('#cboEstado').change(function() { oTable.fnDraw(); } );
     $('#cboUser').change(function() { oTable.fnDraw(); } );
-    
+
     getLastDay('cboMes', 'cboAnio', 'cboDia');
-    
-    
+
+
     $('#cboCliente').select2({
         placeholder: {
             id: "",
             text: "Todos"},
-        
+
         allowClear:true,
         theme: "classic"
     });
@@ -339,7 +340,7 @@ $(document).ready(function() {
         placeholder: {
             id: "",
             text: "Todos"},
-        
+
         allowClear:true,
         theme: "classic"
     });
@@ -372,13 +373,13 @@ $(document).ready(function() {
 
     <?php require('templates/dialogs.tpl.php'); #banner & menu ?>
     <?php require('templates/menu.tpl.php'); #banner & menu ?>
-    
+
     <!-- CENTRAL -->
     <div id="central">
     <div id="contenido">
 
         <!-- DEBUG -->
-        <?php 
+        <?php
         if($debugMode)
         {
             print('<div id="debugbox">');
@@ -396,16 +397,16 @@ $(document).ready(function() {
         <!-- END DEBUG -->
 
         <p class="titulos-form"><?php echo $titulo; ?></p>
-        
-        <?php 
+
+        <?php
         if (isset($error_flag)){
             if(strlen($error_flag) > 0){
                 echo $error_flag;
             }
         }
         ?>
-        
-         <!--CUSTOM FILTROS--> 
+
+         <!--CUSTOM FILTROS-->
         <div id="dt_filtres" style="float:none;margin-top:10px;">
             <label>
                 <span>Año: </span>
@@ -419,11 +420,10 @@ $(document).ready(function() {
 
             <label>
                 <span>Mes: </span>
-                <select 
-                    id="cboMes" 
+                <select
+                    id="cboMes"
                     onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')"
-                    class="js-example-responsive"
-                    >
+                    class="js-example-responsive">
 
                     <?php
                     for ($i=0; $i<=sizeof($arrayDates); $i++){
@@ -431,14 +431,14 @@ $(document).ready(function() {
                             echo "<option selected value='$i'>". $arrayDates[$i] . "</option>";
                         }
                         else {
-                            echo "<option value='$i'>". $arrayDates[$i] . "</option>"; 
+                            echo "<option value='$i'>". $arrayDates[$i] . "</option>";
                         }
 
                     }
                     ?>
                 </select>
             </label>
-                
+
             <!-- CH - creación de filtro por día-->
             <label>
                 <span>D&iacute;a:</span>
@@ -447,7 +447,7 @@ $(document).ready(function() {
                 </select>
                 <!-- CH - fin creación de filtro por día-->
             </label>
-            
+
             <label>
                 <span>Estado:</span>
                 <select id="cboEstado">
@@ -458,11 +458,11 @@ $(document).ready(function() {
                     ?>
                 </select>
             </label>
-            
+
             <label>
                 <span>Cliente:</span>
-                <select 
-                    id="cboCliente" 
+                <select
+                    id="cboCliente"
                     class="js-example-responsive"
                     style="width:15%">
                     <?php
@@ -473,10 +473,10 @@ $(document).ready(function() {
                     ?>
                 </select>
             </label>
-            
+
             <label>
                 <span>Materia:</span>
-                <select 
+                <select
                     id="cboType"
                     class="js-example-responsive"
                     style="width:15%">
@@ -488,10 +488,10 @@ $(document).ready(function() {
                     ?>
                 </select>
             </label>
-            
+
             <label>
                 <span>Responsable:</span>
-                <select 
+                <select
                     id="cboUser"
                     class="js-example-responsive"
                     style="width:15%">
@@ -511,10 +511,10 @@ $(document).ready(function() {
                     ?>
                 </select>
             </label>
-                
+
         </div>
-        <!--END CUSTOM FILTROS--> 
-         
+        <!--END CUSTOM FILTROS-->
+
         <!-- DATATABLE -->
         <div id="dynamic">
             <form id="dt_form" method="" action="">
@@ -553,7 +553,7 @@ $(document).ready(function() {
         <div id="footer" class="headers" style="color:#ffffff;padding:3px;">
             <p style="text-align:right;">Tiempo Total: </p>
         </div>
-        
+
         <div class="spacer"></div>
 
     </div>
