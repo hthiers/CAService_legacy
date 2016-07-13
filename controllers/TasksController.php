@@ -685,6 +685,9 @@ class TasksController extends ControllerBase
         
         $pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
         $data['pdoTypes'] = $pdoTypes;
+        
+        //$pdoTasks = $modelTask->getAllTasksByTenant($session->id_tenant);
+        //$data['pdoTasks'] = $pdoTasks;
 
         #fecha actual
         $now = date("Y/m/d H:i:s");
@@ -1868,5 +1871,26 @@ class TasksController extends ControllerBase
 
         #echo $sql; //debug
         return json_encode($output);
+    }
+    
+    public function getTasksName() {
+        
+        $session = FR_Session::singleton();
+
+        require_once 'models/TasksModel.php';
+
+        $modelTask = new TasksModel();
+        
+        $listado = $modelTask->getAllTasksNameByTenant($session->id_tenant);
+        
+        if($listado->rowCount() > 0){
+            echo json_encode($listado->fetchAll(PDO::FETCH_ASSOC));
+            
+        }
+        else{
+            return false;
+            
+        }
+        //return $listado;
     }
 }

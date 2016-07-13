@@ -382,6 +382,25 @@ class TasksModel extends ModelBase
 
         return $consulta;
     }
+    
+    /**
+     * Get all tasks by tenant
+     * @param type $id_tenant
+     * @return PDO
+     */
+    public function getAllTasksNameByTenant($id_tenant)
+    {
+        $consulta = $this->db->prepare("
+                SELECT 
+                    a.label_task    
+                FROM  cas_task a
+                WHERE a.id_tenant = $id_tenant");
+
+        $consulta->execute();
+
+        //devolvemos la coleccion para que la vista la presente.
+        return $consulta;
+    }
 
 //        public function addUserToProject($id_project, $id_user)
 //        {

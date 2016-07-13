@@ -83,6 +83,26 @@ if($session->id_tenant != null && $session->id_user != null):
             iniTrabajo();
         });
         
+        var tareas = "";
+        
+        $.ajax({
+              type: "POST",
+              url: "?controller=tasks&action=getTasksName",
+              dataType: "json",
+              success: function(data) {
+                tareas = data;
+                console.log(data);
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                
+                alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+              }
+        });
+        
+        $("·gestion").autocomplete({
+            source: tareas['label_task']
+        });
+        
         $("#cbocustomers").change(function(e) {
             //$("#ciudad,#provincias").attr('disabled', true);
             if ($(this).val().trim() != "") {
@@ -514,7 +534,7 @@ if($session->id_tenant != null && $session->id_user != null):
                         <tr>
                             <td class="middle">Gestion</td>
                             <td class="middle">
-                                <input type="text" class="input_box" name="etiqueta" />
+                                <input type="text" class="input_box" name="etiqueta" id="gestion"/>
                             </td>
                         </tr>
                         <tr>
