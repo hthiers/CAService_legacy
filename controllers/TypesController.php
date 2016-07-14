@@ -491,4 +491,48 @@ class TypesController extends ControllerBase
 
         return $listado;
     }
+    
+    public function ajaxUpdateType($id_types, $column, $value)
+    {
+        $session = FR_Session::singleton();
+
+        //Incluye el modelo que corresponde
+        require_once 'models/TypesModel.php';
+
+        //Creamos una instancia de nuestro "modelo"
+        $model = new TypesModel();
+        
+        //Ajax requested vars
+        $idType = $_REQUEST['idtype'];
+        $column = $_REQUEST['column'];
+        $newValue = $_REQUEST['newcalue'];
+        $target_column = ""; 
+        if($column == 1)
+            $target_column = "cod_type";
+        else if($column == 2)
+            $target_column = "label_type";
+        else if($column == 3)
+            $target_column = "id_customer";
+        
+        $result = $model->updateTypeDinamic($idType, $column, $newValue);
+        
+        if($result){
+            $error = $result->errorInfo();
+            $rows_n = $result->rowCount();
+            #$query = $result->debugDumpParams();
+
+            if($error[0] == 00000 && $rows_n > 0){
+                print 'actualizacion correcta';
+            }
+            elseif($error[0] == 00000 && $rows_n < 1){
+                print 'no se actualizaron datos';
+            }
+            else{
+                print 'error en actualizacion: '. $error[2];
+            }
+        }
+        else{
+            print 'hubo un error al intentar ejecutar la sentencia';
+        }
+    }
 }

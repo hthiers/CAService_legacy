@@ -139,22 +139,13 @@ $(document).ready(function() {
         
         "aoColumnDefs": [
             { "sClass": "td_options", "aTargets": [-1] },
-            { "sClass": "td_editable", "aTargets": [3,5] },
+            { "sClass": "td_editable", "aTargets": [3] },
+            { "sClass": "editcustomer_select", "aTargets": [ 5 ] },
             { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,1,2,4] },
             { "sWidth": "40%", "aTargets": [3] },
             { "sWidth": "40%", "aTargets": [5] },
             { "sWidth": "20%", "aTargets": [-1] },
-            ///{ "aType": "dom-select", "aTargets": [5] },
-            {
-                "fnRender": function ( oObj ) {                    
-                    var dt_tools = "";                
-                    dt_tools = '<select>' + options + '</select>';
-
-                    return dt_tools;
-                },
-                "aTargets": [5]
-            },
             {
                 "fnRender": function ( oObj ) {                    
                     var dt_tools = "";                
@@ -182,13 +173,38 @@ $(document).ready(function() {
                 "submitdata": function ( value, settings ) {
                     return {
                         "row_id": this.parentNode.getAttribute('id'),
-                        "column": oTable.fnGetPosition( this )[2]
+                        "column": oTable.fnGetPosition( this )[2],
                     };
                 },
                 
                 "placeholder" : "",
                 "height": "14px"
             } );
+            
+            $('#table tbody td:.editcustomer_select').editable( '?controller=types&action=typesUpdateDinamic', {
+                "callback"      : function( sValue, y ) {
+                        var aPos = oTable.fnGetPosition(this);
+                        
+                        //oTable.fnDraw();
+                        oTable.fnUpdate( sValue, aPos[0], aPos[1] );
+                },
+                "submitdata"    : function (value, settings) {
+                        //var aPos = oTable.fnGetPosition( this );    
+                        //var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
+                        return {idtypes: aData[0], column: 3, newvalue: aData[4]}; //take idData from first column
+                },
+                indicator : "Saving...",
+                tooltip   : "Click to change...",
+                loaddata  : function(value, settings) {
+                        var aPos = oTable.fnGetPosition( this );    
+                        var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
+                        return {current: value}
+                },
+                loadurl   : "?controller=customers&action=getCustomersByTenant",
+                type      : "select",
+                submit    : "OK",
+                height    : "14px"
+            });
         }
     });
     
