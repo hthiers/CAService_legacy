@@ -527,13 +527,20 @@ class CustomersController extends ControllerBase
        
         $output = array();
 
+        
         while ($row = $listado->fetch(PDO::FETCH_ASSOC))
         {
             $output[$row['id_customer']] = utf8_encode($row['label_customer']);
         }
+         
 
         $output['selected'] = utf8_encode($_GET['current']);
 
+        /*
+        print_r($output);
+        exit();
+        */
+        
         echo json_encode( $output );
     }
 }

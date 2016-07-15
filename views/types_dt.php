@@ -184,24 +184,27 @@ $(document).ready(function() {
             $('#table tbody td:.editcustomer_select').editable( '?controller=types&action=typesUpdateDinamic', {
                 "callback"      : function( sValue, y ) {
                         var aPos = oTable.fnGetPosition(this);
-                        
-                        //oTable.fnDraw();
-                        oTable.fnUpdate( sValue, aPos[0], aPos[1] );
+                        console.log("aPos -> ".aPos);
+                        oTable.fnDraw();
+                        //oTable.fnUpdate( sValue, aPos[0], aPos[1] );
                 },
-                "submitdata"    : function (value, settings) {
+                "submitdata"   : function (value, settings) {
                         //var aPos = oTable.fnGetPosition( this );    
                         //var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
-                        console.log("dato en 4 - ". aData[4]);
+                        var aPos = oTable.fnGetPosition( this );    
+                        var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
+                        console.log(aData);
                         return {idtypes: aData[0], column: 3, newvalue: aData[4]}; //take idData from first column
                 },
                 indicator : "Saving...",
                 tooltip   : "Click to change...",
                 loaddata  : function(value, settings) {
+                    //console.log("valor - ". value . " --- settings - ".settings);
                         var aPos = oTable.fnGetPosition( this );    
                         var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
                         return {current: value}
                 },
-                loadurl   : "?controller=customers&action=getCustomersByTenant",
+                loadurl   : "?controller=customers&action=getCustomersByTenantJSON",
                 type      : "select",
                 submit    : "OK",
                 height    : "14px"
