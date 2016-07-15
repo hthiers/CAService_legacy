@@ -191,6 +191,7 @@ $(document).ready(function() {
                 "submitdata"    : function (value, settings) {
                         //var aPos = oTable.fnGetPosition( this );    
                         //var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
+                        console.log("dato en 4 - ". aData[4]);
                         return {idtypes: aData[0], column: 3, newvalue: aData[4]}; //take idData from first column
                 },
                 indicator : "Saving...",

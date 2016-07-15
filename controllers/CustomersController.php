@@ -513,4 +513,27 @@ class CustomersController extends ControllerBase
         }
         //return $listado;
     }
+    
+    public function getCustomersByTenantJSON() {
+        
+        $session = FR_Session::singleton();
+
+        require_once 'models/CustomersModel.php';
+
+        $modelCustomers = new CustomersModel();
+        
+        
+        $listado = $modelCustomers->getAllCustomers($session->id_tenant);
+       
+        $output = array();
+
+        while ($row = $listado->fetch(PDO::FETCH_ASSOC))
+        {
+            $output[$row['id_customer']] = utf8_encode($row['label_customer']);
+        }
+
+        $output['selected'] = utf8_encode($_GET['current']);
+
+        echo json_encode( $output );
+    }
 }
