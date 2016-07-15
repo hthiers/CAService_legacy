@@ -505,7 +505,8 @@ class TypesController extends ControllerBase
         //Ajax requested vars
         $idType = $_REQUEST['idtype'];
         $column = $_REQUEST['column'];
-        $newValue = $_REQUEST['newvalue'];
+        $newValue = $_REQUEST['value'];
+        
         $target_column = ""; 
         if($column == 1)
             $target_column = "cod_type";
