@@ -142,7 +142,7 @@ $(document).ready(function() {
             { "sClass": "td_editable", "aTargets": [3] },
             { "sClass": "editcustomer_select", "aTargets": [ 5 ] },
             { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [0,1,2,4] },
+            //{ "bVisible": false, "aTargets": [0,1,2,4] },
             { "sWidth": "40%", "aTargets": [3] },
             { "sWidth": "40%", "aTargets": [5] },
             { "sWidth": "20%", "aTargets": [-1] },
@@ -181,10 +181,10 @@ $(document).ready(function() {
                 "height": "14px"
             } );
             
-            $('#table tbody td:.editcustomer_select').editable( '?controller=types&action=typesUpdateDinamic', {
+            $('#table tbody td:.editcustomer_select').editable( '?controller=types&action=ajaxUpdateType', {
                 "callback"      : function( sValue, y ) {
                         var aPos = oTable.fnGetPosition(this);
-                        console.log("aPos -> ".aPos);
+                        console.log("aPos -> " +aPos);
                         oTable.fnDraw();
                         //oTable.fnUpdate( sValue, aPos[0], aPos[1] );
                 },
@@ -193,13 +193,14 @@ $(document).ready(function() {
                         //var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
                         var aPos = oTable.fnGetPosition( this );    
                         var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
-                        console.log(aData);
-                        return {idtypes: aData[0], column: 3, newvalue: aData[4]}; //take idData from first column
+                        console.log("aData" + aData);
+                        console.log(aData[0]+" - "+ aData[3]+" - "+ aData[5]);
+                        return {idtype: aData[0], column: 3, newvalue: aData[5]}; //take idData from first column
                 },
                 indicator : "Saving...",
                 tooltip   : "Click to change...",
                 loaddata  : function(value, settings) {
-                    //console.log("valor - ". value . " --- settings - ".settings);
+                    console.log("valor - "+ value + " --- settings - " +settings);
                         var aPos = oTable.fnGetPosition( this );    
                         var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
                         return {current: value}

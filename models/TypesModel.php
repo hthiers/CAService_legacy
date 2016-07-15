@@ -249,7 +249,7 @@ class TypesModel extends ModelBase
     {
          $this->db->exec("set names utf8");
 
-        $consulta = $this->db->prepare("UPDATE cas_types
+        $consulta = $this->db->prepare("UPDATE cas_type 
                         SET 
                             $column = '$value'
                         WHERE id_type = '$id_types'");

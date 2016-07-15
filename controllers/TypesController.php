@@ -492,7 +492,7 @@ class TypesController extends ControllerBase
         return $listado;
     }
     
-    public function ajaxUpdateType($id_types, $column, $value)
+    public function ajaxUpdateType()
     {
         $session = FR_Session::singleton();
 
@@ -505,7 +505,7 @@ class TypesController extends ControllerBase
         //Ajax requested vars
         $idType = $_REQUEST['idtype'];
         $column = $_REQUEST['column'];
-        $newValue = $_REQUEST['newcalue'];
+        $newValue = $_REQUEST['newvalue'];
         $target_column = ""; 
         if($column == 1)
             $target_column = "cod_type";
@@ -514,7 +514,7 @@ class TypesController extends ControllerBase
         else if($column == 3)
             $target_column = "id_customer";
         
-        $result = $model->updateTypeDinamic($idType, $column, $newValue);
+        $result = $model->updateTypeDinamic($idType, $target_column, $newValue);
         
         if($result){
             $error = $result->errorInfo();

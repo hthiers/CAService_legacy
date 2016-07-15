@@ -522,11 +522,9 @@ class CustomersController extends ControllerBase
 
         $modelCustomers = new CustomersModel();
         
-        
         $listado = $modelCustomers->getAllCustomers($session->id_tenant);
        
         $output = array();
-
         
         while ($row = $listado->fetch(PDO::FETCH_ASSOC))
         {
