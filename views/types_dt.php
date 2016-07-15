@@ -19,6 +19,7 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.jeditable.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
 <script type="text/javascript">
 
 var oTable = null;
@@ -70,6 +71,15 @@ $(document).ready(function() {
     }, 2000);
     
     var options = "";
+    
+    /*
+    $('.editcustomer_select').select2({
+        placeholder: {
+            id: "",
+            text: ""},
+            allowClear:true
+        });
+    */
     
     $.ajax({
               type: "POST",
@@ -204,8 +214,21 @@ $(document).ready(function() {
                 submit    : "OK",
                 height    : "14px"
             });
+            
+            
         }
     });
+    
+    /*
+    $('#cbocustomers').select2({
+       placeholder: {
+           id: "",
+           text: "Todos"},
+
+       allowClear:true,
+       theme: "classic"
+   });
+   */
     
     // boton nueva materia
     $("#create-type").click(function() {
