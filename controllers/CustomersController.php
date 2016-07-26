@@ -485,4 +485,32 @@ class CustomersController extends ControllerBase
             return false;
         endif;
     }
+    
+    public function getCustomersByTenant() {
+        
+        $session = FR_Session::singleton();
+
+        require_once 'models/CustomersModel.php';
+
+        $modelCustomers = new CustomersModel();
+        
+        
+        $pdo_listado = $modelCustomers->getAllCustomers($session->id_tenant);
+       
+        if($pdo_listado->rowCount() > 0){
+           $listado = $pdo_listado->fetchAll(PDO::FETCH_ASSOC);
+           $result = json_encode($listado);
+           
+           //print_r($result);
+           //exit();
+           
+           echo $result;
+        }
+       
+        else{
+            return false;
+            
+        }
+        //return $listado;
+    }
 }

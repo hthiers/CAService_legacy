@@ -69,7 +69,37 @@ $(document).ready(function() {
         hideErrorBox();
     }, 2000);
     
+    var options = "";
     
+    $.ajax({
+              type: "POST",
+              url: "?controller=customers&action=getCustomersByTenant",
+              dataType: "json",
+              success: function(data) {
+                //tareas = data;
+                //tareas = $.parseJSON(data);
+                
+                $.each(data , function( index, obj ) {
+                    $.each(obj, function( key, value ) {
+                        
+                        if(key == 'id_customer') {
+                            options += '<option value="'+value+'">';
+                            //console.log(value);
+                        }
+                        
+                        if(key == 'label_customer') {
+                            options += value +'</option>';
+                            //console.log(value);
+                        }
+                    });
+                });
+                
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                
+                alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+              }
+        });
     
     oTable = $('#table').dataTable({
         //Initial server side params
@@ -109,12 +139,22 @@ $(document).ready(function() {
         
         "aoColumnDefs": [
             { "sClass": "td_options", "aTargets": [-1] },
-            { "sClass": "td_editable", "aTargets": [3] },
+            { "sClass": "td_editable", "aTargets": [3,5] },
             { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,1,2,4] },
             { "sWidth": "40%", "aTargets": [3] },
             { "sWidth": "40%", "aTargets": [5] },
             { "sWidth": "20%", "aTargets": [-1] },
+            ///{ "aType": "dom-select", "aTargets": [5] },
+            {
+                "fnRender": function ( oObj ) {                    
+                    var dt_tools = "";                
+                    dt_tools = '<select>' + options + '</select>';
+
+                    return dt_tools;
+                },
+                "aTargets": [5]
+            },
             {
                 "fnRender": function ( oObj ) {                    
                     var dt_tools = "";                
@@ -154,6 +194,7 @@ $(document).ready(function() {
     
     // boton nueva materia
     $("#create-type").click(function() {
+    
         guardarMateria();
     });
     

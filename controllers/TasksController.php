@@ -1399,7 +1399,7 @@ class TasksController extends ControllerBase
         $currentDatetime = date('dmY-His');
         
         $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'Reporte de trabajos - PerÃ­odo: '.$requestedMonth.', '.$requestedYear.' - Fecha exportaciÃ³n: '.date('d-m-Y H:i:s'))
+                ->setCellValue('A1', 'Reporte de trabajos - Período: '.$requestedMonth.', '.$requestedYear.' - Fecha exportación: '.date('d-m-Y H:i:s'))
                 ->mergeCells('A1:I1')
                 ->getRowDimension(1)->setRowHeight(30);
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1412,7 +1412,7 @@ class TasksController extends ControllerBase
                 ->setCellValue('C2', 'Cliente')
                 ->setCellValue('D2', 'Materia')
                 ->setCellValue('E2', 'Gestion')
-                ->setCellValue('F2', 'Descripcion')
+                ->setCellValue('F2', 'Descripción')
                 ->setCellValue('G2', 'Responsable')
                 ->setCellValue('H2', 'Tiempo')
                 ->setCellValue('I2', 'Tiempo (Dec)')

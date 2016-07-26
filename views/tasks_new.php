@@ -64,6 +64,9 @@ if($session->id_tenant != null && $session->id_user != null):
     #datepicker {
         margin-left: 5px;
     }
+    .select2-container, .select2-drop, .select2-search, .select2-search input {
+        width: 100%;
+    }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
