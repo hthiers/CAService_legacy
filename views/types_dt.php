@@ -150,6 +150,7 @@ $(document).ready(function() {
             "sInfo": "_START_ a _END_ de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando 0 registros",
             "sSearch": "Buscar",
+            "sProcessing": "",
             "oPaginate": {
                 "sFirst": "Primera",
                 "sNext": "Siguiente",
