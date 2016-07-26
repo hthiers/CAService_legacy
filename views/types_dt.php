@@ -9,16 +9,30 @@ if($session->id_tenant != null && $session->id_user != null):
 ?>
 
 <!-- AGREGAR JS & CSS AQUI -->
+<link rel="stylesheet" href="views/css/datatable.css">
+<link rel="stylesheet" href="views/css/dataTables.tableTools.min.css">
+<link rel="stylesheet" href="views/css/select2.css">
 <style type="text/css" title="currentStyle">
-    @import "views/css/datatable.css";
     table.dataTable, table.filtres {
         width: 500px;
     }
     #central { width: 60%;}
+    #new_type_label {
+        -webkit-box-sizing: border-box; /* webkit */
+        -moz-box-sizing: border-box; /* firefox */
+        box-sizing: border-box; /* css3 */
+        
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        
+        line-height: 26px;
+        vertical-align: middle;
+    }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.jeditable.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
 <script type="text/javascript">
 
 var oTable = null;
@@ -70,6 +84,15 @@ $(document).ready(function() {
     }, 2000);
     
     var options = "";
+    
+    /*
+    $('.editcustomer_select').select2({
+        placeholder: {
+            id: "",
+            text: ""},
+            allowClear:true
+        });
+    */
     
     $.ajax({
               type: "POST",
@@ -139,22 +162,13 @@ $(document).ready(function() {
         
         "aoColumnDefs": [
             { "sClass": "td_options", "aTargets": [-1] },
-            { "sClass": "td_editable", "aTargets": [3,5] },
+            { "sClass": "td_editable", "aTargets": [3] },
+            { "sClass": "editcustomer_select", "aTargets": [ 5 ] },
             { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,1,2,4] },
             { "sWidth": "40%", "aTargets": [3] },
             { "sWidth": "40%", "aTargets": [5] },
             { "sWidth": "20%", "aTargets": [-1] },
-            ///{ "aType": "dom-select", "aTargets": [5] },
-            {
-                "fnRender": function ( oObj ) {                    
-                    var dt_tools = "";                
-                    dt_tools = '<select>' + options + '</select>';
-
-                    return dt_tools;
-                },
-                "aTargets": [5]
-            },
             {
                 "fnRender": function ( oObj ) {                    
                     var dt_tools = "";                
@@ -182,15 +196,46 @@ $(document).ready(function() {
                 "submitdata": function ( value, settings ) {
                     return {
                         "row_id": this.parentNode.getAttribute('id'),
-                        "column": oTable.fnGetPosition( this )[2]
+                        "column": oTable.fnGetPosition( this )[2],
                     };
                 },
                 
                 "placeholder" : "",
                 "height": "14px"
             } );
+            
+            $('#table tbody td:.editcustomer_select').editable( '?controller=types&action=ajaxUpdateType', {
+                "callback"      : function( sValue, y ) {
+                        var aPos = oTable.fnGetPosition(this);
+                        oTable.fnDraw();
+                        //oTable.fnUpdate( sValue, aPos[0], aPos[1] );
+                },
+                "submitdata"   : function (value, settings) {
+                        var aPos = oTable.fnGetPosition( this );    
+                        var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
+                        return {idtype: aData[0], column: 3, newvalue: aData[5]}; //take idData from first column
+                },
+                indicator : "Saving...",
+                tooltip   : "Click to change...",
+                loaddata  : function(value, settings) {
+                        var aPos = oTable.fnGetPosition( this );    
+                        var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
+                        return {current: value}
+                },
+                loadurl   : "?controller=customers&action=getCustomersByTenantJSON",
+                type      : "select",
+                submit    : "OK",
+                height    : "14px"
+            });
+            
+            
         }
     });
+    
+    $('#cbocustomers').select2({
+       allowClear:true,
+       theme: "classic"
+   });
     
     // boton nueva materia
     $("#create-type").click(function() {
@@ -263,16 +308,24 @@ function guardarMateria() {
 
         <p class="titulos-form" style="float:left;"><?php echo $titulo; ?></p>
         
-        <input type="text" id="new_type_label" name="new_type_label" style="margin-left: 20%; margin-top: 10px;" />
-        <?php
-        echo "<select class='input_box_cliente' id='cbocustomers' name='cbocustomers'>\n";
-        echo "<option value='noaplica' selected='selected'>Sin Cliente</option>\n";
-        while($row = $listadoClientes->fetch(PDO::FETCH_ASSOC))
-        {
-            echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
-        }
-        echo "</select>\n";
-        ?>
+        <input 
+            type="text" 
+            id="new_type_label" 
+            name="new_type_label" 
+            style="margin-left: 20%;"
+            placeholder="Nueva materia..." />
+        <select 
+            class="js-example-responsive" 
+            style="width:20%" 
+            id="cbocustomers" 
+            name="cbocustomers">
+            <?php
+            while($row = $listadoClientes->fetch(PDO::FETCH_ASSOC))
+            {
+                echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
+            }
+            ?>
+        </select>
         &nbsp;
         <input type="button" id="create-type" style="width:22px;height:22px;display:inline;" class="ui-icon ui-icon-circle-plus" />
         
