@@ -115,6 +115,12 @@ if($session->id_tenant != null && $session->id_user != null):
             if ($(this).val().trim() != "") {
                 //alert("se cambio :" + $(this).val());
                 ejecutar($(this), $("#cbotypes"));
+                
+                if($(this).val().trim() == 'noaplica') {
+                    $("#cbotypes").val("noaplica").trigger("change");
+                }
+                
+                
             }
           });
           
@@ -269,12 +275,15 @@ if($session->id_tenant != null && $session->id_user != null):
             allowClear:true
         
         });
+        
+        
         $('#cbotypes').select2({
             placeholder: {
                 id: "",
                 text: "Sin Materia"},
             allowClear:true
         });
+        
     });
     
     // JQDatepicker
@@ -550,10 +559,12 @@ if($session->id_tenant != null && $session->id_user != null):
                                 <?php
                                 echo "<select class='input_box' id='cbotypes' name='cbotypes'>\n";
                                 echo "<option value='noaplica' selected='selected'>Sin Materia</option>\n";
+                                /*
                                 while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
                                 {
                                     echo "<option value='$row[id_type]'>$row[label_type]</option>\n";
                                 }
+                                 */
                                 echo "</select>\n";
                                 ?>
                                 &nbsp;
