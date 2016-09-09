@@ -683,8 +683,8 @@ class TasksController extends ControllerBase
         $pdoProject = $model->getAllProjectsByTenant($session->id_tenant);
         $data['pdoProject'] = $pdoProject;
         
-        $pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
-        $data['pdoTypes'] = $pdoTypes;
+        //$pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
+        //$data['pdoTypes'] = $pdoTypes;
         
         //$pdoTasks = $modelTask->getAllTasksByTenant($session->id_tenant);
         //$data['pdoTasks'] = $pdoTasks;
