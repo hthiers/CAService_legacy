@@ -116,11 +116,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 //alert("se cambio :" + $(this).val());
                 ejecutar($(this), $("#cbotypes"));
                 
-                if($(this).val().trim() == 'noaplica') {
-                    $("#cbotypes").val("noaplica").trigger("change");
-                }
-                
-                
+                $("#cbotypes").val("noaplica").trigger("change");
             }
           });
           
