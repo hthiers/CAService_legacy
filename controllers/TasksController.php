@@ -1762,8 +1762,7 @@ class TasksController extends ControllerBase
             LEFT OUTER JOIN cas_type g
             ON f.cas_type_id_type = g.id_type
             $sWhere
-            $sOrder
-            $sLimit";
+            $sOrder";
 
         #print($sql);
 
