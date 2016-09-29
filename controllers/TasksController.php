@@ -1793,8 +1793,7 @@ class TasksController extends ControllerBase
                     ON a.id_task = f.cas_task_id_task
                     LEFT OUTER JOIN cas_type g
                     ON f.cas_type_id_type = g.id_type
-                    $sWhere
-                    $sLimit";
+                    $sWhere";
 
         $idsPdo = $model->goCustomQuery($sql_ids);
         $ids_array = null;
