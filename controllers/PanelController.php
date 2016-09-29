@@ -526,7 +526,7 @@ class PanelController extends ControllerBase
         {
             if ($boolean_name_user != 'false')
             {
-                $mensaje['error'] = "El nombre de ya existe, debe ingresar un nombre de usuario nuevo.";
+                $mensaje['error'] = "El nombre de usuario ya existe, debe ingresar un nombre nuevo.";
                 $mensaje['estado'] = false;
             }
         }
