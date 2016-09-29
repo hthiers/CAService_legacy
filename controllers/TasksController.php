@@ -1454,7 +1454,7 @@ class TasksController extends ControllerBase
                             ->setCellValue($colArray[$col].''.$row, Utils::formatTime($valor));
                         
                         // create decimal format values for time
-                        $array_time = split(":", Utils::formatTime($valor));
+                        $array_time = explode(":", Utils::formatTime($valor));
                         $decimal_hour = $array_time[0];
                         $decimal_minutes = $array_time[1]/60;
                         $decimal_seconds = $array_time[2]/1200;
