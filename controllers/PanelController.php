@@ -42,9 +42,13 @@ class PanelController extends ControllerBase
         //incluye el modelo que corresponde
         require_once 'models/ProfilesModel.php';
         
+        $error_flag = '';
+        $message = '';
+        
         #support global messages
-        if(isset($_GET['error_flag']))
+        if(isset($_GET['error_flag'])) {
             $error_flag = $_GET['error_flag'];
+        }
         if(isset($_GET['message']))
             $message = $_GET['message'];
         
@@ -56,7 +60,7 @@ class PanelController extends ControllerBase
         $pdoProfiles = $model->getAllProfiles();
         $data['profiles'] = $pdoProfiles;
         
-        //$data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
+        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
 
         
         $this->view->show("users_new.php", $data);
@@ -72,6 +76,14 @@ class PanelController extends ControllerBase
         $model = new UsersModel();
         $user = new UserVO();
         $profile_user = null; //Daclaración de variable antes de capturar el valor de un combobox
+        
+        #support global messages
+        if(isset($_GET['error_flag']))
+            $error_flag = $_GET['error_flag'];
+        if(isset($_GET['message']))
+            $message = $_GET['message'];
+        
+        $data['titulo'] = "Nuevo Usuario";
         
         $name_user = filter_input(INPUT_POST, 'name_user');
         $profile_user = filter_input(INPUT_POST, 'cboprofiles');
@@ -91,7 +103,7 @@ class PanelController extends ControllerBase
         $boolean_name_user = $result_val->fetch(PDO::FETCH_ASSOC);
         
         $validacion = $this->validarDatosUsuario($user, 'normal', $boolean_name_user['result']);
-
+        
         
         if($validacion['estado'] == true )
         {
@@ -279,6 +291,9 @@ class PanelController extends ControllerBase
         require_once 'models/ProfilesModel.php';
         require_once 'vo/UserVO.php';
         
+        $error_flag = '';
+        $message = '';
+        
         #support global messages
         if(isset($_GET['error_flag']))
             $error_flag = $_GET['error_flag'];
@@ -298,13 +313,12 @@ class PanelController extends ControllerBase
         $data['title'] = "Editar Usuario";
         $data['profiles'] = $pdoProfiles;
         $data['user'] = $pdoUser;
-        $message = '';
-        $error_flag = '';
+        //$message = '';
+        //$error_flag = '';
         $data['message'] = $message;
         
         $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
 
-        
         $this->view->show("users_edit.php", $data);
     }
     
@@ -439,6 +453,9 @@ class PanelController extends ControllerBase
     {
         $session = FR_Session::singleton();
         
+        $error_flag = '';
+        $message = '';
+        
         #support global messages
         if(isset($_GET['error_flag']))
             $error_flag = $_GET['error_flag'];
@@ -476,7 +493,7 @@ class PanelController extends ControllerBase
         $data['action'] = "editUserForm";
 
         //Posible error
-        //$data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
+        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
 
         //Finalmente presentamos nuestra plantilla
         $this->view->show("users_dt.php", $data);
@@ -509,7 +526,7 @@ class PanelController extends ControllerBase
         {
             if ($boolean_name_user != 'false')
             {
-                $mensaje['error'] = "El nombre de ya existe, debe ingresar un nombre de usuario nuevo.";
+                $mensaje['error'] = "El nombre de usuario ya existe, debe ingresar un nombre nuevo.";
                 $mensaje['estado'] = false;
             }
         }
@@ -525,6 +542,12 @@ class PanelController extends ControllerBase
         else if($tipoPass == 'distintos')
         {
             $mensaje['error'] = "Los Campos de la contraseña deben ser iguales";
+            $mensaje['estado'] = false;
+        }
+        
+        else if($tipoPass == 'md5')
+        {
+            $mensaje['error'] = "Los Campos de la contraseña no pueden quedar vacios";
             $mensaje['estado'] = false;
         }
         
