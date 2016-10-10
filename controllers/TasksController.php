@@ -1460,6 +1460,9 @@ class TasksController extends ControllerBase
                         $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue($colArray[$col+2].''.$row, Utils::formatTime($valor));
                         
+                        #$objPHPExcel->setActiveSheetIndex(0)
+                        #    ->setCellValue($colArray[$col+2].''.$row, '00:50:50');
+                        
                         #print_r(Utils::formatTime($valor));
                         
                         // create decimal format values for time
@@ -1479,7 +1482,7 @@ class TasksController extends ControllerBase
                             ->setCellValue($colArray[$col+3].''.$row, $decimal_time);
                     }
                     // separar dia y hora INICIO
-                    if($col == 0){
+                    elseif($col == 0){
                         $fechahora = new DateTime($valor);
                         $fecha = $fechahora->format('d-m-Y');
                         $hora = $fechahora->format('H:i');
@@ -1490,7 +1493,7 @@ class TasksController extends ControllerBase
                             ->setCellValue($colArray[$col+1].''.$row, $hora);
                     }
                     // separar dia y hora FIN
-                    if($col == 1){
+                    elseif($col == 1){
                         $fechahora = new DateTime($valor);
                         $fecha = $fechahora->format('d-m-Y');
                         $hora = $fechahora->format('H:i');
@@ -1501,11 +1504,16 @@ class TasksController extends ControllerBase
                             ->setCellValue($colArray[$col+2].''.$row, $hora);
                     }
                     else{
+                        #echo "en else, col: ".$col."</br>";
+                        
                         $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue($colArray[$col+2].''.$row, $valor);
                     }
+                    
                 }
             }
+            
+            #exit();
 
             $objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.$row.':K'.$row)->applyFromArray($style_content);
             $row++;
