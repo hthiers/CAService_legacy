@@ -1511,7 +1511,7 @@ class TasksController extends ControllerBase
             $row++;
         }
         
-        exit();
+        #exit();
 
         // Set tasks total time on last row
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1828,7 +1828,8 @@ class TasksController extends ControllerBase
                     ON a.id_task = f.cas_task_id_task
                     LEFT OUTER JOIN cas_type g
                     ON f.cas_type_id_type = g.id_type
-                    $sWhere";
+                    $sWhere
+                    $sLimit";
 
         $idsPdo = $model->goCustomQuery($sql_ids);
         $ids_array = null;
