@@ -391,7 +391,7 @@ class TasksModel extends ModelBase
     public function getAllTasksNameByTenant($id_tenant)
     {
         $consulta = $this->db->prepare("
-                SELECT 
+                SELECT distinct
                     a.label_task    
                 FROM  cas_task a
                 WHERE a.id_tenant = $id_tenant");
