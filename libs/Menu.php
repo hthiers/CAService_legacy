@@ -124,6 +124,9 @@ class Menu extends ModelBase
                 
                 $menuFullString.= '</li>';
                 
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=managements&amp;action=managementsDt">GESTIONES</a>';
+                $menuFullString.= '</li>';
+                
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=types&amp;action=typesDt">MATERIAS</a>';
                 $menuFullString.= '</li>';
 
