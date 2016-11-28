@@ -642,12 +642,14 @@ class TasksController extends ControllerBase
         require_once 'models/UsersModel.php';
         require_once 'models/CustomersModel.php';
         require_once 'models/TypesModel.php';
+        require_once 'models/ManagementsModel.php';
 
         $model = new ProjectsModel();
         $modelTask = new TasksModel();
         $modelUser = new UsersModel();
         $modelCustomer = new CustomersModel();
         $modelTypes = new TypesModel();
+        $modelManagement = new ManagementsModel();
 
         $pdo = $modelTask->getLastTask($session->id_tenant);
         $error = $pdo->errorInfo();
@@ -683,8 +685,8 @@ class TasksController extends ControllerBase
         $pdoProject = $model->getAllProjectsByTenant($session->id_tenant);
         $data['pdoProject'] = $pdoProject;
         
-        //$pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
-        //$data['pdoTypes'] = $pdoTypes;
+        $pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
+        $data['pdoTypes'] = $pdoTypes;
         
         //$pdoTasks = $modelTask->getAllTasksByTenant($session->id_tenant);
         //$data['pdoTasks'] = $pdoTasks;
@@ -741,6 +743,12 @@ class TasksController extends ControllerBase
             }
         }
         
+        if(isset($_POST['cbomanagements'])){
+            if(is_numeric($_POST['cbomanagements']) && $_POST['cbomanagements'] > 0){
+                $id_management = $_POST['cbomanagements'];
+            }
+        }
+        
         $desc = $_POST['descripcion'];
 
         $fecha = null;
@@ -769,10 +777,10 @@ class TasksController extends ControllerBase
         
         if($_POST['chk_past']){
             $estado = 2;
-            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, $fecha_fin, $total_time,$desc,$estado,$id_project, $id_customer);
+            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, $fecha_fin, $total_time,$desc,$estado,$id_project, $id_customer, $id_management);
         }
         else{
-            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, null,null,$desc,$estado,$id_project, $id_customer);
+            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, null,null,$desc,$estado,$id_project, $id_customer, $id_management);
         }
         
         $query = $result->queryString;

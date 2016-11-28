@@ -276,13 +276,14 @@ class TasksModel extends ModelBase
      */
     public function addNewTask($id_tenant, $new_code, $etiqueta
             , $date_ini, $hora_ini, $date_end, $time_total, $descripcion
-            , $estado = 1, $id_project, $id_customer)
+            , $estado = 1, $id_project, $id_customer, $id_management)
     {
         // force null values
         $date_end = empty($date_end) ? "NULL" : "'$date_end'";
         $time_total = empty($time_total) ? "NULL" : "'$time_total'";
         $id_project = empty($id_project) ? "NULL" : "'$id_project'";
         $id_customer = empty($id_customer) ? "NULL" : "'$id_customer'";
+        $id_management = empty($id_management) ? "NULL" : "$id_management";
         
         $consulta = $this->db->prepare("INSERT INTO cas_task 
                     (id_task, code_task, id_tenant, label_task
