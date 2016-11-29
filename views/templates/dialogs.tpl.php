@@ -57,8 +57,8 @@
 <div id="dialog-new-management" title="Nueva Gestión">
     <form action="?controller=managements&amp;action=ajaxManagementsAdd" method="POST">
         <fieldset style="padding:0; border:0; margin-top:25px;">
-            <label for="label_type">Nombre Gestión</label>
-            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name_type" id="dlgSbm_name_management" class="text ui-widget-content ui-corner-all" />            
+            <label for="label_management">Nombre Gestión</label>
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name_management" id="dlgSbm_name_management" class="text ui-widget-content ui-corner-all" />            
             <input class="dlgSbmCstr_management" type="submit" value="GUARDAR" style="width:80px;height:40px;font-family:inherit;font-size:12px;" />
         </fieldset>
     </form>
@@ -83,4 +83,6 @@
     $("#dialog-new-customer").dialog({ autoOpen: false});
     $("#dialog-new-type").dialog({ autoOpen: false});
     $("#dialog-error-add-type").dialog({ autoOpen: false});
+    $("#dialog-new-management").dialog({ autoOpen: false});
+    $("#dialog-error-add-management").dialog({ autoOpen: false});
 </script>

@@ -120,6 +120,11 @@ if($session->id_tenant != null && $session->id_user != null):
             }
           });
           
+        $("#cbomanagements").change(function(e) {
+            $("#gestion").val($("#cbomanagements option:selected").text());
+            
+          });
+          
         function ejecutar(obj1, obj2) {
         
             var idCustomer = $(obj1).val();
@@ -660,10 +665,10 @@ if($session->id_tenant != null && $session->id_user != null):
                                 <a id="create-management" href="#">Nueva Gestión</a>
                             </td>
                         </tr>
-                        <tr>
+                        <tr  class="hidden-tr">
                             <td class="middle">Nombre tarea</td>
                             <td class="middle">
-                                <input type="text" class="input_box" name="etiqueta" id="gestion"/>
+                                <input type="hidden" class="input_box" name="etiqueta" id="gestion"/>
                             </td>
                         </tr>
                         <tr>

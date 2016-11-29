@@ -288,11 +288,11 @@ class TasksModel extends ModelBase
         $consulta = $this->db->prepare("INSERT INTO cas_task 
                     (id_task, code_task, id_tenant, label_task
                     , date_ini, date_end, time_total, desc_task
-                    , status_task, cas_project_id_project, cas_customer_id_customer) 
+                    , status_task, cas_project_id_project, cas_customer_id_customer, id_management) 
                         VALUES 
                     (NULL, '$new_code', $id_tenant, '$etiqueta'
                         , '$date_ini $hora_ini', $date_end, $time_total, '$descripcion'
-                        , $estado, $id_project, $id_customer)");
+                        , $estado, $id_project, $id_customer, $id_management)");
 
         $consulta->execute();
 

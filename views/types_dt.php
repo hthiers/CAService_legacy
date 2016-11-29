@@ -165,7 +165,7 @@ $(document).ready(function() {
             { "sClass": "td_editable", "aTargets": [3] },
             { "sClass": "editcustomer_select", "aTargets": [ 5 ] },
             { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [0,1,2,4] },
+            { "bVisible": false, "aTargets": [0,1,2,4,5] },
             { "sWidth": "40%", "aTargets": [3] },
             { "sWidth": "40%", "aTargets": [5] },
             { "sWidth": "20%", "aTargets": [-1] },
@@ -251,14 +251,16 @@ $(document).ready(function() {
 
 function guardarMateria() {
     var label = $('#new_type_label').val();
-    var customer = $('#cbocustomers').val();
+    //var customer = $('#cbocustomers').val();
     
     //alert("cliente: "+customer);
     $.ajax(
             {
                 type: "POST",
-                url: "?controller=types&action=ajaxTypesAddWithCustomer",
-                data: { label_type: label, id_customer: customer },
+                //url: "?controller=types&action=ajaxTypesAddWithCustomer",
+                //data: { label_type: label, id_customer: customer },
+                url: "?controller=types&action=ajaxTypesAdd",
+                data: { label_type: label },
                 cache: false,
                 //contentType: "application/json; charset=utf-8",
                 dataType: "json"
@@ -315,7 +317,7 @@ function guardarMateria() {
             style="margin-left: 20%;"
             placeholder="Nueva materia..." />
         <select 
-            class="js-example-responsive" 
+            class="js-example-responsive hidden-element" 
             style="width:20%" 
             id="cbocustomers" 
             name="cbocustomers">
