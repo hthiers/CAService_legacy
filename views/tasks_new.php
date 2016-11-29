@@ -119,12 +119,14 @@ if($session->id_tenant != null && $session->id_user != null):
                 $("#cbomanagements").val("noaplica").trigger("change");
             }
           });
-          
+        
+        /*
         $("#cbomanagements").change(function(e) {
             $("#gestion").val($("#cbomanagements option:selected").text());
             
           });
-          
+        */
+       
         function ejecutar(obj1, obj2) {
         
             var idCustomer = $(obj1).val();
@@ -371,7 +373,7 @@ if($session->id_tenant != null && $session->id_user != null):
         $('#datepicker').datepicker().datepicker('disable');
         //$('#trabajo_info').hide();
         //$('#trabajo_timing').css({"border-top": "none"});
-        
+        $("#gestion").val($("#cbomanagements option:selected").text());
         $('#btn_play').attr('disabled', 'disabled');
         
         $('#formModule').submit();
