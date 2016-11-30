@@ -99,12 +99,13 @@ body{
     height:auto;
 }
 #info{
-    /*width:1020px; */
-    /*height:50px; */
+    width:100%;
     margin:0 auto;
     padding:5px 0;
     background-color:#476085;
     border: 1px solid #476085;
+    position: fixed;
+    bottom: 0;
 }
 .Estilo1 {
     color: #FFFFFF;
@@ -112,6 +113,7 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     text-align:center;
+    padding: 5px 0;
 }
 .Estilo2 {
     color: #FFFFFF;

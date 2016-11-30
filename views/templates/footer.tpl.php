@@ -9,6 +9,9 @@ if($session->id_tenant != null && $session->id_user != null):
   <p class="Estilo1">
       Control tiempos de trabajo - v<?php echo $constants->getSysVersion(); ?>
   </p>
+  <p class="Estilo1">
+       Gomez & Riesco
+  </p>
 </div>
 
 </body>
