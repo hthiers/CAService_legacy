@@ -16,7 +16,7 @@ $debugMode = $config->get('debug');
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Control tiempos de trabajo - Beta v<?php echo $constants->getSysVersion(); ?></title>
+    <title>Control tiempos de trabajo - v<?php echo $constants->getSysVersion(); ?></title>
     
     <style type="text/css" title="currentStyle">
 		@import "views/css/estilo.css";

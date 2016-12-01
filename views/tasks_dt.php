@@ -9,7 +9,6 @@ if($session->id_tenant != null && $session->id_user != null):
 ?>
 
 <!-- AGREGAR JS & CSS AQUI -->
-<link rel="stylesheet" href="views/css/datatable.css">
 <link rel="stylesheet" href="views/css/dataTables.tableTools.min.css">
 <link rel="stylesheet" href="views/css/select2.css">
 <style type="text/css" title="currentStyle">

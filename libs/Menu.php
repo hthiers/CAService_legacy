@@ -98,35 +98,29 @@ class Menu extends ModelBase
         
         function loadMainMenuAdmin() 
         {
-            $menuFullString = '<ul id="menu">';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
-                
-                    $menuFullString.= '<ul>';
-                        $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">NUEVO '
-                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
-                    $menuFullString.= '</ul>';
-                
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
-                    
-                    $menuFullString.= '<ul>';
-                        $menuFullString.= '<li><a href="?controller=customers&amp;action=customersAddForm">NUEVO '
-                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
-                    $menuFullString.= '</ul>';
-                
-                $menuFullString.= '</li>';
+            $menuFullString = '<ul class="dropdown menu" data-dropdown-menu>';
+            $menuFullString.= '<li>';
+            $menuFullString.= '<a href="?controller=tasks&amp;action=tasksDt">Gestiones</a>';
+            $menuFullString.= '<ul class="menu vertical">';
+            $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">Nueva Gestion</a></li>';
+            $menuFullString.= '</ul>';
+            $menuFullString.= '</li>';
 
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=panel&amp;action=usersDt">USUARIOS</a>';
-                
-                    $menuFullString.= '<ul>';
-                        $menuFullString.= '<li><a href="?controller=panel&amp;action=newUserForm">NUEVO '
-                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
-                    $menuFullString.= '</ul>';
-                
-                $menuFullString.= '</li>';
-                
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=types&amp;action=typesDt">MATERIAS</a>';
-                $menuFullString.= '</li>';
+            $menuFullString.= '<li>';
+            $menuFullString.= '<a href="?controller=customers&amp;action=customersDt">Clientes</a>';
+            $menuFullString.= '<ul class="menu vertical">';
+            $menuFullString.= '<li><a href="?controller=customers&amp;action=customersAddForm">Nuevo Cliente</a></li>';
+            $menuFullString.= '</ul>';
+            $menuFullString.= '</li>';
 
+            $menuFullString.= '<li>';
+            $menuFullString.= '<a href="?controller=panel&amp;action=usersDt">Usuarios</a>';
+            $menuFullString.= '<ul class="menu vertical">';
+            $menuFullString.= '<li><a href="?controller=panel&amp;action=newUserForm">Nuevo Usuario</a></li>';
+            $menuFullString.= '</ul>';
+            $menuFullString.= '</li>';
+                
+            $menuFullString.= '<li><a href="?controller=types&amp;action=typesDt">Materias</a></li>';
 
             $menuFullString.= '</ul>';
             

@@ -46,31 +46,6 @@ body{
     margin:0 auto;
     background-color:#476085;
 }
-#menu{
-    width:1020px;
-    height:25px;
-    text-align:left;
-    padding-top:3px;
-    /*padding-left:5px; */
-    border-left:#CCCCCC 1px solid;
-    border-right:#CCCCCC 1px solid;
-    margin:0 auto;
-    background-color:#476085;
-}
-/* TO FIX! There should not be 2 menu classes */
-#menu_div{
-    color: #ffffff;
-    /*width:1020px;*/
-    height:30px;
-    text-align:left;
-    /*padding:3px;*/
-    /*padding-left:5px; */
-    border-left:#CCCCCC 1px solid;
-    border-right:#CCCCCC 1px solid;
-    border-top: #CCCCCC 1px solid;
-    margin:0 auto;
-    background-color:#476085;
-}
 #central{
     /*background-color:#FFFFFF;*/
     width:70%;
