@@ -138,6 +138,7 @@ if($session->id_tenant != null && $session->id_user != null):
               data: { id_customer : idCustomer},
               success: function(msg) {
                 //$(obj1).next('img').remove();
+                //console.log(msg);
                 $(obj2).html(msg).attr("disabled", false);
                 
                 $('#cbomanagements').select2({

@@ -32,7 +32,7 @@ class ManagementsModel extends ModelBase
 	}
         
         /**
-         * Get all managements by tenant
+         * Get managements by customer (and tenant)
          * @param int $id_tenant
          * @return pdo
          */
@@ -56,7 +56,55 @@ class ManagementsModel extends ModelBase
 	}
         
         /**
-         * Get typw por código de management
+         * Get managements by other customer
+         * @param int $id_tenant
+         * @return pdo
+         */
+	public function getManagementsOtherCustomer($id_tenant, $id_customer)
+	{
+                $consulta = $this->db->prepare("
+                        select 
+                            a.id_management
+                            , a.code_management
+                            , a.label_management
+                        from cas_management a
+                        where a.id_tenant = $id_tenant 
+                            
+                        and a.id_customer <> $id_customer 
+                        and a.status_management < 9
+                        order by a.label_management asc");
+
+		$consulta->execute();
+		
+		//devolvemos la coleccion para que la vista la presente.
+		return $consulta;
+	}
+        
+        /**
+         * Get all managements by tenant
+         * @param int $id_tenant
+         * @return pdo
+         */
+	public function getManagements($id_tenant)
+	{
+                $consulta = $this->db->prepare("
+                        select 
+                            a.id_management
+                            , a.code_management
+                            , a.label_management
+                        from cas_management a
+                        where a.id_tenant = $id_tenant 
+                        and a.status_management < 9
+                        order by a.label_management asc");
+
+		$consulta->execute();
+		
+		//devolvemos la coleccion para que la vista la presente.
+		return $consulta;
+	}
+        
+        /**
+         * Get managements por código de management
          * @param int $id_tenant
          * @param varchar $code_management
          * @return PDO 
