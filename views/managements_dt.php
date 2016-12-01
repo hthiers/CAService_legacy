@@ -17,7 +17,7 @@ if($session->id_tenant != null && $session->id_user != null):
         width: 500px;
     }
     #central { width: 60%;}
-    #new_type_label {
+    #new_management_label {
         -webkit-box-sizing: border-box; /* webkit */
         -moz-box-sizing: border-box; /* firefox */
         box-sizing: border-box; /* css3 */
@@ -38,13 +38,13 @@ if($session->id_tenant != null && $session->id_user != null):
 var oTable = null;
     
 function submitToForm(){
-    $('#action_type').val("view");
+    $('#action_management').val("view");
 
     return false;
 }
 
-function removeType(type){
-    var urlAction = "<?php echo "?controller=types&action=typesRemove";?>";
+function removeManagement(management){
+    var urlAction = "<?php echo "?controller=managements&action=managementsRemove";?>";
     
     $( "#dialog-remove" ).dialog({
             height: 200,
@@ -52,11 +52,11 @@ function removeType(type){
             modal: true,
             buttons: {
             "Eliminar": function() {
-                console.log("borrando: #"+type);
+                console.log("borrando: #"+management);
                 
                 $('#dt_form').attr('action', urlAction);
                 $('#dt_form').attr('method', 'POST');
-                $('#type_id').val(type);
+                $('#management_id').val(management);
 
                 $( this ).dialog( "close" );
                 $("#dt_form").submit();
@@ -68,7 +68,7 @@ function removeType(type){
     });
     
     $("#dialog-remove")
-            .data('type_id', type)
+            .data('management_id', management)
             .dialog("open");
 }
     
@@ -128,7 +128,7 @@ $(document).ready(function() {
         //Initial server side params
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": <?php echo "'?controller=types&action=ajaxTypesDt'";?>,
+        "sAjaxSource": <?php echo "'?controller=managements&action=ajaxManagementsDt'";?>,
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
             $.ajax({
                 "dataType": 'json', 
@@ -165,14 +165,14 @@ $(document).ready(function() {
             { "sClass": "td_editable", "aTargets": [3] },
             { "sClass": "editcustomer_select", "aTargets": [ 5 ] },
             { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [0,1,2,4,5] },
+            { "bVisible": false, "aTargets": [0,1,2,4] },
             { "sWidth": "40%", "aTargets": [3] },
             { "sWidth": "40%", "aTargets": [5] },
             { "sWidth": "20%", "aTargets": [-1] },
             {
                 "fnRender": function ( oObj ) {                    
                     var dt_tools = "";                
-                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[0]+"' onclick='removeType("+oObj.aData[0]+")' value='' />";
+                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[0]+"' onclick='removeManagement("+oObj.aData[0]+")' value='' />";
 
                     return dt_tools;
                 },
@@ -184,7 +184,7 @@ $(document).ready(function() {
         "aaSorting": [[3, "asc"]],
 
         "fnDrawCallback": function () {
-            $('#table tbody td:.td_editable').editable( '?controller=types&action=ajaxTypesUpdate', {
+            $('#table tbody td:.td_editable').editable( '?controller=managements&action=ajaxManagementsUpdate', {
                 
                 "callback": function( sValue, y ) {
                     console.log("valor: "+ sValue);
@@ -204,7 +204,7 @@ $(document).ready(function() {
                 "height": "14px"
             } );
             
-            $('#table tbody td:.editcustomer_select').editable( '?controller=types&action=ajaxUpdateType', {
+            $('#table tbody td:.editcustomer_select').editable( '?controller=managements&action=ajaxUpdateManagement', {
                 "callback"      : function( sValue, y ) {
                         var aPos = oTable.fnGetPosition(this);
                         oTable.fnDraw();
@@ -213,7 +213,7 @@ $(document).ready(function() {
                 "submitdata"   : function (value, settings) {
                         var aPos = oTable.fnGetPosition( this );    
                         var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
-                        return {idtype: aData[0], column: 3, newvalue: aData[5]}; //take idData from first column
+                        return {idManagement: aData[0], column: 3, newvalue: aData[5]}; //take idData from first column
                 },
                 indicator : "Saving...",
                 tooltip   : "Click to change...",
@@ -237,10 +237,10 @@ $(document).ready(function() {
        theme: "classic"
    });
     
-    // boton nueva materia
-    $("#create-type").click(function() {
+    // boton nueva gestion
+    $("#create-management").click(function() {
     
-        guardarMateria();
+        guardarGestion();
     });
     
     //Add Class to search field
@@ -249,18 +249,16 @@ $(document).ready(function() {
 });
 
 
-function guardarMateria() {
-    var label = $('#new_type_label').val();
-    //var customer = $('#cbocustomers').val();
+function guardarGestion() {
+    var label = $('#new_management_label').val();
+    var customer = $('#cbocustomers').val();
     
     //alert("cliente: "+customer);
     $.ajax(
             {
                 type: "POST",
-                //url: "?controller=types&action=ajaxTypesAddWithCustomer",
-                //data: { label_type: label, id_customer: customer },
-                url: "?controller=types&action=ajaxTypesAdd",
-                data: { label_type: label },
+                url: "?controller=managements&action=ajaxManagementsAddWithCustomer",
+                data: { label_management: label, id_customer: customer },
                 cache: false,
                 //contentType: "application/json; charset=utf-8",
                 dataType: "json"
@@ -312,12 +310,12 @@ function guardarMateria() {
         
         <input 
             type="text" 
-            id="new_type_label" 
-            name="new_type_label" 
+            id="new_management_label" 
+            name="new_management_label" 
             style="margin-left: 20%;"
-            placeholder="Nueva materia..." />
+            placeholder="Nueva gestión..." />
         <select 
-            class="js-example-responsive hidden-element" 
+            class="js-example-responsive" 
             style="width:20%" 
             id="cbocustomers" 
             name="cbocustomers">
@@ -329,12 +327,12 @@ function guardarMateria() {
             ?>
         </select>
         &nbsp;
-        <input type="button" id="create-type" style="width:22px;height:22px;display:inline;" class="ui-icon ui-icon-circle-plus" />
+        <input type="button" id="create-management" style="width:22px;height:22px;display:inline;" class="ui-icon ui-icon-circle-plus" />
         
-        <!--<div class="new-type" >
-            Nueva Materia
-            <input type="text" name="new_type_label" />
-            <button id="create-type">Crear</button>
+        <!--<div class="new-management" >
+            Nueva Gestion
+            <input type="text" name="new_management_label" />
+            <button id="create-management">Crear</button>
             <br />
         </div>-->
         
@@ -352,14 +350,14 @@ function guardarMateria() {
 
         <!-- DATATABLE -->
         <div id="dynamic">
-            <form id="dt_form" method="POST" action="<?php echo "?controller=types&amp;action=ajaxTypesDt";?>">
+            <form id="dt_form" method="POST" action="<?php echo "?controller=managements&amp;action=ajaxManagementsDt";?>">
                 <table class="display" id="table">
                     <thead>
                         <tr class="headers">
                             <th>ID</th>
-                            <th>CODIGO MATERIA  </th>
+                            <th>CODIGO GESTION  </th>
                             <th>TENANT</th>
-                            <th>MATERIA</th>
+                            <th>GESTION</th>
                             <th>IDCLIENTE</th>
                             <th>CLIENTE</th>
                             <th>OPCIONES</th>
@@ -373,12 +371,12 @@ function guardarMateria() {
                 </table>
                 <table>
                     <tr>
-                        <td><input id="action_type" type="hidden" name="action_type" value="" /></td>
+                        <td><input id="action_management" type="hidden" name="action_management" value="" /></td>
                     </tr>
                 </table>
                 <table style="float:left"> <!-- style float solo para perderlo -->
                     <tr>
-                        <td><input id="type_id" type="hidden" name="type_id" value="" /></td>
+                        <td><input id="management_id" type="hidden" name="management_id" value="" /></td>
                     </tr>
                 </table>
             </form>

@@ -53,6 +53,28 @@
 </div>
 <!-- END Can't Add Type -->
 
+<!-- New Management -->
+<div id="dialog-new-management" title="Nueva Gestión">
+    <form action="?controller=managements&amp;action=ajaxManagementsAdd" method="POST">
+        <fieldset style="padding:0; border:0; margin-top:25px;">
+            <label for="label_management">Nombre Gestión</label>
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name_management" id="dlgSbm_name_management" class="text ui-widget-content ui-corner-all" />            
+            <input class="dlgSbmCstr_management" type="submit" value="GUARDAR" style="width:80px;height:40px;font-family:inherit;font-size:12px;" />
+        </fieldset>
+    </form>
+</div>
+<!-- END New Management -->
+
+<!-- Can't Add Management -->
+<div id="dialog-error-add-management" title="Nueva Gestión">
+        <fieldset style="padding:0; border:0; margin-top:25px;">
+            <label>Primero debe seleccionar un cliente</label>
+            <br />
+            <input class="dlgSbmErr_management" type="submit" value="VOLVER" style="width:80px;height:40px;font-family:inherit;font-size:12px;" />
+        </fieldset>
+</div>
+<!-- END Can't Add Management -->
+
 
 <!-- KEEP DIALOGS CLOSED -->
 <script type="text/javascript" language="javascript">
@@ -61,4 +83,6 @@
     $("#dialog-new-customer").dialog({ autoOpen: false});
     $("#dialog-new-type").dialog({ autoOpen: false});
     $("#dialog-error-add-type").dialog({ autoOpen: false});
+    $("#dialog-new-management").dialog({ autoOpen: false});
+    $("#dialog-error-add-management").dialog({ autoOpen: false});
 </script>

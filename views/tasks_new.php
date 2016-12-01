@@ -114,24 +114,38 @@ if($session->id_tenant != null && $session->id_user != null):
             //$("#ciudad,#provincias").attr('disabled', true);
             if ($(this).val().trim() != "") {
                 //alert("se cambio :" + $(this).val());
-                ejecutar($(this), $("#cbotypes"));
+                ejecutar($(this), $("#cbomanagements"));
                 
-                $("#cbotypes").val("noaplica").trigger("change");
+                $("#cbomanagements").val("noaplica").trigger("change");
             }
           });
-          
+        
+        /*
+        $("#cbomanagements").change(function(e) {
+            $("#gestion").val($("#cbomanagements option:selected").text());
+            
+          });
+        */
+       
         function ejecutar(obj1, obj2) {
         
             var idCustomer = $(obj1).val();
 
             $.ajax({
               type: "POST",
-              url: "?controller=types&action=ajaxGetTypesByCustomer",
+              url: "?controller=managements&action=ajaxGetManagementsByCustomer",
               dataType: "html",
               data: { id_customer : idCustomer},
               success: function(msg) {
                 //$(obj1).next('img').remove();
                 $(obj2).html(msg).attr("disabled", false);
+                
+                $('#cbomanagements').select2({
+                    placeholder: {
+                        id: "",
+                        text: "Ingrese Gestión"},
+                    allowClear:true
+                });
                 
               },
               error: function(jqXHR, textStatus, errorThrown) {
@@ -228,6 +242,51 @@ if($session->id_tenant != null && $session->id_user != null):
             $("#dialog-error-add-type").dialog("close");
 	});
         
+        // JQDialog Submit - Add new type
+        $(".dlgSbmCstr_management").click(function(){
+            var customer = $("#cbocustomers").val();
+            var label_management = $("#dlgSbm_name_management").val();
+            //var dataString = 'name='+ name + '&desc=' + desc;
+            if(label_management === '')
+            {
+                alert("Ingrese nombre de la gestión");
+            }
+            else
+            {
+                //$("#flash").show();
+                //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
+                $.ajax({
+                    type: "POST",
+                    url: "?controller=managements&action=ajaxManagementsAddWithCustomer",
+                    data: {label_management:label_management, id_customer: customer},
+                    cache: false,
+                    dataType: "json"
+                }).done(function(response){
+                    if(response !== null){
+                        if(response[0] !== 0){
+                            $("#cbomanagements").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
+                            //$("#flash").hide();
+                            alert("Gestión agregada!");
+                        }
+                        else
+                            alert("Error: "+response[1]);
+                    }
+                    else{
+                        alert("Ha ocurrido un error! (nulo)");
+                    }
+                    $("#dialog-new-management").dialog("close");
+                }).fail(function(){
+                    alert("Ha ocurrido un error!");
+                });
+            }
+
+            return false;
+	});
+        
+        $(".dlgSbmErr_management").click(function(){
+            $("#dialog-error-add-management").dialog("close");
+	});
+        
         var date_ini = "<?php echo $current_date; ?>";
         $("#hdnPicker").val(date_ini);
         
@@ -272,6 +331,13 @@ if($session->id_tenant != null && $session->id_user != null):
         
         });
         
+        $('#cbomanagements').select2({
+            placeholder: {
+                id: "",
+                text: "Ingrese Gestión"},
+            allowClear:true
+        
+        });
         
         $('#cbotypes').select2({
             placeholder: {
@@ -307,7 +373,7 @@ if($session->id_tenant != null && $session->id_user != null):
         $('#datepicker').datepicker().datepicker('disable');
         //$('#trabajo_info').hide();
         //$('#trabajo_timing').css({"border-top": "none"});
-        
+        $("#gestion").val($("#cbomanagements option:selected").text());
         $('#btn_play').attr('disabled', 'disabled');
         
         $('#formModule').submit();
@@ -423,18 +489,47 @@ if($session->id_tenant != null && $session->id_user != null):
                 width: 350,
                 modal: true
         });
+        
+        $( "#dialog-new-management" ).dialog({
+                autoOpen: false,
+                height: 300,
+                width: 350,
+                modal: true
+        });
+        
+        $( "#dialog-error-add-management" ).dialog({
+                autoOpen: false,
+                height: 300,
+                width: 350,
+                modal: true
+        });
 
 //        $( "#create-user" ).click(function() {
 //                $( "#dialog-form" ).dialog( "open" );
 //        });
         $( "#create-type" ).click(function() {
 //            //console.log("dialog para project.");
+            $( "#dialog-new-type" ).dialog( "open" );
+            /*
             if ($("#cbocustomers option:selected").text() != "Sin Cliente") 
             {   
                 $( "#dialog-new-type" ).dialog( "open" );
             }
             else {
                 $( "#dialog-error-add-type" ).dialog( "open" );;
+               
+            }
+            */
+        });
+        
+        $( "#create-management" ).click(function() {
+//            //console.log("dialog para project.");
+            if ($("#cbocustomers option:selected").text() != "Sin Cliente") 
+            {   
+                $( "#dialog-new-management" ).dialog( "open" );
+            }
+            else {
+                $( "#dialog-error-add-management" ).dialog( "open" );;
                
             }
         });
@@ -538,23 +633,28 @@ if($session->id_tenant != null && $session->id_user != null):
                             </td>
                         </tr>
                         <tr>
-                            <td class="middle">Gestion</td>
-                            <td class="middle">
-                                <input type="text" class="input_box" name="etiqueta" id="gestion"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="middle">Descripci&oacute;n</td>
-                            <td class="middle">
-                                <textarea class="input_box" name="descripcion"></textarea>
-                            </td>
-                        </tr>
-                        <tr>
                             <td class="middle">Materia</td>
                             <td class="middle">
                                 <?php
                                 echo "<select class='input_box' id='cbotypes' name='cbotypes'>\n";
                                 echo "<option value='noaplica' selected='selected'>Sin Materia</option>\n";
+                                
+                                while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
+                                {
+                                    echo "<option value='$row[id_type]'>$row[label_type]</option>\n";
+                                }
+                                
+                                echo "</select>\n";
+                                ?>
+                                &nbsp;
+                                <a id="create-type" href="#">Nueva Materia</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="middle">Gestión</td>
+                            <td class="middle">
+                                <?php
+                                echo "<select class='input_box' id='cbomanagements' name='cbomanagements'>\n";
                                 /*
                                 while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
                                 {
@@ -564,9 +664,22 @@ if($session->id_tenant != null && $session->id_user != null):
                                 echo "</select>\n";
                                 ?>
                                 &nbsp;
-                                <a id="create-type" href="#">Nueva Materia</a>
+                                <a id="create-management" href="#">Nueva Gestión</a>
                             </td>
                         </tr>
+                        <tr  class="hidden-tr">
+                            <td class="middle">Nombre tarea</td>
+                            <td class="middle">
+                                <input type="hidden" class="input_box" name="etiqueta" id="gestion"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="middle">Descripci&oacute;n</td>
+                            <td class="middle">
+                                <textarea class="input_box" name="descripcion"></textarea>
+                            </td>
+                        </tr>
+                        
                     </table>
                     <table class="table_right">
                         <tr>

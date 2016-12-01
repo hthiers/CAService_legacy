@@ -406,3 +406,11 @@ noscript p {
 .ui-menu .ui-menu-item a {
     font-size: 12px;
 }
+
+.hidden-tr {
+    display: none !important;
+}
+
+.hidden-element {
+    display: none !important;
+}
