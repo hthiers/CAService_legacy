@@ -100,9 +100,9 @@ class Menu extends ModelBase
         {
             $menuFullString = '<ul class="dropdown menu" data-dropdown-menu>';
             $menuFullString.= '<li>';
-            $menuFullString.= '<a href="?controller=tasks&amp;action=tasksDt">Gestiones</a>';
+            $menuFullString.= '<a href="?controller=tasks&amp;action=tasksDt">Trabajos</a>';
             $menuFullString.= '<ul class="menu vertical">';
-            $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">Nueva Gestion</a></li>';
+            $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">Nuevo Trabajo</a></li>';
             $menuFullString.= '</ul>';
             $menuFullString.= '</li>';
 
@@ -120,6 +120,8 @@ class Menu extends ModelBase
             $menuFullString.= '</ul>';
             $menuFullString.= '</li>';
                 
+            $menuFullString.= '<li><a href="?controller=managements&amp;action=managementsDt">Gestiones</a></li>';
+            
             $menuFullString.= '<li><a href="?controller=types&amp;action=typesDt">Materias</a></li>';
 
             $menuFullString.= '</ul>';
