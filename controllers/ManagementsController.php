@@ -484,7 +484,7 @@ class ManagementsController extends ControllerBase
         }
         $respuesta .= "</optgroup>";
         //Todas las gestiones
-        $respuesta .= "<optgroup label='Otras las Gestiones'>";
+        $respuesta .= "<optgroup label='Otras Gestiones'>";
         while($todasMateria = $allManagements->fetch(PDO::FETCH_ASSOC))
         {
             $respuesta .= "<option value='".$todasMateria['id_management']."'>".$todasMateria['label_management']."</option>";

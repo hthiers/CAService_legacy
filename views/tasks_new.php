@@ -245,7 +245,6 @@ if($session->id_tenant != null && $session->id_user != null):
         
         // JQDialog Submit - Add new type
         $(".dlgSbmCstr_management").click(function(){
-            var customer = $("#cbocustomers").val();
             var label_management = $("#dlgSbm_name_management").val();
             //var dataString = 'name='+ name + '&desc=' + desc;
             if(label_management === '')
@@ -258,8 +257,8 @@ if($session->id_tenant != null && $session->id_user != null):
                 //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
                     type: "POST",
-                    url: "?controller=managements&action=ajaxManagementsAddWithCustomer",
-                    data: {label_management:label_management, id_customer: customer},
+                    url: "?controller=managements&action=ajaxManagementsAdd",
+                    data: {label_management:label_management},
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
