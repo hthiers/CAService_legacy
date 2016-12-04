@@ -111,25 +111,23 @@ if($session->id_tenant != null && $session->id_user != null):
         });
         
         $("#cbocustomers").change(function(e) {
-            //$("#ciudad,#provincias").attr('disabled', true);
-            if ($(this).val().trim() != "") {
-                //alert("se cambio :" + $(this).val());
-                ejecutar($(this), $("#cbomanagements"));
+            if ($(this).val().trim() !== "") {
+                console.log("cambia customer");
                 
-                $("#cbomanagements").val("noaplica").trigger("change");
+                $("#cbomanagements").empty();
+                
+                if ($(this).val().trim() !== "noaplica") {
+                    ejecutar($(this), $("#cbomanagements"));
+                    $("#cbomanagements").val("noaplica").trigger("change");
+                }
             }
           });
-        
-        /*
-        $("#cbomanagements").change(function(e) {
-            $("#gestion").val($("#cbomanagements option:selected").text());
-            
-          });
-        */
        
         function ejecutar(obj1, obj2) {
         
             var idCustomer = $(obj1).val();
+
+            console.log(idCustomer);
 
             $.ajax({
               type: "POST",
@@ -137,8 +135,6 @@ if($session->id_tenant != null && $session->id_user != null):
               dataType: "html",
               data: { id_customer : idCustomer},
               success: function(msg) {
-                //$(obj1).next('img').remove();
-                //console.log(msg);
                 $(obj2).html(msg).attr("disabled", false);
                 
                 $('#cbomanagements').select2({
@@ -371,8 +367,6 @@ if($session->id_tenant != null && $session->id_user != null):
     function iniTrabajo(){
         $('.input_box').attr('readonly', true);
         $('#datepicker').datepicker().datepicker('disable');
-        //$('#trabajo_info').hide();
-        //$('#trabajo_timing').css({"border-top": "none"});
         $("#gestion").val($("#cbomanagements option:selected").text());
         $('#btn_play').attr('disabled', 'disabled');
         
@@ -381,7 +375,6 @@ if($session->id_tenant != null && $session->id_user != null):
     
     // JQDialog new customer
     $(function() {
-        // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
 
         var name = $( "#name" ),
@@ -418,8 +411,6 @@ if($session->id_tenant != null && $session->id_user != null):
                         return true;
                 }
         }
-        
-        
 
         $( "#dialog-new-customer" ).dialog({
                 autoOpen: false,
@@ -428,11 +419,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 modal: true
         });
 
-//        $( "#create-user" ).click(function() {
-//                $( "#dialog-form" ).dialog( "open" );
-//        });
         $( "#create-customer" ).click(function() {
-//            //console.log("dialog para project.");
             $( "#dialog-new-customer" ).dialog( "open" );
         });
     });
@@ -504,27 +491,12 @@ if($session->id_tenant != null && $session->id_user != null):
                 modal: true
         });
 
-//        $( "#create-user" ).click(function() {
-//                $( "#dialog-form" ).dialog( "open" );
-//        });
         $( "#create-type" ).click(function() {
-//            //console.log("dialog para project.");
             $( "#dialog-new-type" ).dialog( "open" );
-            /*
-            if ($("#cbocustomers option:selected").text() != "Sin Cliente") 
-            {   
-                $( "#dialog-new-type" ).dialog( "open" );
-            }
-            else {
-                $( "#dialog-error-add-type" ).dialog( "open" );;
-               
-            }
-            */
         });
         
         $( "#create-management" ).click(function() {
-//            //console.log("dialog para project.");
-            if ($("#cbocustomers option:selected").text() != "Sin Cliente") 
+            if ($("#cbocustomers option:selected").text() !== "Sin Cliente") 
             {   
                 $( "#dialog-new-management" ).dialog( "open" );
             }
@@ -655,12 +627,6 @@ if($session->id_tenant != null && $session->id_user != null):
                             <td class="middle">
                                 <?php
                                 echo "<select class='input_box' id='cbomanagements' name='cbomanagements'>\n";
-                                /*
-                                while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
-                                {
-                                    echo "<option value='$row[id_type]'>$row[label_type]</option>\n";
-                                }
-                                 */
                                 echo "</select>\n";
                                 ?>
                                 &nbsp;

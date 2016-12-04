@@ -36,15 +36,17 @@ class ManagementsModel extends ModelBase
 	public function getManagementsByCustomer($id_tenant, $id_customer)
 	{
                 $consulta = $this->db->prepare("
-                        select 
-                            a.id_management
-                            , a.code_management
-                            , a.label_management
-                        from cas_management a
-                        where a.id_tenant = $id_tenant 
-                        and a.id_customer = $id_customer 
-                        and a.status_management < 9
-                        order by a.label_management asc");
+                        SELECT DISTINCT
+                            a.id_management,
+                            b.label_management
+                        FROM cas_customer_management a
+                        INNER JOIN cas_management b 
+                        ON a.id_management = b.id_management
+                        WHERE a.id_tenant = $id_tenant
+                        AND a.id_customer = $id_customer
+                        AND b.status_management < 9
+                        ORDER BY
+                            b.label_management ASC");
 
 		$consulta->execute();
 		
@@ -53,11 +55,11 @@ class ManagementsModel extends ModelBase
 	}
         
         /**
-         * Get managements by other customer
+         * Get managements
          * @param int $id_tenant
          * @return pdo
          */
-	public function getManagementsOtherCustomer($id_tenant, $id_customer)
+	public function getManagementsOtherCustomer($id_tenant)
 	{
                 $consulta = $this->db->prepare("
                         select 
@@ -136,6 +138,25 @@ class ManagementsModel extends ModelBase
                                 FROM cas_management a
                                 WHERE id_management = '$id_management'
                                   and id_tenant = $id_tenant");
+            
+            $consulta->execute();
+
+            return $consulta;
+        }
+        
+        /**
+         * Check if pair exists
+         * @param type $id_management
+         * @param type $id_customer
+         * @return type PDO
+         */
+        public function getManagementCustomerPair($id_management, $id_customer)
+        {
+            $consulta = $this->db->prepare("
+				SELECT a.id_management 
+                                FROM cas_customer_management a
+                                WHERE a.id_management = $id_management
+                                  and a.id_customer = $id_customer");
             
             $consulta->execute();
 

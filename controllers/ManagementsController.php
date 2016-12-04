@@ -473,32 +473,27 @@ class ManagementsController extends ControllerBase
         
         //Le pedimos al modelo todos los items
         $customerManagements = $model->getManagementsByCustomer($session->id_tenant, $id_customer);
-        $allManagements = $model->getManagementsOtherCustomer($session->id_tenant, $id_customer);
+        $allManagements = $model->getAllManagementsByTenant($session->id_tenant);
+        
+        $materias = $customerManagements->fetchAll(PDO::FETCH_ASSOC);
+        $materiastodas = $allManagements->fetchAll(PDO::FETCH_ASSOC);
+        $materiasfiltradas = array_diff_assoc($materiastodas, $materias);   // solo las restantes
         
         //Gestiones del cliente
-        //$respuesta = "<option value=''>Seleccione Gestión</option>";
         $respuesta .= "<optgroup label='Gestiones del Cliente'>";
-        while($materia = $customerManagements->fetch(PDO::FETCH_ASSOC))
+        foreach ($materias as $key => $value)
         {
-            $respuesta .= "<option value='".$materia['id_management']."'>".$materia['label_management']."</option>";
+            $respuesta .= "<option value='".$value['id_management']."'>".$value['label_management']."</option>";
         }
         $respuesta .= "</optgroup>";
-        //Todas las gestiones
+        
+        //Gestionas otras
         $respuesta .= "<optgroup label='Otras Gestiones'>";
-        while($todasMateria = $allManagements->fetch(PDO::FETCH_ASSOC))
+        foreach ($materiasfiltradas as $key => $value)
         {
-            $respuesta .= "<option value='".$todasMateria['id_management']."'>".$todasMateria['label_management']."</option>";
+            $respuesta .= "<option value='".$value['id_management']."'>".$value['label_management']."</option>";
         }
         $respuesta .= "</optgroup>";
-        /*
-        foreach($listado as $materia) {
-            $respuesta .= "<option value='".$materia['id_management']."'>".$materia['label_management']."</option>";
-        }
-        */
-        /*
-        print_r($respuesta);
-        exit();
-         */
         
         echo $respuesta;
     }

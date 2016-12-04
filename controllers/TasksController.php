@@ -803,11 +803,16 @@ class TasksController extends ControllerBase
             $result_type = $model->addTypeToTask($values['id_task'], $id_type);
             $error_type = $result_type->errorInfo();
             
-            $result_management = $modelManagement->addManagementCustomerPair($session->id_tenant, $id_customer, $id_management, $id_user);
-            $error_management = $result_management->errorInfo();
+            # check for management and customer pair
+            $resultManagement = $modelManagement->getManagementCustomerPair($id_management, $id_customer);
             
-            #$this->projectsDt(1);
-            #header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=1");
+            # add only if not exists
+            if($resultManagement->rowCount() == 0)
+            {
+                $result_management = $modelManagement->addManagementCustomerPair($session->id_tenant, $id_customer, $id_management, $id_user);
+                $error_management = $result_management->errorInfo();
+            }
+            
             header("Location: ".$this->root."?controller=Tasks&action=tasksView&task_id=".$values['id_task']);
         }
         elseif($error[0] == 00000 && $rows_n < 1){
