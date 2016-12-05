@@ -399,7 +399,7 @@ $(document).ready(function() {
         ?>
         <!-- END DEBUG -->
 
-        <p class="titulos-form"><?php echo $titulo; ?></p>
+        <h4><span class="icon-title fi-list-bullet"></span><?php echo $titulo; ?></h4>
 
         <?php
         if (isset($error_flag)){

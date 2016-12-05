@@ -10,6 +10,7 @@ if($session->id_tenant != null && $session->id_user != null):
 
 <!-- AGREGAR JS & CSS AQUI -->
 <link rel="stylesheet" href="views/css/select2.css">
+<!--
 <style type="text/css" title="currentStyle">
     .table_left {
         margin-bottom: 10px;
@@ -68,6 +69,7 @@ if($session->id_tenant != null && $session->id_user != null):
         width: 100%;
     }
 </style>
+-->
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.timepicker.min.js"></script>
@@ -77,10 +79,6 @@ if($session->id_tenant != null && $session->id_user != null):
     var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
     
     $(document).ready(function(){
-        //var myDate = new Date();
-        //var displayDate = myDate.getFullYear() + '/' + (myDate.getMonth()+1) + '/' + (myDate.getDate());
-        //var outStr = myDate.getHours()+':'+myDate.getMinutes()
-        
         // Btn play
         $("#btn_play").click(function (event){
             iniTrabajo();
@@ -93,8 +91,6 @@ if($session->id_tenant != null && $session->id_user != null):
               url: "?controller=tasks&action=getTasksName",
               dataType: "json",
               success: function(data) {
-                //tareas = data;
-                //tareas = $.parseJSON(data);
                 $.each(data , function( index, obj ) {
                     $.each(obj, function( key, value ) {
                         tareas.push(value);
@@ -156,15 +152,12 @@ if($session->id_tenant != null && $session->id_user != null):
         $(".dlgSbmCstr").click(function(){
             var name = $("#dlgSbm_name_customer").val();
             var desc = $("#dlgSbm_desc_customer").val();
-            //var dataString = 'name='+ name + '&desc=' + desc;
             if(name === '')
             {
                 alert("Ingrese título del cliente");
             }
             else
             {
-                //$("#flash").show();
-                //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
                     type: "POST",
                     url: "?controller=customers&action=ajaxCustomersAdd",
@@ -175,7 +168,6 @@ if($session->id_tenant != null && $session->id_user != null):
                     if(response !== null){
                         if(response[0] !== 0){
                             $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
-                            //$("#flash").hide();
                             alert("Cliente agregado!");
                         }
                         else
@@ -198,15 +190,12 @@ if($session->id_tenant != null && $session->id_user != null):
         $(".dlgSbmCstr_type").click(function(){
             var customer = $("#cbocustomers").val();
             var label_type = $("#dlgSbm_name_type").val();
-            //var dataString = 'name='+ name + '&desc=' + desc;
             if(label_type === '')
             {
                 alert("Ingrese nombre de la materia");
             }
             else
             {
-                //$("#flash").show();
-                //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
                     type: "POST",
                     url: "?controller=types&action=ajaxTypesAddWithCustomer",
@@ -217,7 +206,6 @@ if($session->id_tenant != null && $session->id_user != null):
                     if(response !== null){
                         if(response[0] !== 0){
                             $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
-                            //$("#flash").hide();
                             alert("Materia agregada!");
                         }
                         else
@@ -242,15 +230,12 @@ if($session->id_tenant != null && $session->id_user != null):
         // JQDialog Submit - Add new type
         $(".dlgSbmCstr_management").click(function(){
             var label_management = $("#dlgSbm_name_management").val();
-            //var dataString = 'name='+ name + '&desc=' + desc;
             if(label_management === '')
             {
                 alert("Ingrese nombre de la gestión");
             }
             else
             {
-                //$("#flash").show();
-                //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
                     type: "POST",
                     url: "?controller=managements&action=ajaxManagementsAdd",
@@ -261,7 +246,6 @@ if($session->id_tenant != null && $session->id_user != null):
                     if(response !== null){
                         if(response[0] !== 0){
                             $("#cbomanagements").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
-                            //$("#flash").hide();
                             alert("Gestión agregada!");
                         }
                         else
@@ -290,7 +274,6 @@ if($session->id_tenant != null && $session->id_user != null):
         var task_time = "<?php echo $current_time; ?>";
         $("#hora_ini").val(task_time);
 
-//        $('#hora_ini').val(task_time.substring(0,5));
         $('#hora_ini').timepicker({
             'step': 15,
             'scrollDefault': task_time,
@@ -511,14 +494,13 @@ if($session->id_tenant != null && $session->id_user != null):
 </script>
 
 </head>
-<body id="dt_example" class="ex_highlight_row">
+<body>
 
     <?php require('templates/dialogs.tpl.php'); #session & header ?>
     <?php require('templates/menu.tpl.php'); #banner & menu ?>
     
-    <!-- CENTRAL -->
-    <div id="central">
-    <div id="contenido">
+    <!-- Content -->
+    <div class="row">
 
         <!-- DEBUG -->
         <?php 
@@ -543,18 +525,7 @@ if($session->id_tenant != null && $session->id_user != null):
         ?>
         <!-- END DEBUG -->
 
-        <p class="titulos-form"><?php echo $titulo; ?></p>
-
-        <!--
-        <p style="font-size: 12px; color: #999;">
-            Nota: Esta pantalla permitir&iacute;a crear un
-            nuevo registro de trabajo que tras hacer clic en el boton "INICIO" bajo el control de tiempo, guardar&iacute;a la fecha y la hora en
-            que fue creado. Se puede notar que tras presionar el boton de inicio se bloquean los campos anteriores.
-            El bot&oacute;n de "PAUSA" permite ignorar el tiempo durante el cual el registro permanece en pausa. Para terminar
-            el trabajo habr&iacute;a que presionar el boton "TERMINAR" de color rojo, registrando el momento en que finalizó la tarea.
-            El campo "responsable" corresponde al usuario en sesi&oacute;n sin posibilidad de alterar este valor.
-        </p>
-        -->
+        <h4><span class="icon-title fi-clipboard-pencil"></span><?php echo $titulo; ?></h4>
         
         <?php 
         if (isset($error_flag)){
@@ -564,7 +535,8 @@ if($session->id_tenant != null && $session->id_user != null):
         }
         ?>
 
-        <div id="dt_filtres">
+        <div class="row ">
+            
             <form id="formModule" name="formModule" method="post" action="?controller=tasks&amp;action=tasksAdd">
                 <div id="trabajo_info" style="float: left;width:100%;">
                     <table class="table_left">
@@ -572,22 +544,6 @@ if($session->id_tenant != null && $session->id_user != null):
                             <td class="middle">Responsable</td>
                             <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
                         </tr>
-<!--                        <tr>
-                            <td class="middle">Proyecto</td>
-                            <td class="middle">
-                                <?php/*
-                                echo "<select class='input_box' id='cboprojects' name='cboprojects'>\n";
-                                echo "<option value='noaplica' selected='selected'>Sin Proyecto</option>\n";
-                                while($row = $pdoProject->fetch(PDO::FETCH_ASSOC))
-                                {
-                                    echo "<option value='$row[id_project]'>$row[label_project]</option>\n";
-                                }
-                                echo "</select>\n";
-                                */?>
-                                &nbsp;
-                                <a id="create-project" href="#">Nuevo</a>
-                            </td>
-                        </tr>-->
                         <tr>
                             <td class="middle">Cliente</td>
                             <td class="middle">
@@ -679,11 +635,10 @@ if($session->id_tenant != null && $session->id_user != null):
                     <input id="hdnUser" type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
                 </div>
             </form>
-        </div>
 
     </div>
     </div>
-    <!-- END CENTRAL -->
+    <!-- /Content -->
 
 <?php
 #endif; #privs
