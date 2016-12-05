@@ -472,18 +472,59 @@ class ManagementsController extends ControllerBase
         $id_customer = $_POST["id_customer"];
         
         //Le pedimos al modelo todos los items
-        $listadoPDO = $model->getManagementsByCustomer($session->id_tenant, $id_customer);
+        $customerManagements = $model->getManagementsByCustomer($session->id_tenant, $id_customer);
+        $allManagements = $model->getAllManagementsByTenant($session->id_tenant);
         
-        $respuesta = "<option value=''>Seleccione Materia</option>";
-        while($materia = $listadoPDO->fetch(PDO::FETCH_ASSOC))
+        $materias = $customerManagements->fetchAll(PDO::FETCH_ASSOC);
+        $materiastodas = $allManagements->fetchAll(PDO::FETCH_ASSOC);
+        $materiasfiltradas = array_diff_assoc($materiastodas, $materias);   // solo las restantes
+        
+        //Gestiones del cliente
+        $respuesta .= "<optgroup label='Gestiones del Cliente'>";
+        foreach ($materias as $key => $value)
         {
-            $respuesta .= "<option value='".$materia['id_management']."'>".$materia['label_management']."</option>";
+            $respuesta .= "<option value='".$value['id_management']."'>".$value['label_management']."</option>";
         }
+        $respuesta .= "</optgroup>";
+        
+        //Gestionas otras
+        $respuesta .= "<optgroup label='Otras Gestiones'>";
+        foreach ($materiasfiltradas as $key => $value)
+        {
+            $respuesta .= "<option value='".$value['id_management']."'>".$value['label_management']."</option>";
+        }
+        $respuesta .= "</optgroup>";
+        
+        echo $respuesta;
+    }
+    
+    public function ajaxGetManagements() {
+        $session = FR_Session::singleton();
+        require_once 'models/ManagementsModel.php';
+        $model = new ManagementsModel();
+        
+        //Le pedimos al modelo todos los items
+        $allManagements = $model->getManagements($session->id_tenant);
+        
+        
+        $respuesta = "<option value=''>Seleccione Gestión</option>";
+         //Todas las gestiones
+        $respuesta .= "<optgroup label='Todas las Gestiones'>";
+        while($todasMateria = $allManagements->fetch(PDO::FETCH_ASSOC))
+        {
+            $respuesta .= "<option value='".$todasMateria['id_management']."'>".$todasMateria['label_management']."</option>";
+        }
+        $respuesta .= "</optgroup>";
         /*
         foreach($listado as $materia) {
             $respuesta .= "<option value='".$materia['id_management']."'>".$materia['label_management']."</option>";
         }
         */
+        /*
+        print_r($respuesta);
+        exit();
+         */
+        
         echo $respuesta;
     }
     

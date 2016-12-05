@@ -716,6 +716,7 @@ class TasksController extends ControllerBase
         $id_project = null;
         $id_customer = null;
         $id_type = null;
+        $id_management = null;
 
         #$new_code = $_POST['new_code'];
         
@@ -773,7 +774,9 @@ class TasksController extends ControllerBase
         $estado = 1; #active by default
 
         require_once 'models/TasksModel.php';
+        require_once 'models/ManagementsModel.php';
         $model = new TasksModel();
+        $modelManagement = new ManagementsModel();
         
         if($_POST['chk_past']){
             $estado = 2;
@@ -800,8 +803,16 @@ class TasksController extends ControllerBase
             $result_type = $model->addTypeToTask($values['id_task'], $id_type);
             $error_type = $result_type->errorInfo();
             
-            #$this->projectsDt(1);
-            #header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=1");
+            # check for management and customer pair
+            $resultManagement = $modelManagement->getManagementCustomerPair($id_management, $id_customer);
+            
+            # add only if not exists
+            if($resultManagement->rowCount() == 0)
+            {
+                $result_management = $modelManagement->addManagementCustomerPair($session->id_tenant, $id_customer, $id_management, $id_user);
+                $error_management = $result_management->errorInfo();
+            }
+            
             header("Location: ".$this->root."?controller=Tasks&action=tasksView&task_id=".$values['id_task']);
         }
         elseif($error[0] == 00000 && $rows_n < 1){
@@ -813,7 +824,7 @@ class TasksController extends ControllerBase
         else{
             // Something went wrong
 
-            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error: ".$error[2].", >> SQL: ".$query." '");
+            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
     }
 

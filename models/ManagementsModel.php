@@ -17,10 +17,56 @@ class ManagementsModel extends ModelBase
                             a.id_management
                             , a.code_management
                             , a.label_management
-                            , a.id_customer
-                            , b.label_customer
                         from cas_management a
-                        left join cas_customer b on (b.id_customer = a.id_customer)
+                        where a.id_tenant = $id_tenant 
+                        and a.status_management < 9
+                        order by a.label_management asc");
+
+		$consulta->execute();
+		
+		//devolvemos la coleccion para que la vista la presente.
+		return $consulta;
+	}
+        
+        /**
+         * Get managements by customer (and tenant)
+         * @param int $id_tenant
+         * @return pdo
+         */
+	public function getManagementsByCustomer($id_tenant, $id_customer)
+	{
+                $consulta = $this->db->prepare("
+                        SELECT DISTINCT
+                            a.id_management,
+                            b.label_management
+                        FROM cas_customer_management a
+                        INNER JOIN cas_management b 
+                        ON a.id_management = b.id_management
+                        WHERE a.id_tenant = $id_tenant
+                        AND a.id_customer = $id_customer
+                        AND b.status_management < 9
+                        ORDER BY
+                            b.label_management ASC");
+
+		$consulta->execute();
+		
+		//devolvemos la coleccion para que la vista la presente.
+		return $consulta;
+	}
+        
+        /**
+         * Get managements
+         * @param int $id_tenant
+         * @return pdo
+         */
+	public function getManagementsOtherCustomer($id_tenant)
+	{
+                $consulta = $this->db->prepare("
+                        select 
+                            a.id_management
+                            , a.code_management
+                            , a.label_management
+                        from cas_management a
                         where a.id_tenant = $id_tenant 
                         and a.status_management < 9
                         order by a.label_management asc");
@@ -36,7 +82,7 @@ class ManagementsModel extends ModelBase
          * @param int $id_tenant
          * @return pdo
          */
-	public function getManagementsByCustomer($id_tenant, $id_customer)
+	public function getManagements($id_tenant)
 	{
                 $consulta = $this->db->prepare("
                         select 
@@ -45,7 +91,6 @@ class ManagementsModel extends ModelBase
                             , a.label_management
                         from cas_management a
                         where a.id_tenant = $id_tenant 
-                        and a.id_customer = $id_customer 
                         and a.status_management < 9
                         order by a.label_management asc");
 
@@ -56,7 +101,7 @@ class ManagementsModel extends ModelBase
 	}
         
         /**
-         * Get typw por código de management
+         * Get managements por código de management
          * @param int $id_tenant
          * @param varchar $code_management
          * @return PDO 
@@ -93,6 +138,25 @@ class ManagementsModel extends ModelBase
                                 FROM cas_management a
                                 WHERE id_management = '$id_management'
                                   and id_tenant = $id_tenant");
+            
+            $consulta->execute();
+
+            return $consulta;
+        }
+        
+        /**
+         * Check if pair exists
+         * @param type $id_management
+         * @param type $id_customer
+         * @return type PDO
+         */
+        public function getManagementCustomerPair($id_management, $id_customer)
+        {
+            $consulta = $this->db->prepare("
+				SELECT a.id_management 
+                                FROM cas_customer_management a
+                                WHERE a.id_management = $id_management
+                                  and a.id_customer = $id_customer");
             
             $consulta->execute();
 
@@ -169,6 +233,42 @@ class ManagementsModel extends ModelBase
 
             return $consulta;
 	}
+        
+        /**
+         * 
+         * @param type $id_tenant
+         * @param type $id_customer
+         * @param type $id_management
+         * @param type $id_user
+         * @return type MariaDB String
+         */
+        public function addManagementCustomerPair($id_tenant, $id_customer, $id_management, $id_user) {
+            $this->db->exec("set names utf8");
+            
+            $consulta = $this->db->prepare("
+                    INSERT INTO cas_customer_management
+                            (id_customer_management
+                            , id_tenant
+                            , id_customer
+                            , id_management
+                            , created_at
+                            , updated_at
+                            , user_id) 
+                    VALUES 
+                            (NULL
+                            ,$id_tenant
+                            ,$id_customer
+                            ,$id_management
+                            ,NOW()
+                            ,NULL
+                            ,$id_user)"
+                    
+                    , array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+
+            $consulta->execute();
+
+            return $consulta;
+        }
         
                 
         /**
