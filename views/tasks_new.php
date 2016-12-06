@@ -605,8 +605,20 @@ if($session->id_tenant != null && $session->id_user != null):
                     </table>
                     <table class="table_right">
                         <tr>
-                            <td class="middle" colspan="2">¿Trabajo ya realizado? <input style="width: 20px;" id="chk_past" class="input_box" name="chk_past" type="checkbox" /></td>
-                            <td class="middle"></td>
+                            <td class="middle" colspan="2">
+                                ¿Trabajo ya realizado?
+                                <!--<input style="width: 20px;" id="chk_past" class="input_box" name="chk_past" type="checkbox" />-->
+                                <div class="switch large">
+                                <input class="switch-input" id="chk_past" type="checkbox" name="exampleSwitch">
+                                <label class="switch-paddle" for="chk_past">
+                                    <span class="show-for-sr">¿Trabajo ya realizado?</span>
+                                    <span class="switch-active" aria-hidden="true">Si</span>
+                                    <span class="switch-inactive" aria-hidden="true">No</span>
+                                </label>
+                              </div>
+                            </td>
+                            
+                            
                         </tr>
                         <tr class="hdn_row">
                             <td class="middle">Fecha inicio</td>

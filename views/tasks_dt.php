@@ -29,7 +29,8 @@ if($session->id_tenant != null && $session->id_user != null):
         width: 100%;
     }
 </style>
-<script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
+<!--<script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>-->
+<script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables-control.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery-tableTools.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
@@ -282,20 +283,20 @@ $(document).ready(function() {
 
                         if(s_id_user === oObj.aData[11]){
                             if(oObj.aData[1] === null || oObj.aData[1] === ""){
-                                dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
+                                dt_tools = dt_tools+"<a href=\'javascript:void(0)\' id=\'btn_view\' class=\'icon-action fi-page-edit\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")'></a> &nbsp;";
                             }
 
-                            dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")' value='' />";
+                            dt_tools = dt_tools+"<a href=\'javascript:void(0)\' id=\'tool_remove\' class=\'icon-action fi-trash\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")'></a>";
                         }
                     }
                     else{
                         //mostrar opciones para las tareas de todos los usuarios
 
                         if(oObj.aData[1] === null || oObj.aData[1] === ""){
-                                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'btn_view\' class=\'ui-icon ui-icon-folder-open\' title=\'Ver\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")' value='' /> &nbsp;";
+                            dt_tools = dt_tools+"<a href=\'javascript:void(0)\' id=\'btn_view\' class=\'icon-action fi-page-edit\' name='"+oObj.aData[7]+"' onclick='viewTask("+oObj.aData[7]+")'></a> &nbsp;";
                         }
 
-                        dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")' value='' />";
+                        dt_tools = dt_tools+"<a href=\'javascript:void(0)\' id=\'tool_remove\' class=\'icon-action fi-trash\' name='"+oObj.aData[7]+"' onclick='removeTask("+oObj.aData[7]+")'></a>";
                     }
 
                     return dt_tools;

@@ -94,7 +94,19 @@ select {
     width: 80%;
 }
 
+tr.odd, tr.even {
+    cursor: default;
+}
+
 /* icon */
 .icon-title {
     margin-right: 5px;
+}
+
+a.icon-action {
+    font-size: x-large;
+}
+
+a.icon-action:focus {
+    box-shadow: 4px 4px 7px rgba(0,0,0,0.4);
 }
