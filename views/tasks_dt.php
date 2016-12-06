@@ -379,14 +379,13 @@ $(document).ready(function() {
     <?php require('templates/menu.tpl.php'); #banner & menu ?>
 
     <!-- CENTRAL -->
-    <div id="central">
-    <div id="contenido">
+    <div class="row">
 
         <!-- DEBUG -->
         <?php
         if($debugMode)
         {
-            print('<div id="debugbox">');
+            print('<div class="row" id="debugbox">');
             print("tenant: ".$session->id_tenant.", user: ".$session->id_user."<br/>");
             print_r($titulo); print('<br />');
             print_r($listado); print('<br />');
@@ -400,7 +399,11 @@ $(document).ready(function() {
         ?>
         <!-- END DEBUG -->
 
-        <h4><span class="icon-title fi-list-bullet"></span><?php echo $titulo; ?></h4>
+        <div class="row">
+            <h1>
+                <span class="icon-title fi-list-bullet"></span><?php echo $titulo; ?>
+            </h1>
+        </div>
 
         <?php
         if (isset($error_flag)){
@@ -559,7 +562,6 @@ $(document).ready(function() {
 
         <div class="spacer"></div>
 
-    </div>
     </div>
     <!-- END CENTRAL -->
 
