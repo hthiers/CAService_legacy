@@ -375,11 +375,11 @@ $(document).ready(function() {
 </head>
 <body id="dt_example" class="ex_highlight_row">
 
-    <?php require('templates/dialogs.tpl.php'); #banner & menu ?>
+    <?php #require('templates/dialogs.tpl.php'); #banner & menu ?>
     <?php require('templates/menu.tpl.php'); #banner & menu ?>
 
     <!-- CENTRAL -->
-    <div class="row">
+    <div class="row container">
 
         <!-- DEBUG -->
         <?php
@@ -398,12 +398,10 @@ $(document).ready(function() {
         }
         ?>
         <!-- END DEBUG -->
-
-        <div class="row">
-            <h1>
-                <span class="icon-title fi-list-bullet"></span><?php echo $titulo; ?>
-            </h1>
-        </div>
+        
+        <h1>
+            <span class="icon-title fi-list-bullet"></span><?php echo $titulo; ?>
+        </h1>
 
         <?php
         if (isset($error_flag)){
@@ -414,7 +412,7 @@ $(document).ready(function() {
         ?>
 
          <!--CUSTOM FILTROS-->
-        <div id="dt_filtres" style="float:none;margin-top:10px;">
+        <div class="toolbar">
             <table>
                 <thead>
                     <tr>
@@ -527,19 +525,19 @@ $(document).ready(function() {
                 <table class="display" id="example">
                     <thead>
                         <tr class="headers">
-                            <th>INICIO</th>
-                            <th>FIN</th>
-                            <th>CLIENTE</th>
-                            <th>MATERIA</th>
-                            <th>GESTION</th>
-                            <th>RESPONSABLE</th>
-                            <th>TIEMPO</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Cliente</th>
+                            <th>Materia</th>
+                            <th>Gestion</th>
+                            <th>Responsable</th>
+                            <th>Tiempo</th>
                             <th>ID TASK</th>
                             <th>ID TENANT</th>
                             <th>ID PROJECT</th>
                             <th>ID CUSTOMER</th>
                             <th>ID USER</th>
-                            <th>OPCIONES</th>
+                            <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -548,15 +546,11 @@ $(document).ready(function() {
                         </tr>
                     </tbody>
                 </table>
-                <table style="float:left"> <!-- style float solo para perderlo -->
-                    <tr>
-                        <td><input id="task_id" type="hidden" name="task_id" value="" /></td>
-                    </tr>
-                </table>
+                <input id="task_id" type="hidden" name="task_id" value="" />
             </form>
         </div>
 
-        <div id="footer" class="headers" style="color:#ffffff;padding:3px;">
+        <div id="footer" class="headers" style="color:#ffffff;">
             <p style="text-align:right;">Tiempo Total: </p>
         </div>
 

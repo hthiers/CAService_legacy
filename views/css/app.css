@@ -2,12 +2,33 @@ html {
     font-size: 0.9rem;
 }
 
+h1 {
+    font-size: 1.8rem;
+}
+
 a {
     font-size: inherit;
 }
 
 p {
     font-size: inherit;
+}
+
+table {
+    margin-bottom: 0;
+}
+
+table thead tbody {
+    background-color: #f5f5f5;
+}
+
+table thead, table tbody, table tfoot {
+    background-color: #f5f5f5;
+    border: none;
+}
+
+table thead th {
+    text-align: center;
 }
 
 footer {
@@ -59,13 +80,21 @@ footer p {
     font-size: 1.1em;
 }
 
-table thead tbody {
-    background-color: #f5f5f5;
+/* container */
+
+.container {
+    max-width: 80rem;
 }
 
-table thead, table tbody, table tfoot {
+.toolbar {
     background-color: #f5f5f5;
-    border: none;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 3px rgba(0,0,0,.14),0 3px 5px rgba(0,0,0,.28);
+    font-size: 12px;
+}
+
+.toolbar th {
+    color: #000000;
 }
 
 /* form */
@@ -75,10 +104,16 @@ select {
     padding: 0.3rem;
 }
 
+.button {
+    border-radius: 0;
+}
+
 /* datatable */
 
 .top {
     height: 50px;
+    border-radius: 0;
+    box-shadow: 0 0 3px rgba(0,0,0,.14),0 3px 5px rgba(0,0,0,.28);
 }
 
 .top select {
@@ -96,6 +131,34 @@ select {
 
 tr.odd, tr.even {
     cursor: default;
+}
+
+tr.odd, tr.even {
+    background-color: inherit;
+}
+
+tr.even {
+    background-color: #ebebeb !important;
+}
+
+tr.odd td.sorting_1, tr.even td.sorting_1 {
+    background-color: inherit;
+}
+
+div.DTTT_container {
+    margin: 0.5em 0 !important;
+}
+
+.dataTables_length {
+    width: 30% !important;
+}
+
+.paging_full_numbers {
+    width: 45% !important;
+}
+
+.dataTables_filter {
+    width: 25% !important;
 }
 
 /* icon */
