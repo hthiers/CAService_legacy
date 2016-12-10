@@ -41,7 +41,7 @@ if($session->id_tenant != null && $session->id_user != null):
     <?php require('templates/menu.tpl.php'); #banner & menu ?>
 
     <!-- CENTRAL -->
-    <div class="row container">
+    <div class="row large">
 
         <!-- DEBUG -->
         <?php

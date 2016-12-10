@@ -8,19 +8,13 @@ if($session->id_tenant != null && $session->id_user != null):
 #if($session->privilegio > 0):
 ?>
 
-<!-- AGREGAR JS & CSS AQUI -->
-<link rel="stylesheet" href="views/css/select2.css">
-<script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
-<script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
-<script type="text/javascript" language="javascript" src="views/lib/jquery.timepicker.min.js"></script>
-<script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
-
+<!-- Funciones JS -->
 <?php require_once('tasks_lib_new.php'); # JS ?>
 
 </head>
 <body>
 
-    <?php require('templates/dialogs.tpl.php'); #session & header ?>
+    <?php #require('templates/dialogs.tpl.php'); #session & header ?>
     <?php require('templates/menu.tpl.php'); #banner & menu ?>
 
     <!-- Content -->
@@ -61,10 +55,12 @@ if($session->id_tenant != null && $session->id_user != null):
         }
         ?>
 
-        <div class="row ">
+        <div class="row sweetbox-pad">
 
+            <!-- Nueva tarea-->
             <form id="formModule" name="formModule" method="post" action="?controller=tasks&amp;action=tasksAdd">
 
+                <!-- form nueva tarea -->
                 <div class="row">
                   <div class="medium-3 columns">
                     <label for="resp" class="text-right middle">Responsable</label>
@@ -154,15 +150,42 @@ if($session->id_tenant != null && $session->id_user != null):
                           <span class="switch-inactive" aria-hidden="true">No</span>
                       </label>
                     </div>
-
                   </div>
                 </div>
 
-
+                <!-- controles tarea pasada -->
+                <div class="row">
+                  <div class="medium-3 columns">
+                    <label for="cbotypes" class="text-right middle">Fecha inicio</label>
+                  </div>
+                  <div class="medium-4 columns">
+                    <input type="text" id="dp_finicio">
+                  </div>
+                  <div class="medium-5 columns">
+                    <div id="datepicker"></div>
+                  </div>
+                </div>
+                <div class="row hdn_row">
+                  <div class="medium-3 columns">
+                    <label for="cbotypes" class="text-right middle">Hora inicio</label>
+                  </div>
+                  <div class="medium-9 columns">
+                    <input id="hora_ini" name="hora_ini" type="text" value="" />
+                  </div>
+                </div>
+                <div class="row hdn_row">
+                  <div class="medium-3 columns">
+                    <label for="cbotypes" class="text-right middle">Duración</label>
+                  </div>
+                  <div class="medium-9 columns">
+                    <input id="duration" name="duration" type="text" value="" />
+                  </div>
+                </div>
 
             </form>
+            <!-- /Nueva tarea-->
 
-    </div>
+        </div>
     </div>
     <!-- /Content -->
 
