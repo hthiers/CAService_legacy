@@ -265,7 +265,7 @@
             dateFormat: "yy/mm/dd",
             maxDate: "0D",
             onSelect: function(date, picker){
-                $("#dp_finicio").val(date);
+                $("#hdnPicker").val(date);
             }
         });
     });

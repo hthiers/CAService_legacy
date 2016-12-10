@@ -34,9 +34,10 @@ $navegador = substr($navegador,25,8);
 <link rel="stylesheet" href="views/css/estilo.css"></link>
 <link rel="stylesheet" href="views/css/reset-min.css"></link>
 <link rel="stylesheet" href="views/css/datatable.css"></link>
-<link rel="stylesheet" href="views/css/select2.css">
+<link rel="stylesheet" href="views/css/select2.css"></link>
 <link rel="stylesheet" href="views/css/foundation.css"></link>
-<!--<link rel="stylesheet" href="views/css/foundation-datepicker.css">-->
+<link rel="stylesheet" href="views/css/jquery-ui-datepicker-custom.css"></link>
+<link rel="stylesheet" href="views/css/jquery-ui-timepicker-custom.css"></link>
 <link rel="stylesheet" href="views/css/icons/foundation-icons.css"></link>
 <link rel="stylesheet" href="views/css/app.css"></link>
 
