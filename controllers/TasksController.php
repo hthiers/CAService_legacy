@@ -664,7 +664,7 @@ class TasksController extends ControllerBase
             $data['error'] = "No Hay trabajos";
         }
 
-        $data['titulo'] = "Nuevo Trabajo";
+        $data['titulo'] = "Nueva Gestión";
 
         $pdoUser = $modelUser->getUserAccountByID($session->id_user);
         $value = null;

@@ -102,7 +102,7 @@ class Menu extends ModelBase
             $menuFullString.= '<li>';
             $menuFullString.= '<a href="?controller=tasks&amp;action=tasksDt">Gestiones</a>';
             $menuFullString.= '<ul class="menu vertical">';
-            $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">Nuevo Trabajo</a></li>';
+            $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">Nueva Gestión</a></li>';
             $menuFullString.= '</ul>';
             $menuFullString.= '</li>';
 
@@ -162,7 +162,7 @@ class Menu extends ModelBase
             $menuFullString = '<ul id="menu">';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">Gestiones</a>';
                 $menuFullString.= '</li>';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO TRABAJO</a>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO Gestión</a>';
                 $menuFullString.= '</li>';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
                 $menuFullString.= '</li>';
