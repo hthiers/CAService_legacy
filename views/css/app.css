@@ -4,6 +4,7 @@ html {
 
 h1 {
     font-size: 1.8rem;
+    margin-top: 0.5rem;
 }
 
 a {
@@ -83,7 +84,8 @@ footer p {
 /* container */
 
 .large {
-    max-width: 90rem;
+    max-width: 80rem;
+    margin-bottom: 60px;
 }
 
 .sweetbox, .sweetbox-pad, .toolbar {
@@ -168,11 +170,25 @@ div.DTTT_container {
     width: 25% !important;
 }
 
-/* datepicker */
-
 /* icon */
 .icon-title {
     margin-right: 5px;
+}
+
+a.icon-tool, a.icon-tool-circle {
+  font-size: 2rem;
+  margin: 0;
+}
+
+a.icon-tool-circle {
+  border: none;
+  border-radius: 50%;
+  padding: 8px 12px;
+  box-shadow: 0 0 3px rgba(0,0,0,.14),0 3px 5px rgba(0,0,0,.28);
+}
+
+a.circle {
+  padding: 0.5rem;
 }
 
 a.icon-action {

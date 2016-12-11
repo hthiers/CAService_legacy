@@ -55,10 +55,12 @@ if($session->id_tenant != null && $session->id_user != null):
         }
         ?>
 
-        <div class="row sweetbox-pad">
+        <div class="sweetbox-pad">
 
             <!-- Nueva tarea-->
             <form id="formModule" name="formModule" method="post" action="?controller=tasks&amp;action=tasksAdd">
+              <!-- form container -->
+              <div class="row">
 
                 <!-- seccion nueva tarea -->
                 <div class="medium-6 columns">
@@ -136,7 +138,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       <label for="cbotypes" class="text-right middle">Descripción</label>
                     </div>
                     <div class="medium-9 columns">
-                      <textarea class="input_box" name="descripcion"></textarea>
+                      <textarea rows="5" class="input_box" name="descripcion"></textarea>
                     </div>
                   </div>
 
@@ -151,7 +153,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       ¿Trabajo ya realizado?
                     </div>
                     <div class="medium-6 columns">
-                      <div class="switch large">
+                      <div class="switch">
                         <input class="switch-input" id="chk_past" type="checkbox" name="exampleSwitch" />
                         <label class="switch-paddle" for="chk_past">
                             <span class="show-for-sr">¿Trabajo ya realizado?</span>
@@ -162,7 +164,6 @@ if($session->id_tenant != null && $session->id_user != null):
                     </div>
                   </div>
 
-                  <!-- controles tarea pasada -->
                   <div class="row hdn_row">
                     <div class="medium-3 columns">
                       <label for="cbotypes" class="text-right middle">Fecha inicio</label>
@@ -193,6 +194,13 @@ if($session->id_tenant != null && $session->id_user != null):
 
                 <input id="hdnPicker" type="hidden" name="fecha" value="" />
                 <input id="hdnUser" type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
+
+                <div class="medium-1 medium-centered columns">
+                  <a id="btn_play" class="button success icon-tool-circle"><span class="icon-tool fi-play-circle"></span></a>
+                </div>
+
+              </div>
+              <!-- /form container -->
             </form>
             <!-- /Nueva tarea-->
 

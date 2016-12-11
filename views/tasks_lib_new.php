@@ -275,7 +275,7 @@
         $('.input_box').attr('readonly', true);
         $('#datepicker').datepicker().datepicker('disable');
         $("#gestion").val($("#cbomanagements option:selected").text());
-        $('#btn_play').attr('disabled', 'disabled');
+        $('#btn_play').addClass('disabled');
 
         $('#formModule').submit();
     }
