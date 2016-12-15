@@ -169,7 +169,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       <label for="cbotypes" class="text-right middle">Fecha inicio</label>
                     </div>
                     <div class="medium-9 columns">
-                      <div id="datepicker"></div>
+                      <div id="datepicker" class="datepicker"></div>
                     </div>
                   </div>
                   <div class="row hdn_row">
