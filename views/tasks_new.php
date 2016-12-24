@@ -94,7 +94,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       echo "</select>\n";
                       ?>
 
-                      <a id="create-customer" href="#">Nuevo Cliente</a>
+                      <a id="create-customer" href="#"><span class="fi-plus icon-tool"></span></a>
                     </div>
                   </div>
 
@@ -115,7 +115,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       echo "</select>\n";
                       ?>
 
-                      <a id="create-type" href="#">Nueva Materia</a>
+                      <a id="create-type" href="#"><span class="fi-plus icon-tool"></span></a>
                     </div>
                   </div>
 
@@ -128,8 +128,8 @@ if($session->id_tenant != null && $session->id_user != null):
                         echo "<select class='input_box' id='cbomanagements' name='cbomanagements'>\n";
                         echo "</select>\n";
                         ?>
-                        &nbsp;
-                        <a id="create-management" href="#">Nueva Gestión</a>
+
+                        <a id="create-management" href="#"><span class="fi-plus icon-tool"></span></a>
                     </div>
                   </div>
 

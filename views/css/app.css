@@ -118,6 +118,10 @@ select {
     border-radius: 0;
 }
 
+.select2-container, .select2-drop, .select2-search, .select2-search input {
+  width: 80%;
+}
+
 /* datatable */
 
 .top {
