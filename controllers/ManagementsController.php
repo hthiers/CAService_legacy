@@ -7,35 +7,35 @@ class ManagementsController extends ControllerBase
 
     //DT
     public function managementsDt($error_flag = 0, $message = "")
-    { 
+    {
         $session = FR_Session::singleton();
-        
+
         #support global messages
         if(isset($_GET['error_flag']))
             $error_flag = $_GET['error_flag'];
         if(isset($_GET['message']))
             $message = $_GET['message'];
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/ManagementsModel.php';
         require_once 'models/CustomersModel.php';
-        
+
         //Creamos una instancia de nuestro "modelo"
         $model = new ManagementsModel();
-        
+
         //Creamos una instancia del modelo de los clientes
         $clientModel = new CustomersModel();
-        
+
         //Cargar listado de clientes
         $listadoClientes = $clientModel->getAllCustomers($session->id_tenant);
-        
+
         //Le pedimos al modelo todos los items
         $listado = $model->getAllManagementsByTenant($session->id_tenant);
 
         //Pasamos a la vista toda la información que se desea representar
         $data['listado'] = $listado;
         $data['listadoClientes'] = $listadoClientes;
-        
+
         //Titulo pagina
         $data['titulo'] = "Gestiones";
 
@@ -48,9 +48,9 @@ class ManagementsController extends ControllerBase
 
         //Finalmente presentamos nuestra plantilla
         $this->view->show("managements_dt.php", $data);
-        
+
     }
-    
+
     /**
     * Get customers for ajax dynamic query
     * AJAX
@@ -59,15 +59,15 @@ class ManagementsController extends ControllerBase
     public function ajaxManagementsDt()
     {
         $session = FR_Session::singleton();
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/ManagementsModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new ManagementsModel();
-            
+
         $status_column = "status_management";
-        
+
         /*
         * Build up dynamic query
         */
@@ -80,7 +80,7 @@ class ManagementsController extends ControllerBase
                     , 'a.id_customer'
                     , 'c.label_customer'
             );
-        
+
         $sIndexColumn = "id_management";
 
         /******************** Paging */
@@ -153,12 +153,12 @@ class ManagementsController extends ControllerBase
 
         /********************** Create Query */
         $sql = "
-            SELECT SQL_CALC_FOUND_ROWS 
+            SELECT SQL_CALC_FOUND_ROWS
                 ".str_replace(" , ", " ", implode(", ", $aColumns))."
             FROM $sTable a
             INNER JOIN cas_tenant b
             ON (a.id_tenant = b.id_tenant
-                AND 
+                AND
                 b.id_tenant = $session->id_tenant)
             LEFT JOIN cas_customer c ON (a.id_customer = c.id_customer)
             $sWhere
@@ -207,7 +207,7 @@ class ManagementsController extends ControllerBase
         #echo $sql;
         echo json_encode( $output );
     }
-    
+
     //NEW
     public function managementsAddForm($error_flag = 0)
     {
@@ -218,13 +218,13 @@ class ManagementsController extends ControllerBase
 
         $this->view->show("managements_new.php", $data);
     }
-    
-    
-    
+
+
+
     public function managementsAdd()
     {
         $session = FR_Session::singleton();
-        
+
         $label_management = $_POST["label_management"];
         $id_customer = $_POST["id_customer"];
         //$label_management = filter_input(INPUT_POST, "label_management");
@@ -232,20 +232,20 @@ class ManagementsController extends ControllerBase
         $code_management = Utils::guidv4();
         echo "Label: ".$label_management. " - Customer: ".$id_customer;
         exit();
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/managementsModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new ManagementsModel();
-        
-        
+
+
         //Le pedimos al modelo todos los items
         $result = $model->addNewManagement(null, $code_management, $session->id_tenant, $label_management, $id_customer);
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
-        
+
         return "hola ".$label_managementº;
         /*
         if($error[0] == 00000 && $rows_n > 0){
@@ -257,12 +257,12 @@ class ManagementsController extends ControllerBase
         else{
             header("Location: ".$this->root."?controller=managements&action=managementsDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
-         
+
          */
     }
-    
+
     public function ajaxManagementsAdd()
-    {   
+    {
         $session = FR_Session::singleton();
 
         if(isset($_POST['label_management']) && $_POST['label_management'] != ""):
@@ -307,9 +307,9 @@ class ManagementsController extends ControllerBase
             return false;
         endif;
     }
-    
+
     public function ajaxManagementsAddWithCustomer()
-    {   
+    {
         $session = FR_Session::singleton();
 
         if(isset($_POST['label_management']) && $_POST['label_management'] != ""):
@@ -323,12 +323,12 @@ class ManagementsController extends ControllerBase
 
             $code_management = Utils::guidv4();
             $new_management[] = null;
-            
+
             #fecha actual
             $currentDateTime = date('Y/m/d H:i:s');
-            
+
             $id_user = $session->id_user;
-            
+
             //Le pedimos al modelo todos los items
             $resultPdo = $model->addNewManagementWithCustomer(null, $code_management, $session->id_tenant, $label_management, $id_customer, $currentDateTime, $id_user);
 
@@ -360,7 +360,7 @@ class ManagementsController extends ControllerBase
             return false;
         endif;
     }
-    
+
     public function ajaxManagementsUpdate()
     {
         $session = FR_Session::singleton();
@@ -373,12 +373,12 @@ class ManagementsController extends ControllerBase
             //Creamos una instancia de nuestro "modelo"
             $model = new ManagementsModel();
             $targetManagementPdo = $model->getManagementByID($session->id_tenant, filter_input(INPUT_POST, 'row_id'));
-            
+
             $new_value = filter_input(INPUT_POST, 'value');
             #fecha actual
             $currentDateTime = date('Y/m/d H:i:s');
             $id_user = $session->id_user;
-            
+
             $targetManagement = $targetManagementPdo->fetch(PDO::FETCH_ASSOC);
             if($targetManagement != null && $targetManagement != false){
                 //apply change
@@ -389,7 +389,7 @@ class ManagementsController extends ControllerBase
                         , $new_value
                         , $currentDateTime
                         , $id_user);
-                
+
                 if($result){
                     $error = $result->errorInfo();
                     $rows_n = $result->rowCount();
@@ -412,7 +412,7 @@ class ManagementsController extends ControllerBase
             else{
                 print 'no se encontro elemento a actualizar';
             }
-            
+
             return true;
         else:
             return false;
@@ -426,7 +426,7 @@ class ManagementsController extends ControllerBase
     {
         $session = FR_Session::singleton();
         $id_management = null;
-        
+
         // Support POST & GET
         if(filter_input(INPUT_POST, 'management_id') != ''){
             $id_management = filter_input(INPUT_POST, 'management_id');
@@ -434,11 +434,11 @@ class ManagementsController extends ControllerBase
         else{
             $id_management = filter_input(INPUT_GET, 'management_id');
         }
-        
+
         if($id_management != null){
             require_once 'models/ManagementsModel.php';
             $model = new ManagementsModel();
-            
+
             $status = 9; // 9 removed status
 
             // remove
@@ -462,51 +462,52 @@ class ManagementsController extends ControllerBase
         else{
             header("Location: ".$this->root."?controller=managements&action=managementsDt&error_flag=10&message='Error: esta materia ya no existe!");
         }
-    }   
-    
+    }
+
     public function ajaxGetManagementsByCustomer() {
         $session = FR_Session::singleton();
         require_once 'models/ManagementsModel.php';
         $model = new ManagementsModel();
-        
+
         $id_customer = $_POST["id_customer"];
-        
+        $id_type = $_POST["id_type"];
+
         //Le pedimos al modelo todos los items
-        $customerManagements = $model->getManagementsByCustomer($session->id_tenant, $id_customer);
+        $customerManagements = $model->getManagementsByCustomerType($session->id_tenant, $id_customer, $id_type);
         $allManagements = $model->getAllManagementsByTenant($session->id_tenant);
-        
-        $materias = $customerManagements->fetchAll(PDO::FETCH_ASSOC);
-        $materiastodas = $allManagements->fetchAll(PDO::FETCH_ASSOC);
-        $materiasfiltradas = array_diff_assoc($materiastodas, $materias);   // solo las restantes
-        
+
+        $trabajos = $customerManagements->fetchAll(PDO::FETCH_ASSOC);
+        $trabajosTodos = $allManagements->fetchAll(PDO::FETCH_ASSOC);
+        $trabajosFiltrados = array_diff_assoc($trabajosTodos, $trabajos);   // solo las restantes
+
         //Gestiones del cliente
         $respuesta .= "<optgroup label='Gestiones del Cliente'>";
-        foreach ($materias as $key => $value)
+        foreach ($trabajos as $key => $value)
         {
             $respuesta .= "<option value='".$value['id_management']."'>".$value['label_management']."</option>";
         }
         $respuesta .= "</optgroup>";
-        
+
         //Gestionas otras
         $respuesta .= "<optgroup label='Otras Gestiones'>";
-        foreach ($materiasfiltradas as $key => $value)
+        foreach ($trabajosFiltrados as $key => $value)
         {
             $respuesta .= "<option value='".$value['id_management']."'>".$value['label_management']."</option>";
         }
         $respuesta .= "</optgroup>";
-        
+
         echo $respuesta;
     }
-    
+
     public function ajaxGetManagements() {
         $session = FR_Session::singleton();
         require_once 'models/ManagementsModel.php';
         $model = new ManagementsModel();
-        
+
         //Le pedimos al modelo todos los items
         $allManagements = $model->getManagements($session->id_tenant);
-        
-        
+
+
         $respuesta = "<option value=''>Seleccione Gestión</option>";
          //Todas las gestiones
         $respuesta .= "<optgroup label='Todas las Gestiones'>";
@@ -524,25 +525,25 @@ class ManagementsController extends ControllerBase
         print_r($respuesta);
         exit();
          */
-        
+
         echo $respuesta;
     }
-    
+
     public function getManagementsByCustomer($id_customer)
-    { 
+    {
         $session = FR_Session::singleton();
-        
+
         require_once 'models/ManagementsModel.php';
-        
+
         //Creamos una instancia de nuestro "modelo"
         $model = new ManagementsModel();
-        
+
         //Le pedimos al modelo todos los items
         $listado = $model->getManagementsByCustomer($session->id_tenant, $id_customer);
 
         return $listado;
     }
-    
+
     public function ajaxUpdateManagement()
     {
         $session = FR_Session::singleton();
@@ -552,26 +553,26 @@ class ManagementsController extends ControllerBase
 
         //Creamos una instancia de nuestro "modelo"
         $model = new ManagementsModel();
-        
+
         //Ajax requested vars
         $idManagement = $_REQUEST['idManagement'];
         $column = $_REQUEST['column'];
         $newValue = $_REQUEST['value'];
-        
+
         #fecha actual
         $currentDateTime = date('Y/m/d H:i:s');
         $id_user = $session->id_user;
-        
-        $target_column = ""; 
+
+        $target_column = "";
         if($column == 1)
             $target_column = "cod_management";
         else if($column == 2)
             $target_column = "label_management";
         else if($column == 3)
             $target_column = "id_customer";
-        
+
         $result = $model->updateManagementDinamic($idManagement, $target_column, $newValue, $currentDateTime, $id_user);
-        
+
         if($result){
             $error = $result->errorInfo();
             $rows_n = $result->rowCount();

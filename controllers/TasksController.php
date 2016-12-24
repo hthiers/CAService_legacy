@@ -704,7 +704,7 @@ class TasksController extends ControllerBase
     }
 
     /*
-     * Add project action
+     * Agrega gestion
      */
     public function tasksAdd()
     {
@@ -804,14 +804,17 @@ class TasksController extends ControllerBase
             $error_type = $result_type->errorInfo();
 
             # check for management and customer pair
-            $resultManagement = $modelManagement->getManagementCustomerPair($id_management, $id_customer);
+            // $resultManagement = $modelManagement->getRelation($id_management, $id_customer, $id_type);
 
             # add only if not exists
-            if($resultManagement->rowCount() == 0)
-            {
-                $result_management = $modelManagement->addManagementCustomerPair($session->id_tenant, $id_customer, $id_management, $id_user);
-                $error_management = $result_management->errorInfo();
-            }
+            // if($resultManagement->rowCount() == 0)
+            // {
+            //     $result_management = $modelManagement->addRelation($session->id_tenant, $id_customer, $id_management, $id_user);
+            //     $error_management = $result_management->errorInfo();
+            // }
+
+            $result_relation = $modelManagement->addRelation($session->id_tenant, $id_customer, $id_management, $id_type, $id_user);
+            $error_relation = $result_relation->errorInfo();
 
             header("Location: ".$this->root."?controller=Tasks&action=tasksView&task_id=".$values['id_task']);
         }

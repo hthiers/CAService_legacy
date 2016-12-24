@@ -37,25 +37,40 @@
                 $("#cbomanagements").empty();
 
                 if ($(this).val().trim() !== "noaplica") {
-                    ejecutar($(this), $("#cbomanagements"));
+                    ejecutar($(this), $("#cbotypes"), $("#cbomanagements"));
                     $("#cbomanagements").val("noaplica").trigger("change");
                 }
             }
           });
 
-        function ejecutar(obj1, obj2) {
+          $("#cbotypes").change(function(e) {
+            if ($(this).val().trim() !== "") {
+                console.log("cambia type");
 
-            var idCustomer = $(obj1).val();
+                $("#cbomanagements").empty();
+
+                if ($(this).val().trim() !== "noaplica") {
+                    ejecutar($("#cbocustomers"), $(this), $("#cbomanagements"));
+                    $("#cbomanagements").val("noaplica").trigger("change");
+                }
+            }
+          });
+
+        function ejecutar(cboCustomers, cbotypes, cboManagements) {
+
+            var idCustomer = $(cboCustomers).val();
+            var idType = $(cbotypes).val();
 
             console.log(idCustomer);
+            console.log(idType);
 
             $.ajax({
               type: "POST",
               url: "?controller=managements&action=ajaxGetManagementsByCustomer",
               dataType: "html",
-              data: { id_customer : idCustomer},
+              data: { id_customer : idCustomer, id_type : idType},
               success: function(msg) {
-                $(obj2).html(msg).attr("disabled", false);
+                $(cboManagements).html(msg).attr("disabled", false);
 
                 $('#cbomanagements').select2({
                     placeholder: {
@@ -66,7 +81,7 @@
 
               },
               error: function(jqXHR, textStatus, errorThrown) {
-                $(obj1).next('img').remove();
+                $(cboCustomers).next('img').remove();
                 alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
               }
             });
