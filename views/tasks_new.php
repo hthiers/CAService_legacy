@@ -94,7 +94,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       echo "</select>\n";
                       ?>
 
-                      <a id="create-customer" href="#"><span class="fi-plus icon-tool"></span></a>
+                      <a id="create-customer" href="#"><span class="fi-plus icon-tool pushed"></span></a>
                     </div>
                   </div>
 
@@ -115,7 +115,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       echo "</select>\n";
                       ?>
 
-                      <a id="create-type" href="#"><span class="fi-plus icon-tool"></span></a>
+                      <a id="create-type" href="#"><span class="fi-plus icon-tool pushed"></span></a>
                     </div>
                   </div>
 
@@ -129,7 +129,7 @@ if($session->id_tenant != null && $session->id_user != null):
                         echo "</select>\n";
                         ?>
 
-                        <a id="create-management" href="#"><span class="fi-plus icon-tool"></span></a>
+                        <a id="create-management" href="#"><span class="fi-plus icon-tool pushed"></span></a>
                     </div>
                   </div>
 

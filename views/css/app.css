@@ -203,3 +203,8 @@ a.icon-action {
 a.icon-action:focus {
     box-shadow: 4px 4px 7px rgba(0,0,0,0.4);
 }
+
+/* Generales */
+.pushed {
+  margin: 0 5px;
+}
