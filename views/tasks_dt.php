@@ -10,7 +10,6 @@ if($session->id_tenant != null && $session->id_user != null):
 
 <!-- AGREGAR JS & CSS AQUI -->
 <link rel="stylesheet" href="views/css/dataTables.tableTools.min.css">
-<link rel="stylesheet" href="views/css/select2.css">
 <style type="text/css" title="currentStyle">
     .select2-container--default .select2-selection--single {
         font-size: 12px;
@@ -162,16 +161,14 @@ if($session->id_tenant != null && $session->id_user != null):
                                 echo "<option value=''>Todos</option>";
 
                                 for ($i=0; $i<sizeof($users); $i++){
+                                  //check if item is current user
+                                  $selected = "";
+                                  if($users[$i][0] == $session->id_user){
+                                      $selected = "selected";
+                                  }
 
-                                        //check if item is current user
-                                        $selected = "";
-                                        if($users[$i][0] == $session->id_user){
-                                            $selected = "selected";
-                                        }
-
-                                        echo "<option ".$selected." value=".$users[$i][0].">". $users[$i][3] . "</option>";
-                                }
-                                ?>
+                                  echo "<option ".$selected." value=".$users[$i][0].">". $users[$i][3] . "</option>";
+                                } ?>
                             </select>
                         </td>
                     </tr>

@@ -48,8 +48,6 @@ $navegador = substr($navegador,25,8);
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.timepicker.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
-<!--<script type="text/javascript" language="javascript" src="views/lib/foundation-datepicker.js"></script>-->
-
 
 <script type="text/javascript" language="javascript">
 // Prevent the backspace key from navigating back.
