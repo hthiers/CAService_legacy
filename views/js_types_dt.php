@@ -50,15 +50,6 @@ $(document).ready(function() {
 
     var options = "";
 
-    /*
-    $('.editcustomer_select').select2({
-        placeholder: {
-            id: "",
-            text: ""},
-            allowClear:true
-        });
-    */
-
     $.ajax({
               type: "POST",
               url: "?controller=customers&action=getCustomersByTenant",
@@ -95,104 +86,78 @@ $(document).ready(function() {
         "bServerSide": true,
         "sAjaxSource": <?php echo "'?controller=types&action=ajaxTypesDt'";?>,
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
-            $.ajax({
-                "dataType": 'json',
-                "type": "GET",
-                "url": sSource,
-                "data": aoData,
-                "success": fnDrawCallback
-            });
+          $.ajax({
+            "dataType": 'json',
+            "type": "GET",
+            "url": sSource,
+            "data": aoData,
+            "success": fnDrawCallback
+          });
         },
 
         "sDom": '<"top"lpfi>rt<"clear">',
 
         "oLanguage": {
-            "sInfo": "_TOTAL_ registros",
-            "sInfoEmpty": "0 registros",
-            "sInfoFiltered": "(de _MAX_ registros)",
-            "sLengthMenu": "_MENU_ por p&aacute;gina",
-            "sZeroRecords": "No hay registros",
-            "sInfo": "_START_ a _END_ de _TOTAL_ registros",
-            "sInfoEmpty": "Mostrando 0 registros",
-            "sSearch": "Buscar",
-            "oPaginate": {
-                "sFirst": "Primera",
-                "sNext": "Siguiente",
-                "sPrevious": "Anterior",
-                "sLast": "&Uacute;ltima"
-            }
+          "sInfo": "_TOTAL_ registros",
+          "sInfoEmpty": "0 registros",
+          "sInfoFiltered": "(de _MAX_ registros)",
+          "sLengthMenu": "_MENU_ por p&aacute;gina",
+          "sZeroRecords": "No hay registros",
+          "sInfo": "_START_ a _END_ de _TOTAL_ registros",
+          "sInfoEmpty": "Mostrando 0 registros",
+          "sSearch": "Buscar",
+          "oPaginate": {
+            "sFirst": "Primera",
+            "sNext": "Siguiente",
+            "sPrevious": "Anterior",
+            "sLast": "&Uacute;ltima"
+          }
         },
 
         //Custom filters params
 
         "aoColumnDefs": [
-            { "sClass": "td_options", "aTargets": [-1] },
-            { "sClass": "td_editable", "aTargets": [3] },
-            { "sClass": "editcustomer_select", "aTargets": [ 5 ] },
-            { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [0,1,2,4,5] },
-            { "sWidth": "40%", "aTargets": [3] },
-            { "sWidth": "40%", "aTargets": [5] },
-            { "sWidth": "20%", "aTargets": [-1] },
-            {
-                "fnRender": function ( oObj ) {
-                    var dt_tools = "";
-                    dt_tools = dt_tools+"<input style=\'width:22px;height:22px;display:inline;\' type='button' id=\'tool_remove\' class=\'ui-icon ui-icon-trash\' title=\'Borrar\' name='"+oObj.aData[0]+"' onclick='removeType("+oObj.aData[0]+")' value='' />";
+          { "sClass": "td_options", "aTargets": [-1] },
+          { "sClass": "td_editable", "aTargets": [3] },
+          { "sClass": "editcustomer_select", "aTargets": [ 5 ] },
+          { "mDataProp": null, "aTargets": [-1] },
+          { "bVisible": false, "aTargets": [0,1,2,4,5] },
+          { "sWidth": "40%", "aTargets": [3] },
+          { "sWidth": "40%", "aTargets": [5] },
+          { "sWidth": "20%", "aTargets": [-1] },
+          {
+              "fnRender": function ( oObj ) {
+                  var dt_tools = "";
+                  dt_tools = dt_tools+"<a id=\'tool_remove\' class=\'icon-action fi-trash\' title=\'Borrar\' name='"+oObj.aData[0]+"' onclick='removeType("+oObj.aData[0]+")' />";
 
-                    return dt_tools;
-                },
-                "aTargets": [-1]
-            }
+                  return dt_tools;
+              },
+              "aTargets": [-1]
+          }
         ],
 
         "sPaginationType": "full_numbers",
         "aaSorting": [[3, "asc"]],
 
         "fnDrawCallback": function () {
-            // $('#table tbody td:.td_editable').editable( '?controller=types&action=ajaxTypesUpdate', {
-            //
-            //     "callback": function( sValue, y ) {
-            //         console.log("valor: "+ sValue);
-            //         /* Redraw the table from the new data on the server */
-            //         //oTable.fnDraw();
-            //         var aPos = oTable.fnGetPosition( this );
-            //         oTable.fnUpdate( sValue, aPos[0], aPos[1] );
-            //     },
-            //     "submitdata": function ( value, settings ) {
-            //         return {
-            //             "row_id": this.parentNode.getAttribute('id'),
-            //             "column": oTable.fnGetPosition( this )[2],
-            //         };
-            //     },
-            //
-            //     "placeholder" : "",
-            //     "height": "14px"
-            // } );
+            $('#table tbody td.td_editable').editable( '?controller=types&action=ajaxTypesUpdate', {
 
-            // $('#table tbody td:.editcustomer_select').editable( '?controller=types&action=ajaxUpdateType', {
-            //     "callback"      : function( sValue, y ) {
-            //             var aPos = oTable.fnGetPosition(this);
-            //             oTable.fnDraw();
-            //             //oTable.fnUpdate( sValue, aPos[0], aPos[1] );
-            //     },
-            //     "submitdata"   : function (value, settings) {
-            //             var aPos = oTable.fnGetPosition( this );
-            //             var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
-            //             return {idtype: aData[0], column: 3, newvalue: aData[5]}; //take idData from first column
-            //     },
-            //     indicator : "Saving...",
-            //     tooltip   : "Click to change...",
-            //     loaddata  : function(value, settings) {
-            //             var aPos = oTable.fnGetPosition( this );
-            //             var aData = oTable.fnSettings().aoData[ aPos[0] ]._aData;
-            //             return {current: value}
-            //     },
-            //     loadurl   : "?controller=customers&action=getCustomersByTenantJSON",
-            //     type      : "select",
-            //     submit    : "OK",
-            //     height    : "14px"
-            // });
+                "callback": function( sValue, y ) {
+                    console.log("valor: "+ sValue);
+                    /* Redraw the table from the new data on the server */
+                    //oTable.fnDraw();
+                    var aPos = oTable.fnGetPosition( this );
+                    oTable.fnUpdate( sValue, aPos[0], aPos[1] );
+                },
+                "submitdata": function ( value, settings ) {
+                    return {
+                        "row_id": this.parentNode.getAttribute('id'),
+                        "column": oTable.fnGetPosition( this )[2],
+                    };
+                },
 
+                "placeholder" : ""
+            } );
 
         }
     });
