@@ -30,7 +30,7 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
 
-<?php require_once('tasks_lib.php'); # JS ?>
+<?php require_once('js_tasks_dt.php'); # JS ?>
 
 </head>
 
