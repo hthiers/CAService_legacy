@@ -37,7 +37,7 @@ $(document).ready(function(){
       </p> -->
 
       <div class="medium-6 medium-centered large-4 large-centered columns">
-        <h2 class="text-center">Control</h2>
+        <h2 class="text-center pushed-up">Control</h2>
         <p class="text-center">
             Versi&oacute;n <?php echo $constants->getSysVersion(); ?>
         </p>
@@ -48,7 +48,7 @@ $(document).ready(function(){
       <div class="sweetbox-centered medium-6 medium-centered large-4 large-centered columns">
 
           <form id="form1" name="form1" method="post" action="?controller=Users&action=logIn">
-            <h4 class="text-center">Inicio de sesión</h4>
+            <h4 class="text-center">Inicia sesión</h4>
 
             <label>Usuario
               <input name="txtusername" type="text" class="bien" id="txtuser" size="50" />

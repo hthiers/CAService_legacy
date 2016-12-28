@@ -66,7 +66,6 @@ if($session->id_tenant != null && $session->id_user != null):
                 <div class="medium-9 columns">
                   <?php
                   echo "<select class='input_box' id='cboprofiles' name='cboprofiles'>\n";
-                  echo "<option value='noaplica' selected='selected'>Seleccione Perfil</option>\n";
                   while($row = $profiles->fetch(PDO::FETCH_ASSOC))
                   {
                       echo "<option value='$row[id_profile]' >$row[label_profile]</option>\n";

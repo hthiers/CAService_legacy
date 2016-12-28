@@ -103,7 +103,7 @@ footer p {
 }
 
 .sweetbox-centered {
-  margin-top: 20%;
+  margin-top: 10%;
 }
 
 .toolbar {
@@ -116,7 +116,6 @@ footer p {
 
 /* form */
 select {
-    height: 1.9rem;
     margin-bottom: 0.5rem;
     padding: 0.3rem;
 }
@@ -214,4 +213,8 @@ a.icon-action:focus {
 /* Generales */
 .pushed {
   margin: 0 5px;
+}
+
+.pushed-up {
+  margin-top: 5rem;
 }
