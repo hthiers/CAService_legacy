@@ -88,15 +88,22 @@ footer p {
     margin-bottom: 60px;
 }
 
-.sweetbox, .sweetbox-pad, .toolbar {
+.sweetbox, .sweetbox-pad, .sweetbox-centered, .toolbar {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   box-shadow: 0 0 3px rgba(0,0,0,.14),0 3px 5px rgba(0,0,0,.28);
 }
 
-.sweetbox-pad {
+.sweetbox-pad, .sweetbox-centered {
   padding: 10px;
+}
+
+.sweetbox-pad {
   margin-bottom: 60px;
+}
+
+.sweetbox-centered {
+  margin-top: 20%;
 }
 
 .toolbar {

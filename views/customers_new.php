@@ -62,7 +62,7 @@ require('templates/menu.tpl.php'); #banner & menu
               </div>
 
               <div class="medium-1 medium-centered columns">
-                <button name="button" type="submit" class="button" id="button">Guardar</button>
+                <button name="button" type="submit" class="button">Guardar</button>
               </div>
 
             </div>
