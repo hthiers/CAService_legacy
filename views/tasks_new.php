@@ -9,7 +9,7 @@ if($session->id_tenant != null && $session->id_user != null):
 ?>
 
 <!-- Funciones JS -->
-<?php require_once('tasks_lib_new.php'); # JS ?>
+<?php require_once('js_tasks_new.php'); # JS ?>
 
 </head>
 <body>
