@@ -210,7 +210,7 @@ if($session->id_tenant != null && $session->id_user != null):
         </div>
 
         <div id="footer" class="headers" style="color:#ffffff;">
-            <p style="text-align:right;">Tiempo Total: </p>
+            <p style="text-align:right;"></p>
         </div>
 
         <div class="spacer"></div>

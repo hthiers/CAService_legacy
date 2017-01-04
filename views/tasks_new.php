@@ -14,7 +14,6 @@ if($session->id_tenant != null && $session->id_user != null):
 </head>
 <body>
 
-    <?php #require('templates/dialogs.tpl.php'); #session & header ?>
     <?php require('templates/menu.tpl.php'); #banner & menu ?>
 
     <!-- Content -->
@@ -55,6 +54,9 @@ if($session->id_tenant != null && $session->id_user != null):
         }
         ?>
 
+        <?php require('modal_tasks_new.php'); #banner & menu ?>
+
+        <!-- box -->
         <div class="sweetbox-pad">
 
             <!-- Nueva tarea-->
@@ -94,7 +96,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       echo "</select>\n";
                       ?>
 
-                      <a id="create-customer" href="#"><span class="fi-plus icon-tool pushed"></span></a>
+                      <a id="create-customer" href="#" data-open="modalNuevoCliente"><span class="fi-plus icon-tool pushed"></span></a>
                     </div>
                   </div>
 
@@ -115,7 +117,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       echo "</select>\n";
                       ?>
 
-                      <a id="create-type" href="#"><span class="fi-plus icon-tool pushed"></span></a>
+                      <a id="create-type" href="#" data-open="modalNuevaMateria"><span class="fi-plus icon-tool pushed"></span></a>
                     </div>
                   </div>
 
@@ -129,7 +131,7 @@ if($session->id_tenant != null && $session->id_user != null):
                         echo "</select>\n";
                         ?>
 
-                        <a id="create-management" href="#"><span class="fi-plus icon-tool pushed"></span></a>
+                        <a id="create-management" href="#" data-open="modalNuevaGestion"><span class="fi-plus icon-tool pushed"></span></a>
                     </div>
                   </div>
 
@@ -196,7 +198,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 <input id="hdnUser" type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
 
                 <div class="medium-1 medium-centered columns">
-                  <a id="btn_play" class="button success icon-tool-circle"><span class="icon-tool fi-play-circle"></span></a>
+                  <a id="btn_play" class="button success icon-tool-circle"><span class="icon-tool fi-play"></span></a>
                 </div>
 
               </div>

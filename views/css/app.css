@@ -186,16 +186,28 @@ div.DTTT_container {
     margin-right: 5px;
 }
 
+.icon-indicator {
+  font-size: initial;
+}
+
 a.icon-tool, a.icon-tool-circle {
   font-size: 2rem;
   margin: 0;
 }
 
-a.icon-tool-circle {
+a.icon-tool-circle, a.icon-tool-pause, a.icon-tool-stop {
   border: none;
   border-radius: 50%;
-  padding: 8px 12px;
+  padding: 9px 15px;
   box-shadow: 0 0 3px rgba(0,0,0,.14),0 3px 5px rgba(0,0,0,.28);
+}
+
+a.icon-tool-pause {
+  padding: 9px 18px;
+}
+
+a.icon-tool-stop {
+  padding: 9px 15px;
 }
 
 a.circle {

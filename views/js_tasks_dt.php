@@ -129,12 +129,16 @@ $(document).ready(function() {
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
             $.getJSON(sSource, aoData, function(json) {
                 var total_seconds = json.iTotalTime;
+                var total_time = secondsToTime(total_seconds);
+                var total_records = json.iTotalDisplayRecords;
                 s_id_user = json.iIdUser;
                 s_id_profile = json.iIdProfile;
 
-                var total_time = secondsToTime(total_seconds);
+                var strFooter = "<span class='fi-list icon-indicator'></span> "+total_records+" ";
+                strFooter += "<span class='fi-clock icon-indicator'></span> "+total_time['h']+":"+total_time['m']+":"+total_time['s'];
 
-                $("#footer p").text('Tiempo total: '+total_time['h']+':'+total_time['m']+':'+total_time['s']);
+
+                $("#footer p").html(strFooter);
 
                 fnDrawCallback(json);
             });
