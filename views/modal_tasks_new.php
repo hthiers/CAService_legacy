@@ -30,3 +30,11 @@
     <button class="button" type="submit">Guardar</button>
   </form>
 </div>
+
+<!-- modal mensaje -->
+<div class="reveal" id="modalMensaje" data-reveal>
+  <h1 id="title_message"></h1>
+  <p id="detail_message"> </p>
+    <button class="button close_message close-reveal-modal">Cerrar</button>
+</div>
+

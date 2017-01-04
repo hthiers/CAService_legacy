@@ -107,7 +107,8 @@
                     if(response !== null){
                         if(response[0] !== 0){
                             $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
-                            alert("Cliente agregado!");
+                            //alert("Cliente agregado!");
+                            showMessage('#modalMensaje', 'Nuevo Cliente', 'Se ha creado el nuevo cliente exitosamente');
                         }
                         else
                             alert("Error: "+response[1]);
@@ -146,7 +147,7 @@
                     if(response !== null){
                         if(response[0] !== 0){
                             $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
-                            alert("Materia agregada!");
+                            showMessage('#modalMensaje', 'Nueva Materia', 'Se ha creado la nueva materia exitosamente');
                         }
                         else
                             alert("Error: "+response[1]);
@@ -186,7 +187,7 @@
                     if(response !== null){
                         if(response[0] !== 0){
                             $("#cbomanagements").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
-                            alert("Gestión agregada!");
+                            showMessage('#modalMensaje', 'Nueva Gestión', 'Se ha agregado la nueva gestión');
                         }
                         else
                             alert("Error: "+response[1]);
@@ -202,6 +203,11 @@
 
             return false;
 	});
+        
+        $('.close_message').click(function () {
+            $('#modalMensaje').foundation('close');
+        });
+        
 
         $(".dlgSbmErr_management").click(function(){
             $("#dialog-error-add-management").dialog("close");
@@ -295,5 +301,15 @@
 
         $('#formModule').submit();
     }
+    
+    function showMessage(modal, titulo, detalle) {
+        console.log(modal + '  ' + titulo);
+        $('#title_message').text(titulo);
+        console.log(modal + '  ' + detalle);
+        $('#detail_message').text(detalle);
+        
+        $(modal).foundation('open');
+    }
+    
 
 </script>
