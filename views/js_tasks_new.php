@@ -88,7 +88,7 @@
         }
 
         // JQDialog Submit - Add new customer
-        $(".dlgSbmCstr").click(function(){
+        $("#modalNuevoCliente form").submit(function(){
             var name = $("#dlgSbm_name_customer").val();
             var desc = $("#dlgSbm_desc_customer").val();
             if(name === '')
@@ -115,7 +115,8 @@
                     else{
                         alert("Ha ocurrido un error! (nulo)");
                     }
-                    $("#dialog-new-customer").dialog("close");
+                    //$("#modalNuevoCliente").dialog("close");
+                    $('#modalNuevoCliente').foundation('close');
                 }).fail(function(){
                     alert("Ha ocurrido un error!");
                 });
@@ -126,7 +127,7 @@
 
 
         // JQDialog Submit - Add new type
-        $(".dlgSbmCstr_type").click(function(){
+        $("#modalNuevaMateria form").submit(function(){
             var customer = $("#cbocustomers").val();
             var label_type = $("#dlgSbm_name_type").val();
             if(label_type === '')
@@ -153,7 +154,7 @@
                     else{
                         alert("Ha ocurrido un error! (nulo)");
                     }
-                    $("#dialog-new-type").dialog("close");
+                    $("#modalNuevaMateria").foundation("close");
                 }).fail(function(){
                     alert("Ha ocurrido un error!");
                 });
@@ -167,7 +168,7 @@
 	});
 
         // JQDialog Submit - Add new type
-        $(".dlgSbmCstr_management").click(function(){
+        $("#modalNuevaGestion form").submit(function(){
             var label_management = $("#dlgSbm_name_management").val();
             if(label_management === '')
             {
@@ -193,7 +194,7 @@
                     else{
                         alert("Ha ocurrido un error! (nulo)");
                     }
-                    $("#dialog-new-management").dialog("close");
+                    $("#modalNuevaGestion").foundation("close");
                 }).fail(function(){
                     alert("Ha ocurrido un error!");
                 });

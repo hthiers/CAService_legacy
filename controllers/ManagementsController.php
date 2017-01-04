@@ -474,7 +474,7 @@ class ManagementsController extends ControllerBase
 
         //Le pedimos al modelo todos los items
         $customerManagements = $model->getManagementsByCustomerType($session->id_tenant, $id_customer, $id_type);
-        $allManagements = $model->getAllManagementsByTenant($session->id_tenant);
+        $allManagements = $model->getManagementsByCustomer($session->id_tenant, $id_customer);
 
         $trabajos = $customerManagements->fetchAll(PDO::FETCH_ASSOC);
         $trabajosTodos = $allManagements->fetchAll(PDO::FETCH_ASSOC);
