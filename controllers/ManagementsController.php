@@ -481,7 +481,7 @@ class ManagementsController extends ControllerBase
         $trabajosFiltrados = array_diff_assoc($trabajosTodos, $trabajos);   // solo las restantes
 
         //Gestiones del cliente
-        $respuesta .= "<optgroup label='Gestiones del Cliente'>";
+        $respuesta .= "<optgroup label='Gestiones de Materia'>";
         foreach ($trabajos as $key => $value)
         {
             $respuesta .= "<option value='".$value['id_management']."'>".$value['label_management']."</option>";
