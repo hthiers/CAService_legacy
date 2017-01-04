@@ -88,7 +88,6 @@ if($session->id_tenant != null && $session->id_user != null):
                     <div class="medium-9 columns">
                       <?php
                       echo "<select class='input_box' id='cbocustomers' name='cbocustomers'>\n";
-                      echo "<option value='noaplica' selected='selected'>Sin Cliente</option>\n";
                       while($row = $pdoCustomer->fetch(PDO::FETCH_ASSOC))
                       {
                           echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
@@ -107,7 +106,6 @@ if($session->id_tenant != null && $session->id_user != null):
                     <div class="medium-9 columns">
                       <?php
                       echo "<select class='input_box' id='cbotypes' name='cbotypes'>\n";
-                      echo "<option value='noaplica' selected='selected'>Sin Materia</option>\n";
 
                       while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
                       {
@@ -196,9 +194,10 @@ if($session->id_tenant != null && $session->id_user != null):
 
                 <input id="hdnPicker" type="hidden" name="fecha" value="" />
                 <input id="hdnUser" type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
+                <input id="gestion" type="hidden" name="etiqueta"/>
 
                 <div class="medium-1 medium-centered columns">
-                  <a id="btn_play" class="button success icon-tool-circle"><span class="icon-tool fi-play"></span></a>
+                  <a id="btn_play" class="button success icon-tool icon-tool-circle"><span class="icon-tool fi-play"></span></a>
                 </div>
 
               </div>

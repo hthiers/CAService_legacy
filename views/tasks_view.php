@@ -127,9 +127,9 @@ if($session->id_tenant != null && $session->id_user != null):
                   </div>
 
                   <div class="medium-3 medium-centered columns">
-                    <a id="btn_play" class="button success icon-tool-circle" disabled="disabled"><span class="icon-tool fi-play"></span></a>
-                    <a id="btn_pause" class="button icon-tool-circle"><span class="icon-tool fi-pause"></span></a>
-                    <a id="btn_stop" class="button alert icon-tool-circle"><span class="icon-tool fi-stop"></span></a>
+                    <a id="btn_play" class="button success icon-tool icon-tool-circle" disabled="disabled"><span class="icon-tool fi-play"></span></a>
+                    <a id="btn_pause" class="button icon-tool icon-tool-pause"><span class="icon-tool fi-pause"></span></a>
+                    <a id="btn_stop" class="button icon-tool alert icon-tool-stop"><span class="icon-tool fi-stop"></span></a>
                   </div>
 
                   <?php
