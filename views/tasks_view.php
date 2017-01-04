@@ -135,14 +135,11 @@ if($session->id_tenant != null && $session->id_user != null):
                   <?php
                   // Active and scheduled in future
                   elseif($status_task == 1 && strtotime($currentTime) < strtotime($date_ini)):?>
-                  <tr>
-                      <td colspan="2" style="text-align: center;">Control de tiempo
-                          <br /><br />
-                          <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
-                          <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                          <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
-                      </td>
-                  </tr>
+                  <div class="medium-3 medium-centered columns">
+                      <a id="btn_play" class="button success icon-tool icon-tool-circle" disabled="disabled"><span class="icon-tool fi-play"></span></a>
+                      <a id="btn_pause" class="button icon-tool icon-tool-pause" disabled="disabled"><span class="icon-tool fi-pause"></span></a>
+                      <a id="btn_stop" class="button icon-tool alert icon-tool-stop" disabled="disabled"><span class="icon-tool fi-stop"></span></a>
+                  </div>
                   <?php
                   // Paused
                   elseif($status_task == 3 && strtotime($currentTime) > strtotime($date_ini)):?>
