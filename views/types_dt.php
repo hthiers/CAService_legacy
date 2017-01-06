@@ -95,7 +95,7 @@ if($session->id_tenant != null && $session->id_user != null):
 
         ?>
         
-        <?php require('modal_types_dt.php'); #banner & menu ?>
+        <?php require('modal_types_dt.php'); ?>
 
         <!-- CUSTOM FILTROS -->
         <!-- END CUSTOM FILTROS -->

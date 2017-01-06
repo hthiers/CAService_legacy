@@ -186,38 +186,16 @@ $(document).ready(function() {
         
         console.log("borrando: #"+$('#type_id').val());
 
-        
         $('#dt_form').attr('action', urlAction);
         $('#dt_form').attr('method', 'POST');
         //$('#type_id').val(idType);
 
-        //$( this ).dialog( "close" );
         $("#dt_form").submit();
+    });
+    
+    $('#cancelarEliminarMateria').click(function() {
         
-        
-        /*
-        $.ajax({
-            type: "POST",
-            url: "?controller=types&action=typesRemove",
-            data: {type_id:idType},
-            cache: false,
-            dataType: "json"
-        }).done(function(response){
-            if(response !== null){
-                if(response[0] !== 0){
-                    showMessage('#modalMensajeMateria', 'Eliminar Materia', 'Se ha Eliminado la Materia seleccionada');
-                }
-                else
-                    alert("Error: "+response[1]);
-            }
-            else{
-                alert("Ha ocurrido un error! (nulo)");
-            }
-            $("#modalEliminarMateriaAdevertencia").foundation("close");
-        }).fail(function(){
-            alert("fail: Ha ocurrido un error!");
-        });
-        */
+        $('#modalEliminarMateriaAdevertencia').foundation('close');
     });
 
 });
