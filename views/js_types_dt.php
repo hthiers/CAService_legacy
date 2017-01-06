@@ -10,7 +10,8 @@ function submitToForm(){
 
 function removeType(type){
     var urlAction = "<?php echo "?controller=types&action=typesRemove";?>";
-
+    
+    /*
     $( "#dialog-remove" ).dialog({
             height: 200,
             width: 350,
@@ -35,6 +36,9 @@ function removeType(type){
     $("#dialog-remove")
             .data('type_id', type)
             .dialog("open");
+    */
+   $('#type_id').val(type);
+   $('#modalEliminarMateriaAdevertencia').foundation('open');
 }
 
 function hideErrorBox(){
@@ -175,6 +179,46 @@ $(document).ready(function() {
 
     //Add Class to search field
     //$(".dataTables_filter input").addClass("search_input");
+    
+    $('#confirmarEliminarMateria').click(function() {
+        
+        var urlAction = "<?php echo "?controller=types&action=typesRemove";?>";
+        
+        console.log("borrando: #"+$('#type_id').val());
+
+        
+        $('#dt_form').attr('action', urlAction);
+        $('#dt_form').attr('method', 'POST');
+        //$('#type_id').val(idType);
+
+        //$( this ).dialog( "close" );
+        $("#dt_form").submit();
+        
+        
+        /*
+        $.ajax({
+            type: "POST",
+            url: "?controller=types&action=typesRemove",
+            data: {type_id:idType},
+            cache: false,
+            dataType: "json"
+        }).done(function(response){
+            if(response !== null){
+                if(response[0] !== 0){
+                    showMessage('#modalMensajeMateria', 'Eliminar Materia', 'Se ha Eliminado la Materia seleccionada');
+                }
+                else
+                    alert("Error: "+response[1]);
+            }
+            else{
+                alert("Ha ocurrido un error! (nulo)");
+            }
+            $("#modalEliminarMateriaAdevertencia").foundation("close");
+        }).fail(function(){
+            alert("fail: Ha ocurrido un error!");
+        });
+        */
+    });
 
 });
 
@@ -207,6 +251,15 @@ function guardarMateria() {
             console.log(textStatus);
     });
 }
+
+function showMessage(modal, titulo, detalle) {
+        console.log(modal + '  ' + titulo);
+        $('#title_message').text(titulo);
+        console.log(modal + '  ' + detalle);
+        $('#detail_message').text(detalle);
+        
+        $(modal).foundation('open');
+    }
 
 
 </script>
