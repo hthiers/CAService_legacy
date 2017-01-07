@@ -79,6 +79,7 @@ function editTask(task){
 function removeTask(task){
     var urlAction = "<?php echo "?controller=".$controller."&action=tasksRemove";?>";
 
+    /*
     $( "#dialog-remove" ).dialog({
             height: 200,
             width: 350,
@@ -103,6 +104,9 @@ function removeTask(task){
     $("#dialog-remove")
             .data('task_id', task)
             .dialog("open");
+    */
+    $('#task_id').val(task);
+   $('#modalEliminar').foundation('open');
 }
 
 function hideErrorBox(){
@@ -320,6 +324,25 @@ $(document).ready(function() {
     $('#cboDia').select2();
     $('#cboEstado').select2({
       minimumResultsForSearch: 5
+    });
+    
+    $('#confirmarEliminar').click(function() {
+        
+        var urlAction = "<?php echo "?controller=tasks&action=tasksRemove";?>";
+        
+        //console.log("borrando: #"+$('#task_id').val());
+
+        $('#dt_form').attr('action', urlAction);
+        $('#dt_form').attr('method', 'POST');
+        //$('#task_id').val(task);
+
+        //$( this ).dialog( "close" );
+        $("#dt_form").submit();
+    });
+    
+    $('#cancelarEliminar').click(function() {
+        
+        $('#modalEliminar').foundation('close');
     });
 });
 

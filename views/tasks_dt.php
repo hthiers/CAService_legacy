@@ -71,6 +71,10 @@ if($session->id_tenant != null && $session->id_user != null):
             }
         }
         ?>
+        
+        
+        <!-- Archivo de modals -->
+        <?php require('modal_tasks_dt.php'); ?>
 
          <!--CUSTOM FILTROS-->
         <div class="toolbar">
