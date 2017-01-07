@@ -87,7 +87,7 @@ if($session->id_tenant != null && $session->id_user != null):
                     </div>
                     <div class="medium-9 columns">
                       <?php
-                      echo "<select class='input_box' id='cbocustomers' name='cbocustomers'>\n";
+                      echo "<select id='cbocustomers' name='cbocustomers' style='width: 90%;'>\n";
                       while($row = $pdoCustomer->fetch(PDO::FETCH_ASSOC))
                       {
                           echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
@@ -105,7 +105,7 @@ if($session->id_tenant != null && $session->id_user != null):
                     </div>
                     <div class="medium-9 columns">
                       <?php
-                      echo "<select class='input_box' id='cbotypes' name='cbotypes'>\n";
+                      echo "<select id='cbotypes' name='cbotypes' style='width: 90%;'>\n";
 
                       while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
                       {
@@ -125,7 +125,7 @@ if($session->id_tenant != null && $session->id_user != null):
                     </div>
                     <div class="medium-9 columns">
                       <?php
-                        echo "<select class='input_box' id='cbomanagements' name='cbomanagements'>\n";
+                        echo "<select id='cbomanagements' name='cbomanagements' style='width: 90%;'>\n";
                         echo "</select>\n";
                         ?>
 
@@ -138,7 +138,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       <label for="cbotypes" class="text-right middle">Descripción</label>
                     </div>
                     <div class="medium-9 columns">
-                      <textarea rows="5" class="input_box" name="descripcion"></textarea>
+                      <textarea rows="5" name="descripcion"></textarea>
                     </div>
                   </div>
 
