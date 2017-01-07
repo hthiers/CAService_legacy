@@ -11,7 +11,7 @@ if($session->id_tenant != null && $session->id_user != null):
 <!-- AGREGAR JS & CSS AQUI -->
 <link rel="stylesheet" href="views/css/dataTables.tableTools.min.css">
 <style type="text/css" title="currentStyle">
-    .select2-container--default .select2-selection--single {
+    /*.select2-container--default .select2-selection--single {
         font-size: 12px;
     }
 
@@ -22,7 +22,7 @@ if($session->id_tenant != null && $session->id_user != null):
 
     .select2-container, .select2-drop, .select2-search, .select2-search input {
         width: 100%;
-    }
+    }*/
 </style>
 <!--<script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>-->
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables-control.js"></script>
@@ -88,15 +88,15 @@ if($session->id_tenant != null && $session->id_user != null):
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
-                            <select id="cboAnio" onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')">
+                        <td style="width:7%">
+                            <select id="cboAnio" onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')" >
                                 <?php
                                 echo "<option selected value=".date('Y').">". date('Y') ."</option>";
                                 echo "<option value=".date('Y',strtotime('-1 year')).">". date('Y',strtotime('-1 year')) ."</option>";
                                 ?>
                             </select>
                         </td>
-                        <td style="width:15%">
+                        <td style="width:12%">
                             <select
                                 id="cboMes"
                                 onChange="getLastDay('cboMes', 'cboAnio', 'cboDia')"
@@ -115,12 +115,12 @@ if($session->id_tenant != null && $session->id_user != null):
                                 ?>
                             </select>
                         </td>
-                        <td>
+                        <td style="width:8%">
                             <select id="cboDia">
                                 <option value="">Todos</option>
                             </select>
                         </td>
-                        <td style="width:5%">
+                        <td style="width:8%">
                             <select id="cboEstado">
                                 <?php
                                 echo "<option selected value=''>Todos</option>";
@@ -129,7 +129,7 @@ if($session->id_tenant != null && $session->id_user != null):
                                 ?>
                             </select>
                         </td>
-                        <td style="width:30%">
+                        <td style="width:25%">
                             <select
                                 id="cboCliente"
                                 class="js-example-responsive">
@@ -141,7 +141,7 @@ if($session->id_tenant != null && $session->id_user != null):
                                 ?>
                             </select>
                         </td>
-                        <td style="width:30%">
+                        <td style="width:25%">
                             <select
                                 id="cboType"
                                 class="js-example-responsive">
@@ -153,7 +153,7 @@ if($session->id_tenant != null && $session->id_user != null):
                                 ?>
                             </select>
                         </td>
-                        <td style="width:20%">
+                        <td style="width:15%">
                             <select
                                 id="cboUser"
                                 class="js-example-responsive">

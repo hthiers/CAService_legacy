@@ -303,38 +303,23 @@ $(document).ready(function() {
     $('#cboCliente').select2({
         placeholder: {
             id: "",
-            text: "Todos"},
-
-        allowClear:true,
-        theme: "classic"
+            text: "Todos"}
     });
     $('#cboType').select2({
         placeholder: {
             id: "",
-            text: "Todos"},
-
-        allowClear:true,
-        theme: "classic"
+            text: "Todos"}
     });
     $('#cboUser').select2({
-        allowClear:true,
-        theme: "classic"
+      minimumResultsForSearch: 5
     });
     $('#cboAnio').select2({
-        allowClear:true,
-        theme: "classic"
+      minimumResultsForSearch: 5
     });
-    $('#cboMes').select2({
-        allowClear:true,
-        theme: "classic"
-    });
-    $('#cboDia').select2({
-        allowClear:true,
-        theme: "classic"
-    });
+    $('#cboMes').select2();
+    $('#cboDia').select2();
     $('#cboEstado').select2({
-        allowClear:true,
-        theme: "classic"
+      minimumResultsForSearch: 5
     });
 });
 

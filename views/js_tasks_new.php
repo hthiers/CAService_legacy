@@ -1,60 +1,60 @@
 <script type="text/javascript">
     // JQDialog window
-    var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
+    // var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
 
     $(document).ready(function(){
-        // Btn play
-        $("#btn_play").click(function (event){
-            iniTrabajo();
-        });
+      // Btn play
+      $("#btn_play").click(function (event){
+          iniTrabajo();
+      });
 
-        var tareas = new Array();
+      var tareas = new Array();
 
-        $.ajax({
-              type: "POST",
-              url: "?controller=tasks&action=getTasksName",
-              dataType: "json",
-              success: function(data) {
-                $.each(data , function( index, obj ) {
-                    $.each(obj, function( key, value ) {
-                        tareas.push(value);
-                    });
-                });
-                $("#gestion").autocomplete({
-                    source: tareas
-                });
-              },
-              error: function(jqXHR, textStatus, errorThrown) {
+      $.ajax({
+            type: "POST",
+            url: "?controller=tasks&action=getTasksName",
+            dataType: "json",
+            success: function(data) {
+              $.each(data , function( index, obj ) {
+                  $.each(obj, function( key, value ) {
+                      tareas.push(value);
+                  });
+              });
+              $("#gestion").autocomplete({
+                  source: tareas
+              });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
 
-                alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+              alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+            }
+      });
+
+      $("#cbocustomers").change(function(e) {
+          if ($(this).val().trim() !== "") {
+              console.log("cambia customer");
+
+              $("#cbomanagements").empty();
+
+              if ($(this).val().trim() !== "noaplica") {
+                  ejecutar($(this), $("#cbotypes"), $("#cbomanagements"));
+                  $("#cbomanagements").val("noaplica").trigger("change");
               }
+          }
         });
 
-        $("#cbocustomers").change(function(e) {
-            if ($(this).val().trim() !== "") {
-                console.log("cambia customer");
+        $("#cbotypes").change(function(e) {
+          if ($(this).val().trim() !== "") {
+              console.log("cambia type");
 
-                $("#cbomanagements").empty();
+              $("#cbomanagements").empty();
 
-                if ($(this).val().trim() !== "noaplica") {
-                    ejecutar($(this), $("#cbotypes"), $("#cbomanagements"));
-                    $("#cbomanagements").val("noaplica").trigger("change");
-                }
-            }
-          });
-
-          $("#cbotypes").change(function(e) {
-            if ($(this).val().trim() !== "") {
-                console.log("cambia type");
-
-                $("#cbomanagements").empty();
-
-                if ($(this).val().trim() !== "noaplica") {
-                    ejecutar($("#cbocustomers"), $(this), $("#cbomanagements"));
-                    $("#cbomanagements").val("noaplica").trigger("change");
-                }
-            }
-          });
+              if ($(this).val().trim() !== "noaplica") {
+                  ejecutar($("#cbocustomers"), $(this), $("#cbomanagements"));
+                  $("#cbomanagements").val("noaplica").trigger("change");
+              }
+          }
+        });
 
         function ejecutar(cboCustomers, cbotypes, cboManagements) {
 
@@ -124,94 +124,94 @@
             }
 
             return false;
-	});
+          });
 
 
-        // JQDialog Submit - Add new type
-        $("#modalNuevaMateria form").submit(function(){
-            var customer = $("#cbocustomers").val();
-            var label_type = $("#dlgSbm_name_type").val();
-            if(label_type === '')
-            {
-                alert("Ingrese nombre de la materia");
-            }
-            else
-            {
-                $.ajax({
-                    type: "POST",
-                    url: "?controller=types&action=ajaxTypesAddWithCustomer",
-                    data: {label_type:label_type, id_customer: customer},
-                    cache: false,
-                    dataType: "json"
-                }).done(function(response){
-                    if(response !== null){
-                        if(response[0] !== 0){
-                            $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
-                            showMessage('#modalMensaje', 'Nueva Materia', 'Se ha creado la nueva materia exitosamente');
+          // JQDialog Submit - Add new type
+          $("#modalNuevaMateria form").submit(function(){
+              var customer = $("#cbocustomers").val();
+              var label_type = $("#dlgSbm_name_type").val();
+              if(label_type === '')
+              {
+                  alert("Ingrese nombre de la materia");
+              }
+              else
+              {
+                  $.ajax({
+                      type: "POST",
+                      url: "?controller=types&action=ajaxTypesAddWithCustomer",
+                      data: {label_type:label_type, id_customer: customer},
+                      cache: false,
+                      dataType: "json"
+                  }).done(function(response){
+                      if(response !== null){
+                          if(response[0] !== 0){
+                              $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
+                              showMessage('#modalMensaje', 'Nueva Materia', 'Se ha creado la nueva materia exitosamente');
+                          }
+                          else
+                              alert("Error: "+response[1]);
+                      }
+                      else{
+                          alert("Ha ocurrido un error! (nulo)");
+                      }
+                      $("#modalNuevaMateria").foundation("close");
+                  }).fail(function(){
+                      alert("Ha ocurrido un error!");
+                  });
+              }
+
+              return false;
+            });
+
+            $(".dlgSbmErr_type").click(function(){
+              $("#dialog-error-add-type").dialog("close");
+            });
+
+            // JQDialog Submit - Add new type
+            $("#modalNuevaGestion form").submit(function(){
+                var label_management = $("#dlgSbm_name_management").val();
+                if(label_management === '')
+                {
+                    alert("Ingrese nombre de la gestión");
+                }
+                else
+                {
+                    $.ajax({
+                        type: "POST",
+                        url: "?controller=managements&action=ajaxManagementsAdd",
+                        data: {label_management:label_management},
+                        cache: false,
+                        dataType: "json"
+                    }).done(function(response){
+                        if(response !== null){
+                            if(response[0] !== 0){
+                                $("#cbomanagements").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
+                                showMessage('#modalMensaje', 'Nueva Gestión', 'Se ha agregado la nueva gestión');
+                            }
+                            else
+                                alert("Error: "+response[1]);
                         }
-                        else
-                            alert("Error: "+response[1]);
-                    }
-                    else{
-                        alert("Ha ocurrido un error! (nulo)");
-                    }
-                    $("#modalNuevaMateria").foundation("close");
-                }).fail(function(){
-                    alert("Ha ocurrido un error!");
-                });
-            }
-
-            return false;
-	});
-
-        $(".dlgSbmErr_type").click(function(){
-            $("#dialog-error-add-type").dialog("close");
-	});
-
-        // JQDialog Submit - Add new type
-        $("#modalNuevaGestion form").submit(function(){
-            var label_management = $("#dlgSbm_name_management").val();
-            if(label_management === '')
-            {
-                alert("Ingrese nombre de la gestión");
-            }
-            else
-            {
-                $.ajax({
-                    type: "POST",
-                    url: "?controller=managements&action=ajaxManagementsAdd",
-                    data: {label_management:label_management},
-                    cache: false,
-                    dataType: "json"
-                }).done(function(response){
-                    if(response !== null){
-                        if(response[0] !== 0){
-                            $("#cbomanagements").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
-                            showMessage('#modalMensaje', 'Nueva Gestión', 'Se ha agregado la nueva gestión');
+                        else{
+                            alert("Ha ocurrido un error! (nulo)");
                         }
-                        else
-                            alert("Error: "+response[1]);
-                    }
-                    else{
-                        alert("Ha ocurrido un error! (nulo)");
-                    }
-                    $("#modalNuevaGestion").foundation("close");
-                }).fail(function(){
-                    alert("Ha ocurrido un error!");
-                });
-            }
+                        $("#modalNuevaGestion").foundation("close");
+                    }).fail(function(){
+                        alert("Ha ocurrido un error!");
+                    });
+                }
 
-            return false;
-	});
-        
-        $('.close_message').click(function () {
+                return false;
+              });
+
+          $('.close_message').click(function () {
             $('#modalMensaje').foundation('close');
-        });
-        
+          });
 
-        $(".dlgSbmErr_management").click(function(){
+
+          $(".dlgSbmErr_management").click(function(){
             $("#dialog-error-add-management").dialog("close");
-	});
+          });
 
         var date_ini = "<?php echo $current_date; ?>";
         $("#hdnPicker").val(date_ini);
@@ -248,28 +248,12 @@
             }
         });
 
-        $('#cbocustomers').select2({
-            placeholder: {
-                id: "",
-                text: "Sin Cliente"},
-            allowClear:true
+        /* select2 */
+        $('#cbocustomers').select2();
 
-        });
+        $('#cbotypes').select2();
 
-        $('#cbomanagements').select2({
-            placeholder: {
-                id: "",
-                text: "Ingrese Gestión"},
-            allowClear:true
-
-        });
-
-        $('#cbotypes').select2({
-            placeholder: {
-                id: "",
-                text: "Sin Materia"},
-            allowClear:true
-        });
+        $('#cbomanagements').select2();
 
     });
 
@@ -301,15 +285,15 @@
 
         $('#formModule').submit();
     }
-    
+
     function showMessage(modal, titulo, detalle) {
         console.log(modal + '  ' + titulo);
         $('#title_message').text(titulo);
         console.log(modal + '  ' + detalle);
         $('#detail_message').text(detalle);
-        
+
         $(modal).foundation('open');
     }
-    
+
 
 </script>
