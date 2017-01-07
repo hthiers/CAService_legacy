@@ -87,10 +87,17 @@ if($session->id_tenant != null && $session->id_user != null):
                     </div>
                     <div class="medium-9 columns">
                       <?php
+                      $last = $pdoMyLastCustomer->fetch(PDO::FETCH_ASSOC);
+
                       echo "<select id='cbocustomers' name='cbocustomers' style='width: 90%;'>\n";
                       while($row = $pdoCustomer->fetch(PDO::FETCH_ASSOC))
                       {
-                          echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
+                          if($row['id_customer'] == $last['id_customer']){
+                              echo "<option selected value='$row[id_customer]'>$row[label_customer]</option>\n";
+                          }
+                          else {
+                              echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
+                          }
                       }
                       echo "</select>\n";
                       ?>
@@ -105,11 +112,18 @@ if($session->id_tenant != null && $session->id_user != null):
                     </div>
                     <div class="medium-9 columns">
                       <?php
+                      $lastType = $pdoMyLastType->fetch(PDO::FETCH_ASSOC);
+
                       echo "<select id='cbotypes' name='cbotypes' style='width: 90%;'>\n";
 
                       while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
                       {
-                          echo "<option value='$row[id_type]'>$row[label_type]</option>\n";
+                          if($row['id_type'] == $lastType['id_type']){
+                              echo "<option selected value='$row[id_type]'>$row[label_type]</option>\n";
+                          }
+                          else {
+                              echo "<option value='$row[id_type]'>$row[label_type]</option>\n";
+                          }
                       }
 
                       echo "</select>\n";

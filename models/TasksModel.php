@@ -15,7 +15,7 @@ class TasksModel extends ModelBase
     {
         //realizamos la consulta de todos los segmentos
         $consulta = $this->db->prepare("
-                SELECT 
+                SELECT
                     a.id_task
                     , b.cas_project_id_project
                     , a.code_task
@@ -49,7 +49,7 @@ class TasksModel extends ModelBase
     public function getAllTasksByTenant($id_tenant)
     {
         $consulta = $this->db->prepare("
-                SELECT 
+                SELECT
                     a.id_task
                     , a.code_task
                     , a.id_tenant
@@ -70,11 +70,11 @@ class TasksModel extends ModelBase
                 FROM  cas_task a
                 LEFT OUTER JOIN cas_project b
                 ON (a.cas_project_id_project = b.id_project
-                    AND 
+                    AND
                     a.id_tenant = b.id_tenant)
                 LEFT OUTER JOIN cas_customer c
                 ON (a.cas_customer_id_customer = c.id_customer
-                    AND 
+                    AND
                     a.id_tenant = b.id_tenant)
                 LEFT OUTER JOIN cas_task_has_cas_user d
                 ON a.id_task = d.cas_task_id_task
@@ -101,7 +101,7 @@ class TasksModel extends ModelBase
     public function getTaskById($id_tenant, $id_task)
     {
         $consulta = $this->db->prepare("
-                SELECT 
+                SELECT
                     a.id_task
                     , a.code_task
                     , a.id_tenant
@@ -154,7 +154,7 @@ class TasksModel extends ModelBase
     {
         //get last segment
         $consulta = $this->db->prepare("
-                SELECT 
+                SELECT
                    a.id_task
                     , a.code_task
                     , a.id_tenant
@@ -187,7 +187,7 @@ class TasksModel extends ModelBase
     public function getTaskByCode($id_tenant, $code_task)
     {
         $consulta = $this->db->prepare("
-                SELECT 
+                SELECT
                      a.id_task
                     , a.code_task
                     , a.id_tenant
@@ -220,7 +220,7 @@ class TasksModel extends ModelBase
     public function getTaskIDByCode($id_tenant, $code_task)
     {
         $consulta = $this->db->prepare("
-                SELECT 
+                SELECT
                     A.id_task
                 FROM  cas_task A
                 INNER JOIN cas_tenant B
@@ -243,7 +243,7 @@ class TasksModel extends ModelBase
     public function getPTaskIDByCodeINT($id_tenant, $code_task)
     {
         $consulta = $this->db->prepare("
-                SELECT 
+                SELECT
                     A.id_task
                 FROM  cas_task A
                 INNER JOIN cas_tenant B
@@ -272,11 +272,13 @@ class TasksModel extends ModelBase
      * @param type $estado
      * @param type $id_project
      * @param type $id_customer
+     * @param int $id_user
+     * @param int $id_type
      * @return PDO
      */
     public function addNewTask($id_tenant, $new_code, $etiqueta
             , $date_ini, $hora_ini, $date_end, $time_total, $descripcion
-            , $estado = 1, $id_project, $id_customer, $id_management)
+            , $estado = 1, $id_project, $id_customer, $id_management, $id_user, $id_type)
     {
         // force null values
         $date_end = empty($date_end) ? "NULL" : "'$date_end'";
@@ -284,21 +286,21 @@ class TasksModel extends ModelBase
         $id_project = empty($id_project) ? "NULL" : "'$id_project'";
         $id_customer = empty($id_customer) ? "NULL" : "'$id_customer'";
         $id_management = empty($id_management) ? "NULL" : "$id_management";
-        
-        $consulta = $this->db->prepare("INSERT INTO cas_task 
+
+        $consulta = $this->db->prepare("INSERT INTO cas_task
                     (id_task, code_task, id_tenant, label_task
                     , date_ini, date_end, time_total, desc_task
-                    , status_task, cas_project_id_project, cas_customer_id_customer, id_management) 
-                        VALUES 
+                    , status_task, cas_project_id_project, cas_customer_id_customer, id_management, id_user, id_type)
+                        VALUES
                     (NULL, '$new_code', $id_tenant, '$etiqueta'
                         , '$date_ini $hora_ini', $date_end, $time_total, '$descripcion'
-                        , $estado, $id_project, $id_customer, $id_management)");
+                        , $estado, $id_project, $id_customer, $id_management, $id_user, $id_type)");
 
         $consulta->execute();
 
         return $consulta;
     }
-    
+
     /**
      * Add user to task (allows multiple users in one task)
      * @param type $id_task
@@ -307,16 +309,16 @@ class TasksModel extends ModelBase
      */
     public function addUserToTask($id_task, $id_user)
     {
-        $consulta = $this->db->prepare("INSERT INTO cas_task_has_cas_user 
-                (cas_task_id_task, cas_user_id_user) 
-                    VALUES 
+        $consulta = $this->db->prepare("INSERT INTO cas_task_has_cas_user
+                (cas_task_id_task, cas_user_id_user)
+                    VALUES
                 ($id_task, $id_user)");
 
         $consulta->execute();
 
         return $consulta;
     }
-    
+
     /**
      * Add a type to an existent task
      * @param type $id_task
@@ -325,9 +327,9 @@ class TasksModel extends ModelBase
      */
     public function addTypeToTask($id_task, $id_type)
     {
-        $consulta = $this->db->prepare("INSERT INTO cas_task_has_cas_type 
-                (cas_task_id_task, cas_type_id_type) 
-                    VALUES 
+        $consulta = $this->db->prepare("INSERT INTO cas_task_has_cas_type
+                (cas_task_id_task, cas_type_id_type)
+                    VALUES
                 ($id_task, $id_type)");
 
         $consulta->execute();
@@ -363,8 +365,8 @@ class TasksModel extends ModelBase
         $id_customer = empty($id_customer) ? "NULL" : "'$id_customer'";
         $date_pause = empty($date_pause) ? "NULL" : "'$date_pause'";
         $time_paused = empty($time_paused) ? "NULL" : "'$time_paused'";
-        
-        $consulta = $this->db->prepare("UPDATE cas_task 
+
+        $consulta = $this->db->prepare("UPDATE cas_task
                     SET
                     code_task = '$code_task'
                     , label_task = '$etiqueta'
@@ -383,7 +385,7 @@ class TasksModel extends ModelBase
 
         return $consulta;
     }
-    
+
     /**
      * Get all tasks by tenant
      * @param type $id_tenant
@@ -393,7 +395,7 @@ class TasksModel extends ModelBase
     {
         $consulta = $this->db->prepare("
                 SELECT distinct
-                    a.label_task    
+                    a.label_task
                 FROM  cas_task a
                 WHERE a.id_tenant = $id_tenant");
 
@@ -405,11 +407,11 @@ class TasksModel extends ModelBase
 
 //        public function addUserToProject($id_project, $id_user)
 //        {
-//            $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
-//                    (cas_project_id_project, cas_user_id_user) 
-//                        VALUES 
+//            $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user
+//                    (cas_project_id_project, cas_user_id_user)
+//                        VALUES
 //                    ($id_project, $id_user)");
-//            
+//
 //            $consulta->execute();
 //
 //            return $consulta;
@@ -417,11 +419,11 @@ class TasksModel extends ModelBase
 
 //        public function addCustomerToProject($id_project, $id_customer)
 //        {
-//            $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
-//                    (cas_project_id_project, cas_customer_id_customer) 
-//                        VALUES 
+//            $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer
+//                    (cas_project_id_project, cas_customer_id_customer)
+//                        VALUES
 //                    ($id_project, $id_customer)");
-//            
+//
 //            $consulta->execute();
 //
 //            return $consulta;
@@ -454,7 +456,7 @@ class TasksModel extends ModelBase
 //    {
 //        //realizamos la consulta de todos los segmentos
 //        $consulta = $this->db->prepare("
-//                SELECT 
+//                SELECT
 //                    DISTINCT
 //                    a.COD_SEGMENT
 //                    , a.NAME_SEGMENT
@@ -472,13 +474,13 @@ class TasksModel extends ModelBase
 //    {
 //        //realizamos la consulta de todos los segmentos
 //        $consulta = $this->db->prepare("
-//                SELECT 
+//                SELECT
 //                    a.COD_SEGMENT
 //                    , a.NAME_SEGMENT
 //                    , b.COD_GBU AS GBU_COD_GBU
 //                    , b.NAME_GBU AS GBU_NAME_GBU
 //                FROM  t_segment a
-//                INNER JOIN t_gbu b 
+//                INNER JOIN t_gbu b
 //                ON a.COD_GBU = b.COD_GBU
 //                WHERE A.NAME_SEGMENT = '$name_segment'");
 //
@@ -497,13 +499,13 @@ class TasksModel extends ModelBase
 //    {
 //        //realizamos la consulta de todos los segmentos
 //        $consulta = $this->db->prepare("
-//                SELECT 
+//                SELECT
 //                    a.COD_SEGMENT
 //                    , a.NAME_SEGMENT
 //                    , b.COD_GBU AS GBU_COD_GBU
 //                    , b.NAME_GBU AS GBU_NAME_GBU
 //                FROM  t_segment a
-//                INNER JOIN t_gbu b 
+//                INNER JOIN t_gbu b
 //                ON a.COD_GBU = b.COD_GBU
 //                WHERE A.COD_GBU = '$cod_gbu'");
 //
@@ -527,7 +529,7 @@ class TasksModel extends ModelBase
 //        $session = FR_Session::singleton();
 //
 //        $consulta = $this->db->prepare("UPDATE t_segment
-//                        SET 
+//                        SET
 //                            NAME_SEGMENT = '$name_segment'
 //                            , COD_GBU = '$cod_gbu'
 //                        WHERE COD_SEGMENT = '$old_cod_segment'
@@ -568,9 +570,9 @@ class TasksModel extends ModelBase
 //    public function getNewSubSegmentCode()
 //    {
 //        //get last sub segment
-//        $consulta = $this->db->prepare("SELECT COD_SUB_SEGMENT 
-//                        FROM t_sub_segment 
-//                        WHERE COD_SUB_SEGMENT NOT LIKE '%N/A%' 
+//        $consulta = $this->db->prepare("SELECT COD_SUB_SEGMENT
+//                        FROM t_sub_segment
+//                        WHERE COD_SUB_SEGMENT NOT LIKE '%N/A%'
 //                        ORDER BY COD_SUB_SEGMENT DESC LIMIT 1");
 //
 //        $consulta->execute();
@@ -607,8 +609,8 @@ class TasksModel extends ModelBase
 //
 //        $session = FR_Session::singleton();
 //
-//        $consulta = $this->db->prepare("INSERT INTO t_sub_segment 
-//                (COD_SUB_SEGMENT, NAME_SUB_SEGMENT, COD_GBU) 
+//        $consulta = $this->db->prepare("INSERT INTO t_sub_segment
+//                (COD_SUB_SEGMENT, NAME_SUB_SEGMENT, COD_GBU)
 //                VALUES ('$code','$name','$cod_gbu')");
 //        $consulta->execute();
 //
@@ -628,7 +630,7 @@ class TasksModel extends ModelBase
 //        $session = FR_Session::singleton();
 //
 //        $consulta = $this->db->prepare("UPDATE t_sub_segment
-//                            SET 
+//                            SET
 //                                NAME_SUB_SEGMENT = '$name'
 //                                , COD_GBU = '$cod_gbu'
 //                            WHERE COD_SUB_SEGMENT = '$old_code'
@@ -689,7 +691,7 @@ class TasksModel extends ModelBase
 //    {
 //        //get last sub segment
 //        $consulta = $this->db->prepare("SELECT COD_MICRO_SEGMENT FROM t_micro_segment
-//                    WHERE COD_MICRO_SEGMENT NOT LIKE '%N/A%' 
+//                    WHERE COD_MICRO_SEGMENT NOT LIKE '%N/A%'
 //                    ORDER BY COD_MICRO_SEGMENT DESC LIMIT 1");
 //        $consulta->execute();
 //
@@ -706,8 +708,8 @@ class TasksModel extends ModelBase
 //
 //        $session = FR_Session::singleton();
 //
-//        $consulta = $this->db->prepare("INSERT INTO t_micro_segment 
-//                (COD_MICRO_SEGMENT, NAME_MICRO_SEGMENT, COD_GBU) 
+//        $consulta = $this->db->prepare("INSERT INTO t_micro_segment
+//                (COD_MICRO_SEGMENT, NAME_MICRO_SEGMENT, COD_GBU)
 //                VALUES ('$code','$name','$cod_gbu')");
 //        $consulta->execute();
 //
@@ -727,7 +729,7 @@ class TasksModel extends ModelBase
 //        $session = FR_Session::singleton();
 //
 //        $consulta = $this->db->prepare("UPDATE t_micro_segment
-//                    SET 
+//                    SET
 //                            NAME_MICRO_SEGMENT = '$name'
 //                            , COD_GBU = '$cod_gbu'
 //                    WHERE COD_MICRO_SEGMENT = '$old_code'

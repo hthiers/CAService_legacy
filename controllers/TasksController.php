@@ -680,13 +680,17 @@ class TasksController extends ControllerBase
         }
 
         $pdoCustomer = $modelCustomer->getAllCustomers($session->id_tenant);
+        $pdoMyLastCustomer = $modelCustomer->getMyLastCustomer($session->id_tenant, $session->id_user);
         $data['pdoCustomer'] = $pdoCustomer;
+        $data['pdoMyLastCustomer'] = $pdoMyLastCustomer;
 
         $pdoProject = $model->getAllProjectsByTenant($session->id_tenant);
         $data['pdoProject'] = $pdoProject;
 
         $pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
+        $pdoMyLastType = $modelTypes->getMyLastType($session->id_tenant, $session->id_user);
         $data['pdoTypes'] = $pdoTypes;
+        $data['pdoMyLastType'] = $pdoMyLastType;
 
         //$pdoTasks = $modelTask->getAllTasksByTenant($session->id_tenant);
         //$data['pdoTasks'] = $pdoTasks;
@@ -724,7 +728,7 @@ class TasksController extends ControllerBase
         $new_code = Utils::guidv4();
 
         $user = $_POST['resp'];
-        $id_user = $_POST['id_user'];
+        $id_user = $session->id_user;
 
         if(isset($_POST['cboprojects'])){
             if(is_numeric($_POST['cboprojects']) && $_POST['cboprojects'] > 0){
@@ -780,10 +784,10 @@ class TasksController extends ControllerBase
 
         if($_POST['chk_past']){
             $estado = 2;
-            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, $fecha_fin, $total_time,$desc,$estado,$id_project, $id_customer, $id_management);
+            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, $fecha_fin, $total_time,$desc,$estado,$id_project, $id_customer, $id_management, $session->id_user, $id_type);
         }
         else{
-            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, null,null,$desc,$estado,$id_project, $id_customer, $id_management);
+            $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, null,null,$desc,$estado,$id_project, $id_customer, $id_management, $session->id_user, $id_type);
         }
 
         $query = $result->queryString;
