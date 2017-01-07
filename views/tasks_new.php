@@ -89,7 +89,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       <?php
                       $last = $pdoMyLastCustomer->fetch(PDO::FETCH_ASSOC);
 
-                      echo "<select id='cbocustomers' name='cbocustomers' style='width: 90%;'>\n";
+                      echo "<select id='cbocustomers' name='cbocustomers' style='width: 89%;'>\n";
                       while($row = $pdoCustomer->fetch(PDO::FETCH_ASSOC))
                       {
                           if($row['id_customer'] == $last['id_customer']){
@@ -102,7 +102,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       echo "</select>\n";
                       ?>
 
-                      <a id="create-customer" href="#" data-open="modalNuevoCliente"><span class="fi-plus icon-tool pushed"></span></a>
+                      <a id="create-customer" class="icon-action" href="#" data-open="modalNuevoCliente"><span class="fi-plus pushed"></span></a>
                     </div>
                   </div>
 
@@ -114,7 +114,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       <?php
                       $lastType = $pdoMyLastType->fetch(PDO::FETCH_ASSOC);
 
-                      echo "<select id='cbotypes' name='cbotypes' style='width: 90%;'>\n";
+                      echo "<select id='cbotypes' name='cbotypes' style='width: 89%;'>\n";
 
                       while($row = $pdoTypes->fetch(PDO::FETCH_ASSOC))
                       {
@@ -129,7 +129,7 @@ if($session->id_tenant != null && $session->id_user != null):
                       echo "</select>\n";
                       ?>
 
-                      <a id="create-type" href="#" data-open="modalNuevaMateria"><span class="fi-plus icon-tool pushed"></span></a>
+                      <a id="create-type" class="icon-action" href="#" data-open="modalNuevaMateria"><span class="fi-plus pushed"></span></a>
                     </div>
                   </div>
 
@@ -139,11 +139,11 @@ if($session->id_tenant != null && $session->id_user != null):
                     </div>
                     <div class="medium-9 columns">
                       <?php
-                        echo "<select id='cbomanagements' name='cbomanagements' style='width: 90%;'>\n";
+                        echo "<select id='cbomanagements' name='cbomanagements' style='width: 89%;'>\n";
                         echo "</select>\n";
                         ?>
 
-                        <a id="create-management" href="#" data-open="modalNuevaGestion"><span class="fi-plus icon-tool pushed"></span></a>
+                        <a id="create-management" class="icon-action" href="#" data-open="modalNuevaGestion"><span class="fi-plus pushed"></span></a>
                     </div>
                   </div>
 
