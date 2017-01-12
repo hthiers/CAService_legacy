@@ -180,6 +180,35 @@ class CustomersModel extends ModelBase
             return $consulta;
 	}
 
+	/**
+	* Get all customers by user
+	* @param int $id_tenant
+	* @param int $id_user
+	*/
+	public function getCustomersByUser($id_tenant, $id_user)
+	{
+		$consulta = $this->db->prepare("
+			SELECT
+				DISTINCT
+				a.cas_customer_id_customer AS id_customer
+				, b.code_customer
+				, b.id_tenant
+				, b.label_customer
+				, b.detail_customer
+				FROM cas_task a
+				INNER JOIN cas_customer b
+				ON (a.cas_customer_id_customer = b.id_customer
+					AND
+					a.id_tenant = b.id_tenant)
+				WHERE a.id_tenant = 1
+				AND a.id_user = 8
+				ORDER BY b.label_customer ASC");
+
+		$consulta->execute();
+
+		return $consulta;
+	}
+
         /**
          * Update customer
          * @param int $id_customer

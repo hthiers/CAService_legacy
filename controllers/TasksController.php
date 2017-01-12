@@ -679,16 +679,19 @@ class TasksController extends ControllerBase
             $data['id_user'] = 0;
         }
 
-        $pdoCustomer = $modelCustomer->getAllCustomers($session->id_tenant);
+        $pdoAllCustomer = $modelCustomer->getAllCustomers($session->id_tenant);
+        $pdoUserCustomers = $modelCustomer->getCustomersByUser($session->id_tenant, $session->id_user);
         $pdoMyLastCustomer = $modelCustomer->getMyLastCustomer($session->id_tenant, $session->id_user);
-        $data['pdoCustomer'] = $pdoCustomer;
-        $data['pdoMyLastCustomer'] = $pdoMyLastCustomer;
 
-        $pdoProject = $model->getAllProjectsByTenant($session->id_tenant);
-        $data['pdoProject'] = $pdoProject;
+        // $pdoProject = $model->getAllProjectsByTenant($session->id_tenant);
+        // $data['pdoProject'] = $pdoProject;
 
         $pdoTypes = $modelTypes->getAllTypesByTenant($session->id_tenant);
         $pdoMyLastType = $modelTypes->getMyLastType($session->id_tenant, $session->id_user);
+
+        $data['pdoCustomer'] = $pdoAllCustomer;
+        $data['pdoMyLastCustomer'] = $pdoMyLastCustomer;
+
         $data['pdoTypes'] = $pdoTypes;
         $data['pdoMyLastType'] = $pdoMyLastType;
 

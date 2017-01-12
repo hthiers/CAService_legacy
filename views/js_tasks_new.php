@@ -1,6 +1,5 @@
 <script type="text/javascript">
     // JQDialog window
-    // var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
 
     $(document).ready(function(){
       // Btn play
@@ -56,6 +55,11 @@
           }
         });
 
+        // primer carga (no se espera evento change)
+        ejecutar($("#cbocustomers"), $(this), $("#cbomanagements"));
+        
+        $("#cbomanagements").val("noaplica").trigger("change");
+
         function ejecutar(cboCustomers, cbotypes, cboManagements) {
 
             var idCustomer = $(cboCustomers).val();
@@ -75,8 +79,7 @@
                 $('#cbomanagements').select2({
                     placeholder: {
                         id: "",
-                        text: "Ingrese Gestión"},
-                    allowClear:true
+                        text: "Ingrese Gestión"}
                 });
 
               },
