@@ -147,7 +147,7 @@ $(document).ready(function() {
             $('#table tbody td.td_editable').editable( '?controller=types&action=ajaxTypesUpdate', {
 
                 "callback": function( sValue, y ) {
-                    console.log("valor: "+ sValue);
+                    //console.log("valor: "+ sValue);
                     /* Redraw the table from the new data on the server */
                     //oTable.fnDraw();
                     var aPos = oTable.fnGetPosition( this );
@@ -184,7 +184,7 @@ $(document).ready(function() {
         
         var urlAction = "<?php echo "?controller=types&action=typesRemove";?>";
         
-        console.log("borrando: #"+$('#type_id').val());
+        //console.log("borrando: #"+$('#type_id').val());
 
         $('#dt_form').attr('action', urlAction);
         $('#dt_form').attr('method', 'POST');
@@ -219,21 +219,21 @@ function guardarMateria() {
             }).done(function(response){
 
         if(response !== null){
-            console.log(response);
+            //console.log(response);
             oTable.fnDraw();
         }
         else{
-            console.log("response null");
+            //console.log("response null");
         }
         }).fail(function(jqXHR, textStatus){
-            console.log(textStatus);
+            //console.log(textStatus);
     });
 }
 
 function showMessage(modal, titulo, detalle) {
-        console.log(modal + '  ' + titulo);
+        //console.log(modal + '  ' + titulo);
         $('#title_message').text(titulo);
-        console.log(modal + '  ' + detalle);
+        //console.log(modal + '  ' + detalle);
         $('#detail_message').text(detalle);
         
         $(modal).foundation('open');

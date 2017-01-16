@@ -53,7 +53,7 @@ function fnFormatDetails (oTable, nTr){
 }
 
 function viewTask(task){
-    console.log(task);
+    //console.log(task);
 
     var urlAction = "<?php echo "?controller=".$controller."&action=tasksView";?>";
 
@@ -65,7 +65,7 @@ function viewTask(task){
 }
 
 function editTask(task){
-    console.log(task);
+    //console.log(task);
 
     var urlAction = "<?php echo "?controller=".$controller."&action=tasksEditForm";?>";
 

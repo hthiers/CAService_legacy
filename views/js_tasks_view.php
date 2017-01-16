@@ -1,7 +1,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
     requested_action = "<?php echo $action;?>";
-    console.log(requested_action);
+    //console.log(requested_action);
 
     if(requested_action === "view"){
         $('form input[type=text]').attr('readonly', true);
@@ -38,9 +38,9 @@ $(document).ready(function(){
     // Set timer
     //active
     if(status === 1){
-        console.log("continued");
-        console.log("$pasued_date: <?php echo $paused_date;?>");
-        console.log("$time_paused: <?php echo $time_paused;?>");
+        //console.log("continued");
+        //console.log("$pasued_date: <?php echo $paused_date;?>");
+        //console.log("$time_paused: <?php echo $time_paused;?>");
 
         var tiempo_array = secondsToTime(total_progress);
         var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
@@ -48,12 +48,12 @@ $(document).ready(function(){
     }
     //paused
     else if(status === 3){
-        console.log("paused");
-        console.log("$pasued_date: <?php echo $paused_date;?>");
-        console.log("$time_paused: <?php echo $time_paused;?>");
+        //console.log("paused");
+        //console.log("$pasued_date: <?php echo $paused_date;?>");
+        //console.log("$time_paused: <?php echo $time_paused;?>");
 
         var paused_seconds = <?php if($paused_date == null): echo 0; else: echo $paused_date; endif;?>;
-        console.log(paused_seconds);
+        //console.log(paused_seconds);
 
         var paused_array = secondsToTime(paused_seconds);
         var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
@@ -75,12 +75,12 @@ function iniTrabajo(){
         dataType: "json"
     }).done(function(response){
         if(response !== null){
-            console.log(response);
+            //console.log(response);
             if(response[0] === "0"){
                 $('#btn_pause').removeAttr('disabled');
                 $('#btn_play').attr('disabled', 'disabled');
 
-                console.log("Trabajo activado!");
+                //console.log("Trabajo activado!");
                 current_time = $('#progress_clock').val();
                 customClock(current_time);
             }
@@ -92,7 +92,7 @@ function iniTrabajo(){
             alert("response null");
         }
     }).fail(function(jqXHR, textStatus){
-        console.log(textStatus);
+        //console.log(textStatus);
         alert("ajax error: "+textStatus);
     });
 }
@@ -108,13 +108,13 @@ function pausaTrabajo(){
         dataType: "json"
     }).done(function(response){
         if(response !== null){
-            console.log(response);
+            //console.log(response);
             if(response[0] === "0"){
 //                $("#flash").hide();
                 $('#btn_play').removeAttr('disabled');
                 $('#btn_pause').attr('disabled', 'disabled');
 
-                console.log("task paused!");
+                //console.log("task paused!");
                 current_time = $('#progress_clock').val();
                 clearTimeout(timeout);
             }
@@ -123,11 +123,11 @@ function pausaTrabajo(){
             }
         }
         else{
-            console.log(response);
+            //console.log(response);
             alert("response null");
         }
     }).fail(function(jqXHR, textStatus){
-        console.log(textStatus);
+        //console.log(textStatus);
         alert("ajax error: "+textStatus);
     });
 }
@@ -143,13 +143,13 @@ function updateTask(){
         dataType: "json"
     }).done(function(response){
         if(response !== null){
-            console.log(response);
+            //console.log(response);
             if(response[0] === "0"){
 //                $("#flash").hide();
                 $('#btn_play').removeAttr('disabled');
                 $('#btn_pause').attr('disabled', 'disabled');
 
-                console.log("task paused!");
+                //console.log("task paused!");
                 current_time = $('#progress_clock').val();
                 clearTimeout(timeout);
             }
@@ -158,11 +158,11 @@ function updateTask(){
             }
         }
         else{
-            console.log(response);
+            //console.log(response);
             alert("response null");
         }
     }).fail(function(jqXHR, textStatus){
-        console.log(textStatus);
+        //console.log(textStatus);
         alert("ajax error: "+textStatus);
     });
 }

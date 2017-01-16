@@ -60,7 +60,7 @@ $(document).ready(function() {
 });
 
 function editUser(user){
-    console.log(user);
+    //console.log(user);
     var urlAction = "<?php echo "?controller=panel&action=editUserForm";?>";
 
     $('#dt_form').attr('action', urlAction);

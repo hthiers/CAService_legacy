@@ -6,8 +6,8 @@
         var idCustomer = $(cboCustomers).val();
         var idType = $(cbotypes).val();
 
-        console.log(idCustomer);
-        console.log(idType);
+        //console.log(idCustomer);
+        //console.log(idType);
 
         $.ajax({
           type: "POST",
@@ -61,7 +61,7 @@
 
       $("#cbocustomers").change(function(e) {
           if ($(this).val().trim() !== "") {
-              console.log("cambia customer");
+              //console.log("cambia customer");
 
               $("#cbomanagements").empty();
 
@@ -74,7 +74,7 @@
 
         $("#cbotypes").change(function(e) {
           if ($(this).val().trim() !== "") {
-              console.log("cambia type");
+              //console.log("cambia type");
 
               $("#cbomanagements").empty();
 
@@ -290,9 +290,9 @@
     }
 
     function showMessage(modal, titulo, detalle) {
-        console.log(modal + '  ' + titulo);
+        //console.log(modal + '  ' + titulo);
         $('#title_message').text(titulo);
-        console.log(modal + '  ' + detalle);
+        //console.log(modal + '  ' + detalle);
         $('#detail_message').text(detalle);
 
         $(modal).foundation('open');
