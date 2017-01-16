@@ -474,23 +474,25 @@ class ManagementsController extends ControllerBase
 
         //Le pedimos al modelo todos los items
         $customerManagements = $model->getManagementsByCustomerType($session->id_tenant, $id_customer, $id_type);
-        $allManagements = $model->getManagementsByCustomer($session->id_tenant, $id_customer);
-
         $trabajos = $customerManagements->fetchAll(PDO::FETCH_ASSOC);
-        $trabajosTodos = $allManagements->fetchAll(PDO::FETCH_ASSOC);
-        $trabajosFiltrados = array_diff_assoc($trabajosTodos, $trabajos);   // solo las restantes
-
+        
         //Gestiones del cliente
         if(sizeof($trabajos) > 0){
-          $respuesta .= "<optgroup label='Gestiones de Materia'>";
+          //$respuesta .= "<optgroup label='Gestiones de Materia'>";
           foreach ($trabajos as $key => $value)
           {
               $respuesta .= "<option value='".$value['id_management']."'>".$value['label_management']."</option>";
           }
-          $respuesta .= "</optgroup>";
+          //$respuesta .= "</optgroup>";
         }
 
+        /*** Si se desea añadir gestiones de otras materias***/
+        /* Inicio bloque de gestiones de otras materias
         //Gestionas otras
+        $allManagements = $model->getManagementsByCustomer($session->id_tenant, $id_customer);
+        $trabajosTodos = $allManagements->fetchAll(PDO::FETCH_ASSOC);
+        $trabajosFiltrados = array_diff_assoc($trabajosTodos, $trabajos);   // solo las restantes
+        
         if(sizeof($trabajosFiltrados) > 0){
           $respuesta .= "<optgroup label='Otras Gestiones del Cliente'>";
           foreach ($trabajosFiltrados as $key => $value)
@@ -499,6 +501,8 @@ class ManagementsController extends ControllerBase
           }
           $respuesta .= "</optgroup>";
         }
+         * Fin de bloque de gestiones de otras materias
+         */
 
         echo $respuesta;
     }
