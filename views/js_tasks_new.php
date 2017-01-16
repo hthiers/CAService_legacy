@@ -1,6 +1,36 @@
 <script type="text/javascript">
     // JQDialog window
 
+    function ejecutar(cboCustomers, cbotypes, cboManagements) {
+
+        var idCustomer = $(cboCustomers).val();
+        var idType = $(cbotypes).val();
+
+        console.log(idCustomer);
+        console.log(idType);
+
+        $.ajax({
+          type: "POST",
+          url: "?controller=managements&action=ajaxGetManagementsByCustomer",
+          dataType: "html",
+          data: { id_customer : idCustomer, id_type : idType},
+          success: function(msg) {
+            $(cboManagements).html(msg).attr("disabled", false);
+
+            $('#cbomanagements').select2({
+                placeholder: {
+                    id: "",
+                    text: "Ingrese Gestión"}
+            });
+
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            $(cboCustomers).next('img').remove();
+            alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+          }
+        });
+    }
+
     $(document).ready(function(){
       // Btn play
       $("#btn_play").click(function (event){
@@ -56,39 +86,9 @@
         });
 
         // primer carga (no se espera evento change)
-        ejecutar($("#cbocustomers"), $(this), $("#cbomanagements"));
-        
+        ejecutar($("#cbocustomers"), $("#cbotypes"), $("#cbomanagements"));
+
         $("#cbomanagements").val("noaplica").trigger("change");
-
-        function ejecutar(cboCustomers, cbotypes, cboManagements) {
-
-            var idCustomer = $(cboCustomers).val();
-            var idType = $(cbotypes).val();
-
-            console.log(idCustomer);
-            console.log(idType);
-
-            $.ajax({
-              type: "POST",
-              url: "?controller=managements&action=ajaxGetManagementsByCustomer",
-              dataType: "html",
-              data: { id_customer : idCustomer, id_type : idType},
-              success: function(msg) {
-                $(cboManagements).html(msg).attr("disabled", false);
-
-                $('#cbomanagements').select2({
-                    placeholder: {
-                        id: "",
-                        text: "Ingrese Gestión"}
-                });
-
-              },
-              error: function(jqXHR, textStatus, errorThrown) {
-                $(cboCustomers).next('img').remove();
-                alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
-              }
-            });
-        }
 
         // JQDialog Submit - Add new customer
         $("#modalNuevoCliente form").submit(function(){
