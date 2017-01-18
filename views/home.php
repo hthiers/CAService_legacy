@@ -37,13 +37,21 @@ $(document).ready(function(){
       </p> -->
 
       <div class="medium-6 medium-centered large-4 large-centered columns">
-        <h2 class="text-center pushed-up">Control</h2>
+        <h2 class="text-center pushed-up"><a href="<?php echo $_SERVER['PHP_SELF'];?>">Control</a></h2>
         <p class="text-center">
             Versi&oacute;n <?php echo $constants->getSysVersion(); ?>
         </p>
       </div>
 
-      <?php if(isset($error) && $error == 1) echo "<div id='errorbox_failure'>Usuario o contraseña inválido!</div>"; ?>
+      <?php if(isset($error) && $error == 1){
+          echo "<div id='errorbox_failure' class='callout warning' data-closable>\n";
+            echo "Usuario o contraseña inválido!\n";
+            echo "<button class='close-button' aria-label='Dismiss alert' type='button' data-close>\n";
+              echo "<span aria-hidden='true'>&times;</span>\n";
+            echo "</button>\n";
+          echo "</div>\n";
+      }
+      ?>
 
       <div class="sweetbox-centered medium-6 medium-centered large-4 large-centered columns">
 
