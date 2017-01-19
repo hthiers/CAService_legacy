@@ -25,7 +25,7 @@
             },
             error: function(jqXHR, textStatus, errorThrown) {
               $(cboCustomers).next('img').remove();
-              alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+              alert("Error al ejecutar ajaxGetManagementsByCustomer(): " + textStatus + " - " + errorThrown);
             }
           });
         }
@@ -54,7 +54,7 @@
               });
             },
             error: function(jqXHR, textStatus, errorThrown) {
-              alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+              alert("Error al ejecutar getTasksName(): " + textStatus + " - " + errorThrown);
             }
       });
 
