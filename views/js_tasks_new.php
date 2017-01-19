@@ -5,30 +5,30 @@
 
         var idCustomer = $(cboCustomers).val();
         var idType = $(cbotypes).val();
-
         //console.log(idCustomer);
         //console.log(idType);
 
-        $.ajax({
-          type: "POST",
-          url: "?controller=managements&action=ajaxGetManagementsByCustomer",
-          dataType: "html",
-          data: { id_customer : idCustomer, id_type : idType},
-          success: function(msg) {
-            $(cboManagements).html(msg).attr("disabled", false);
+        if(idCustomer !== null) {
+          $.ajax({
+            type: "POST",
+            url: "?controller=managements&action=ajaxGetManagementsByCustomer",
+            dataType: "html",
+            data: { id_customer : idCustomer, id_type : idType},
+            success: function(msg) {
+              $(cboManagements).html(msg).attr("disabled", false);
 
-            $('#cbomanagements').select2({
-                placeholder: {
-                    id: "",
-                    text: "Ingrese Gestión"}
-            });
-
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            $(cboCustomers).next('img').remove();
-            alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
-          }
-        });
+              $('#cbomanagements').select2({
+                  placeholder: {
+                      id: "",
+                      text: "Ingrese Gestión"}
+              });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              $(cboCustomers).next('img').remove();
+              alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+            }
+          });
+        }
     }
 
     $(document).ready(function(){
@@ -54,7 +54,6 @@
               });
             },
             error: function(jqXHR, textStatus, errorThrown) {
-
               alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
             }
       });
