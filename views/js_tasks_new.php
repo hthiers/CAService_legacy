@@ -44,14 +44,19 @@
             url: "?controller=tasks&action=getTasksName",
             dataType: "json",
             success: function(data) {
-              $.each(data , function( index, obj ) {
-                  $.each(obj, function( key, value ) {
-                      tareas.push(value);
-                  });
-              });
-              $("#gestion").autocomplete({
-                  source: tareas
-              });
+              if(data.length > 0) {
+                $.each(data , function( index, obj ) {
+                    $.each(obj, function( key, value ) {
+                        tareas.push(value);
+                    });
+                });
+                $("#gestion").autocomplete({
+                    source: tareas
+                });
+              }
+              else {
+                console.log("no hay tareas...");
+              }
             },
             error: function(jqXHR, textStatus, errorThrown) {
               alert("Error al ejecutar getTasksName(): " + textStatus + " - " + errorThrown);
