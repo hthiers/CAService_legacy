@@ -1966,7 +1966,8 @@ class TasksController extends ControllerBase
         }
 
         else{
-            return false;
+            echo json_encode(false);
+            //return false;
 
         }
         //return $listado;

@@ -10,7 +10,7 @@ function submitToForm(){
 
 function removeType(type){
     var urlAction = "<?php echo "?controller=types&action=typesRemove";?>";
-    
+
     /*
     $( "#dialog-remove" ).dialog({
             height: 200,
@@ -80,7 +80,7 @@ $(document).ready(function() {
               },
               error: function(jqXHR, textStatus, errorThrown) {
 
-                alert("Error al ejecutar =&gt; " + textStatus + " - " + errorThrown);
+                alert("Error al ejecutar getCustomersByTenant - ; " + textStatus + " - " + errorThrown);
               }
         });
 
@@ -179,11 +179,11 @@ $(document).ready(function() {
 
     //Add Class to search field
     //$(".dataTables_filter input").addClass("search_input");
-    
+
     $('#confirmarEliminarMateria').click(function() {
-        
+
         var urlAction = "<?php echo "?controller=types&action=typesRemove";?>";
-        
+
         //console.log("borrando: #"+$('#type_id').val());
 
         $('#dt_form').attr('action', urlAction);
@@ -192,9 +192,9 @@ $(document).ready(function() {
 
         $("#dt_form").submit();
     });
-    
+
     $('#cancelarEliminarMateria').click(function() {
-        
+
         $('#modalEliminarMateriaAdevertencia').foundation('close');
     });
 
@@ -235,7 +235,7 @@ function showMessage(modal, titulo, detalle) {
         $('#title_message').text(titulo);
         //console.log(modal + '  ' + detalle);
         $('#detail_message').text(detalle);
-        
+
         $(modal).foundation('open');
     }
 

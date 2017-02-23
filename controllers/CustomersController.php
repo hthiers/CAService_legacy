@@ -4,18 +4,18 @@ class CustomersController extends ControllerBase
     /*******************************************************************************
     * CLIENTES
     *******************************************************************************/
-        
+
     //DT
     public function customersDt($error_flag = 0, $message = "")
     {
         $session = FR_Session::singleton();
-        
+
         #support global messages
         if(isset($_GET['error_flag']))
             $error_flag = $_GET['error_flag'];
         if(isset($_GET['message']))
             $message = $_GET['message'];
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/CustomersModel.php';
 
@@ -59,7 +59,7 @@ class CustomersController extends ControllerBase
     public function ajaxCustomersDt()
     {
         $session = FR_Session::singleton();
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/CustomersModel.php';
 
@@ -76,7 +76,7 @@ class CustomersController extends ControllerBase
                     , 'b.id_tenant'
                     , 'a.label_customer'
                     , 'a.detail_customer');
-        
+
         $sIndexColumn = "id_customer";
 
         /******************** Paging */
@@ -139,12 +139,12 @@ class CustomersController extends ControllerBase
 
         /********************** Create Query */
         $sql = "
-            SELECT SQL_CALC_FOUND_ROWS 
+            SELECT SQL_CALC_FOUND_ROWS
                 ".str_replace(" , ", " ", implode(", ", $aColumns))."
             FROM $sTable a
             INNER JOIN cas_tenant b
             ON (a.id_tenant = b.id_tenant
-                AND 
+                AND
                 b.id_tenant = $session->id_tenant)
             $sWhere
             $sOrder
@@ -192,7 +192,7 @@ class CustomersController extends ControllerBase
         #echo $sql;
         echo json_encode( $output );
     }
-    
+
     //NEW
     public function customersAddForm($error_flag = 0)
     {
@@ -203,28 +203,28 @@ class CustomersController extends ControllerBase
 
         $this->view->show("customers_new.php", $data);
     }
-    
+
     public function customersAdd()
     {
         $session = FR_Session::singleton();
 
         $label_customer = $_POST['customer_name'];
         $detail_customer = $_POST['customer_detail'];
-        
+
         $code_customer = Utils::guidv4();
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/CustomersModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new CustomersModel();
-        
+
         //Le pedimos al modelo todos los items
         $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer, $detail_customer);
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
-        
+
         if($error[0] == 00000 && $rows_n > 0){
             header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=1");
         }
@@ -235,7 +235,7 @@ class CustomersController extends ControllerBase
             header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
     }
-    
+
     public function ajaxCustomersAdd()
     {
         $session = FR_Session::singleton();
@@ -254,10 +254,10 @@ class CustomersController extends ControllerBase
 
             $result = $model->getLastCustomer($session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
-            
+
             // UUID code
             $code_customer = Utils::guidv4();
-            
+
             $new_customer[] = null;
 
             //Le pedimos al modelo todos los items
@@ -291,7 +291,7 @@ class CustomersController extends ControllerBase
             return false;
         endif;
     }
-    
+
     public function ajaxCustomersUpdate()
     {
         $session = FR_Session::singleton();
@@ -304,14 +304,14 @@ class CustomersController extends ControllerBase
             //Creamos una instancia de nuestro "modelo"
             $model = new CustomersModel();
             $targetCustomerPdo = $model->getCustomerByID($session->id_tenant, filter_input(INPUT_POST, 'row_id'));
-            
+
             $new_value = filter_input(INPUT_POST, 'value');
             $column_updated = filter_input(INPUT_POST, 'column');
-            
+
             $targetCustomer = $targetCustomerPdo->fetch(PDO::FETCH_ASSOC);
             if($targetCustomer != null && $targetCustomer != false){
                 //apply change
-                
+
                 if($column_updated == 3)
                 {
                     $result = $model->updateCustomer(
@@ -330,9 +330,9 @@ class CustomersController extends ControllerBase
                         , $targetCustomer['label_customer']
                         , $new_value);
                 }
-                
-                
-                
+
+
+
                 if($result){
                     $error = $result->errorInfo();
                     $rows_n = $result->rowCount();
@@ -355,7 +355,7 @@ class CustomersController extends ControllerBase
             else{
                 print 'no se encontro elemento a actualizar';
             }
-            
+
             return true;
         else:
             return false;
@@ -363,7 +363,7 @@ class CustomersController extends ControllerBase
     }
 
     /**
-     * show project info 
+     * show project info
      */
     public function customersView()
     {
@@ -377,7 +377,7 @@ class CustomersController extends ControllerBase
         $model = new CustomersModel();
 
         $pdo = $model->getCustomerById($session->id_tenant, $id_customer);
-        
+
         $values = $pdo->fetch(PDO::FETCH_ASSOC);
         if($values != null && $values != false){
             #data
@@ -387,14 +387,14 @@ class CustomersController extends ControllerBase
             $data['label_customer'] = $values['label_customer'];
             $data['detail_customer'] = $values['detail_customer'];
         }
-        
+
         $data['action_type'] = $id_customer;
         $data['titulo'] = "Customer #";
         $data['pdo'] = $pdo;
 
         $this->view->show("customers_view.php", $data);
     }
-    
+
     public function customersEdit()
     {
         $session = FR_Session::singleton();
@@ -407,7 +407,7 @@ class CustomersController extends ControllerBase
         $model = new CustomersModel();
 
         $pdo = $model->getCustomerById($session->id_tenant, $id_customer);
-        
+
         $values = $pdo->fetch(PDO::FETCH_ASSOC);
         if($values != null && $values != false){
             #data
@@ -417,14 +417,14 @@ class CustomersController extends ControllerBase
             $data['label_customer'] = $values['label_customer'];
             $data['detail_customer'] = $values['detail_customer'];
         }
-        
+
         $data['action_type'] = 2;
         $data['titulo'] = "Editar Cliente";
         $data['pdo'] = $pdo;
 
         $this->view->show("customers_view.php", $data);
     }
-    
+
     /**
      * Returns Customers list grouped by user
      * prints json array
@@ -448,10 +448,10 @@ class CustomersController extends ControllerBase
 
             $result = $model->getLastCustomer($session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
-            
+
             // UUID code
             $code_customer = Utils::guidv4();
-            
+
             $new_customer[] = null;
 
             //Le pedimos al modelo todos los items
@@ -485,52 +485,52 @@ class CustomersController extends ControllerBase
             return false;
         endif;
     }
-    
+
     public function getCustomersByTenant() {
-        
+
         $session = FR_Session::singleton();
 
         require_once 'models/CustomersModel.php';
 
         $modelCustomers = new CustomersModel();
-        
-        
+
+
         $pdo_listado = $modelCustomers->getAllCustomers($session->id_tenant);
-       
+
         if($pdo_listado->rowCount() > 0){
            $listado = $pdo_listado->fetchAll(PDO::FETCH_ASSOC);
            $result = json_encode($listado);
-           
+
            //print_r($result);
            //exit();
-           
+
            echo $result;
         }
-       
+
         else{
-            return false;
-            
+            echo json_encode(false);
+
         }
         //return $listado;
     }
-    
+
     public function getCustomersByTenantJSON() {
-        
+
         $session = FR_Session::singleton();
 
         require_once 'models/CustomersModel.php';
 
         $modelCustomers = new CustomersModel();
-        
+
         $listado = $modelCustomers->getAllCustomers($session->id_tenant);
-       
+
         $output = array();
-        
+
         while ($row = $listado->fetch(PDO::FETCH_ASSOC))
         {
             $output[$row['id_customer']] = utf8_encode($row['label_customer']);
         }
-         
+
 
         $output['selected'] = utf8_encode($_GET['current']);
 
@@ -538,7 +538,7 @@ class CustomersController extends ControllerBase
         print_r($output);
         exit();
         */
-        
+
         echo json_encode( $output );
     }
 }
