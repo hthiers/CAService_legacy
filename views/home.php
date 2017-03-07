@@ -26,46 +26,52 @@ $(document).ready(function(){
     </noscript>
 
     <!-- CABECERA -->
-	<div class="Estilo2" id="banner"></div>
+	<!-- <div class="top-bar"></div> -->
     <!-- END CABECERA -->
-    
+
     <!-- CENTRAL -->
-    <div id="central">
-        <div id="contenido">
-            
-            <?php if(isset($error) && $error == 1) echo "<div id='errorbox_failure'>Usuario o contraseña inválido!</div>"; ?>
-            
-            <h2 class="menuinicio">Inicio de sesión</h2>
-            <p class="submenu">
-                Versi&oacute;n <?php echo $constants->getSysVersion(); ?>
-            </p>
-            
-            <div style="margin-top: 10px;">
-                <form id="form1" name="form1" method="post" action="?controller=Users&action=logIn">
-                    <table>
-                        <tr>
-                            <td>Usuario</td>
-                            <td><input name="txtusername" type="text" class="bien" id="txtuser" size="50" /></td>
-                        </tr>
-                        <tr>
-                            <td>Contraseña</td>
-                            <td><input name="txtpassword" type="password" class="bien" id="txtpass" size="50" /></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="padding-top: 10px;">
-                                <input name="button" type="submit" class="boton" id="button" value="Acceder" />
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
-        </div>
+    <div class="row">
+
+      <!-- <p class="submenu">
+          Versi&oacute;n <?php #echo $constants->getSysVersion(); ?>
+      </p> -->
+
+      <div class="medium-6 medium-centered large-4 large-centered columns">
+        <h2 class="text-center pushed-up"><a href="<?php echo $_SERVER['PHP_SELF'];?>">Control</a></h2>
+        <p class="text-center">
+            Versi&oacute;n <?php echo $constants->getSysVersion(); ?>
+        </p>
+      </div>
+
+      <?php if(isset($error) && $error == 1){
+          echo "<div id='errorbox_failure' class='callout warning' data-closable>\n";
+            echo "Usuario o contraseña inválido!\n";
+            echo "<button class='close-button' aria-label='Dismiss alert' type='button' data-close>\n";
+              echo "<span aria-hidden='true'>&times;</span>\n";
+            echo "</button>\n";
+          echo "</div>\n";
+      }
+      ?>
+
+      <div class="sweetbox-centered medium-6 medium-centered large-4 large-centered columns">
+
+          <form id="form1" name="form1" method="post" action="?controller=Users&action=logIn">
+            <h4 class="text-center">Inicia sesión</h4>
+
+            <label>Usuario
+              <input name="txtusername" type="text" class="bien" id="txtuser" size="50" />
+            </label>
+
+            <label>Contraseña
+              <input name="txtpassword" type="password" class="bien" id="txtpass" size="50" />
+            </label>
+
+            <button type="submit" name="button" class="button expanded">Entrar</button>
+          </form>
+
+      </div>
     </div>
     <!-- END CENTRAL -->
-    
-    <div id="ads">
-        &nbsp;
-    </div>
 
 <!-- FOOTER -->
 <?php require('templates/footer_index.tpl.php'); ?>

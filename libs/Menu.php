@@ -1,15 +1,15 @@
 <?php
 /**
- * System Menu 
+ * System Menu
  */
 class Menu extends ModelBase
-{       
+{
         /**
          * Clase CSS para item de menu abierto (current page)
          * @var String
          */
         private $current_class = 'class="current"';
-        
+
         function getCurrentClass($controller, $target, $option = ""){
             if($controller == $target)
                 return $this->current_class;
@@ -18,10 +18,10 @@ class Menu extends ModelBase
             else
                 return "control: ".$controller.", tar: ".$target.", opt: ".$option;
         }
-        
+
         function getUserAccesByPrivi($privi)
         {
-            $consulta = $this->db->prepare("SELECT 
+            $consulta = $this->db->prepare("SELECT
                         A.COD_PRIVILEGIO
                         , A.VER
                         , A.ESCRIBIR
@@ -37,37 +37,37 @@ class Menu extends ModelBase
                           AND A.VER = 1
                         ORDER BY C.ORDER asc");
             $consulta->execute();
-            
+
             $result = $consulta->rowCount();
-            
+
             if($result > 0)
                 return $consulta;
             else
                 return null;
         }
-	
+
 	public function loadMenu($userSession,$nav,$root,$controller)
 	{
             $privi = $userSession->privilegio;
             $access = $this->getUserAccesByPrivi($privi);
-            
+
             if($access != null)
             {
                 $menuFullString = '';
-                
+
                 if($nav == 'MSIE 6.0')
                     $menuFullString.= '<ul id="navmenu-h">';
                 else
                     $menuFullString.= '<ul id="menu">';
-                
+
                 while($accessModule = $access->fetch(PDO::FETCH_ASSOC))
                 {
                     #$permission = $this->getPriviPermission($privi, $accessModule['COD_MODULO']);
                     $menuFullString.= call_user_func_array(array($this, $accessModule['NAME_MODULO']), array($root, $accessModule['ESCRIBIR'], $controller));
                 }
-                
+
                 $menuFullString.= '</ul>';
-                
+
                 #Print out menu
                 print $menuFullString;
             }
@@ -82,101 +82,93 @@ class Menu extends ModelBase
                 $menuFullString.= '</ul>';
             }
         }
-        
+
         function loadMainMenu($session)
         {
             if($session->id_profile == 1)
             {
                 $this->loadMainMenuAdmin();
             }
-            
+
             else if($session->id_profile == 2)
             {
                 $this->loadMainMenuGeneric();
             }
         }
-        
-        function loadMainMenuAdmin() 
+
+        function loadMainMenuAdmin()
         {
-            $menuFullString = '<ul id="menu">';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
-                
-                    $menuFullString.= '<ul>';
-                        $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">NUEVO '
-                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
-                    $menuFullString.= '</ul>';
-                
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
-                    
-                    $menuFullString.= '<ul>';
-                        $menuFullString.= '<li><a href="?controller=customers&amp;action=customersAddForm">NUEVO '
-                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
-                    $menuFullString.= '</ul>';
-                
-                $menuFullString.= '</li>';
+            $menuFullString = '<ul class="dropdown menu" data-dropdown-menu>';
+            $menuFullString.= '<li>';
+            $menuFullString.= '<a href="?controller=tasks&amp;action=tasksDt">Gestiones</a>';
+            $menuFullString.= '<ul class="menu vertical">';
+            $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">Nueva Gestión</a></li>';
+            $menuFullString.= '</ul>';
+            $menuFullString.= '</li>';
 
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=panel&amp;action=usersDt">USUARIOS</a>';
-                
-                    $menuFullString.= '<ul>';
-                        $menuFullString.= '<li><a href="?controller=panel&amp;action=newUserForm">NUEVO '
-                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
-                    $menuFullString.= '</ul>';
-                
-                $menuFullString.= '</li>';
-                
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=types&amp;action=typesDt">MATERIAS</a>';
-                $menuFullString.= '</li>';
+            $menuFullString.= '<li>';
+            $menuFullString.= '<a href="?controller=customers&amp;action=customersDt">Clientes</a>';
+            $menuFullString.= '<ul class="menu vertical">';
+            $menuFullString.= '<li><a href="?controller=customers&amp;action=customersAddForm">Nuevo Cliente</a></li>';
+            $menuFullString.= '</ul>';
+            $menuFullString.= '</li>';
 
+            $menuFullString.= '<li>';
+            $menuFullString.= '<a href="?controller=panel&amp;action=usersDt">Usuarios</a>';
+            $menuFullString.= '<ul class="menu vertical">';
+            $menuFullString.= '<li><a href="?controller=panel&amp;action=newUserForm">Nuevo Usuario</a></li>';
+            $menuFullString.= '</ul>';
+            $menuFullString.= '</li>';
+
+            #$menuFullString.= '<li><a href="?controller=managements&amp;action=managementsDt">Gestiones</a></li>';
+
+            $menuFullString.= '<li><a href="?controller=types&amp;action=typesDt">Materias</a></li>';
 
             $menuFullString.= '</ul>';
-            
+
             print $menuFullString;
         }
-        
+
         function loadMainMenuGeneric()
         {
-            $menuFullString = '<ul id="menu">';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
-                
-                    $menuFullString.= '<ul>';
-                        $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">NUEVO '
-                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
-                    $menuFullString.= '</ul>';
-                
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
-                    
-                    $menuFullString.= '<ul>';
-                        $menuFullString.= '<li><a href="?controller=customers&amp;action=customersAddForm">NUEVO '
-                                . '<span class="ui-icon ui-icon-plusthick" style="display: inline-block;"/></a></li>';
-                    $menuFullString.= '</ul>';
-                
-                $menuFullString.= '</li>';
-                
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=types&amp;action=typesDt">MATERIAS</a>';
-                $menuFullString.= '</li>';
+          $menuFullString = '<ul class="dropdown menu" data-dropdown-menu>';
+          $menuFullString.= '<li>';
+          $menuFullString.= '<a href="?controller=tasks&amp;action=tasksDt">Gestiones</a>';
+          $menuFullString.= '<ul class="menu vertical">';
+          $menuFullString.= '<li><a href="?controller=tasks&amp;action=tasksNewForm">Nueva Gestión</a></li>';
+          $menuFullString.= '</ul>';
+          $menuFullString.= '</li>';
 
+          $menuFullString.= '<li>';
+          $menuFullString.= '<a href="?controller=customers&amp;action=customersDt">Clientes</a>';
+          $menuFullString.= '<ul class="menu vertical">';
+          $menuFullString.= '<li><a href="?controller=customers&amp;action=customersAddForm">Nuevo Cliente</a></li>';
+          $menuFullString.= '</ul>';
+          $menuFullString.= '</li>';
 
-            $menuFullString.= '</ul>';
-            
-            print $menuFullString;
+          $menuFullString.= '<li><a href="?controller=types&amp;action=typesDt">Materias</a></li>';
+
+          $menuFullString.= '</ul>';
+
+          print $menuFullString;
         }
-        
+
         function loadTestMenu()
         {
             $menuFullString = '<ul id="menu">';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">Gestiones</a>';
                 $menuFullString.= '</li>';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO TRABAJO</a>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO Gestión</a>';
                 $menuFullString.= '</li>';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
                 $menuFullString.= '</li>';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersAddForm">NUEVO CLIENTE</a>';
                 $menuFullString.= '</li>';
             $menuFullString.= '</ul>';
-            
+
             print $menuFullString;
         }
-        
+
         function mimenu($root, $permiso, $controller)
 	{
             $code = '<li '. $this->getCurrentClass($controller, "admin", "users").'><a href="#">Menu</a>';
@@ -185,10 +177,10 @@ class Menu extends ModelBase
                 $code.= '<li><a href="'.$root.'?controller=users&amp;action=userProfile">Mi Cuenta</a></li>';
                 $code.= '</ul>';
             $code.= '</li>';
-            
+
             return $code;
 	}
-	
+
 	function mimenuuser($root, $permiso, $controller)
 	{
             $code = '<li '. $this->getCurrentClass($controller, "admin", "users").'><a href="#">Menu</a>';
@@ -198,279 +190,5 @@ class Menu extends ModelBase
             $code.= '</li>';
             return $code;
 	}
-	
-	function tienda($root, $permiso, $controller)
-	{
-            $code = '<li '. $this->getCurrentClass($controller, "tiendas").'><a href="'.$root.'?controller=tiendas&action=tiendasDt">Tienda</a>';
-            $code.= '<ul>';
-            $code.= '<li><a href="'.$root.'?controller=tiendas&action=tiendasDt">Tienda</a>';
-                if($permiso == 1){
-                    $code.= '<ul>';
-                    $code.= '<li><a href="'.$root.'?controller=tiendas&action=tiendasAddForm">Nueva</a></li>';
-                    $code.= '</ul>';
-                }
-            $code.= '</li>';
-            $code.= '<li><a href="'.$root.'?controller=tiendas&action=zonasDt">Zona</a>';
-                if($permiso == 1){
-                    $code.= '<ul>';
-                    $code.= '<li><a href="'.$root.'?controller=tiendas&action=zonasAddForm">Nueva</a></li>';
-                    $code.= '</ul>';
-                }
-            $code.= '</li>';
-            $code.= '<li><a href="'.$root.'?controller=tiendas&action=tiposDt">Tipo</a>';
-                if($permiso == 1){
-                    $code.= '<ul>';
-                    $code.= '<li><a href="'.$root.'?controller=tiendas&action=tiposAddForm">Nuevo</a></li>';
-                    $code.= '</ul>';
-                }
-            $code.= '</li>';
-            $code.= '<li><a href="'.$root.'?controller=tiendas&action=agrupacionesDt">Agrupacion</a>';
-                if($permiso == 1){
-                    $code.= '<ul>';
-                    $code.= '<li><a href="'.$root.'?controller=tiendas&action=agrupacionesAddForm">Nueva</a></li>';
-                    $code.= '</ul>';
-                }
-            $code.= '</li>';
-            $code.= '<li><a href="'.$root.'?controller=tiendas&action=estadosDt">Estado</a>';
-                if($permiso == 1){
-                    $code.= '<ul>';
-                    $code.= '<li><a href="'.$root.'?controller=tiendas&action=estadosAddForm">Nuevo</a></li>';
-                    $code.= '</ul>';
-                }
-            $code.= '</ul>';
-            $code.= '</li>';
-            
-            return $code;
-	}
 
-	function administracion($root)
-	{
-            $code = '<li><a href="#">Administracion</a>';
-            $code.= '<ul>';
-                $code.= '<li><a href="'.$root.'?controller=admin&action=usersDt">Usuarios</a>';
-                    $code.= '<ul>';
-                    $code.= '<li><a href="'.$root.'?controller=admin&action=userAddForm">Nuevo Usuario</a></li>';
-                    $code.= '</ul>';
-                $code.= '</li>';
-                $code.= '<li><a href="'.$root.'?controller=admin&action=privilegiosPanel">Perfiles</a>';
-                    $code.= '<ul>';
-                    $code.= '<li><a href="'.$root.'?controller=admin&action=privilegiosAddForm">Nuevo Perfil</a></li>';
-                    $code.= '</ul>';
-                $code.= '</li>';
-		$code.= '<li><a href="'.$root.'?controller=admin&action=eventsDt">Historial de eventos</a></li>';
-            $code.= '</ul>';
-            
-            return $code;
-	}
-
-	function cliente($root, $permiso, $controller)
-	{
-            $code = '<li '. $this->getCurrentClass($controller, "clientes").'><a href="'.$root.'?controller=clientes&action=clientesDt">Cliente</a>';
-                $code.= '<ul>';
-                $code.= '<li><a href="'.$root.'?controller=clientes&action=clientesDt">Cliente</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=clientes&action=clientesAddForm">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-                $code.= '<li><a href="'.$root.'?controller=clientes&action=buyerClassDt">Buyer Class</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=clientes&action=buyerClassAddForm">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-                $code.= '<li><a href="'.$root.'?controller=clientes&action=channelDt">Channels</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=clientes&action=channelAddForm">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-                $code.= '</ul>';
-            $code.= '</li>';
-            
-            return $code;
-	}
-	
-	function region($root, $permiso, $controller)
-	{
-            $code = '<li '. $this->getCurrentClass($controller, "lugares").'><a href="'.$root.'?controller=lugares&action=regionesDt">Region</a>';
-                $code.= '<ul>';
-                $code.= '<li><a href="'.$root.'?controller=lugares&action=regionesDt">Region</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="#">Nueva</a></li>';	
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-                $code.= '<li><a href="'.$root.'?controller=lugares&action=ciudadesDt">Ciudad</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=lugares&action=ciudadesAddForm">Nueva</a></li>';	
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-                $code.= '<li><a href="'.$root.'?controller=lugares&action=comunasDt">Comuna</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=lugares&action=comunasAddForm">Nueva</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';		
-                $code.= '</ul>';
-            $code.= '</li>';
-            
-            return $code;
-	}
-	
-	function modelos($root, $permiso, $controller)
-	{	 
-            $code = '<li '. $this->getCurrentClass($controller, "models").'><a href="'.$root.'?controller=models&action=modelsDt">Modelos</a>';
-                $code.= '<ul>';
-                $code.= '<li><a href="'.$root.'?controller=models&action=modelsDt">Modelos</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="#">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-                $code.= '<li><a href="'.$root.'?controller=models&action=estadosDt">Estado</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=models&action=estadosAddForm">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-                $code.= '</ul>';
-            $code.= '</li>';
-            
-            return $code;
-	}
-	
-	function brand($root, $permiso, $controller)
-	{
-            $code = '<li '. $this->getCurrentClass($controller, "brands").'><a href="'.$root.'?controller=brands&action=brandsDt">Brand</a>';
-                $code.= '<ul>';
-                $code.= '<li><a href="'.$root.'?controller=brands&action=brandsDt">Brand</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=brands&action=brandsAddForm">Nueva</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</ul>';
-            $code.= '</li>';
-            
-            return $code;
-	}
-	
-	function bu($root, $permiso, $controller)
-	{
-            $code = '<li '. $this->getCurrentClass($controller, "categories").'><a href="'.$root.'?controller=categories&action=buDt">BU</a>';
-                $code.= '<ul>';
-                
-                $code.= '<li><a href="'.$root.'?controller=categories&action=buDt">BU</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=categories&action=buAddForm">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-
-                $code.= '<li><a href="'.$root.'?controller=categories&action=categoryDt">Category</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=categories&action=categoryAddForm">Nueva</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-
-                $code.= '<li><a href="'.$root.'?controller=categories&action=gbuDt">GBU</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=categories&action=gbuAddForm">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-
-                $code.= '</ul>';
-            $code.= '</li>';
-            
-            return $code;
-        }
-	
-	function segment($root, $permiso, $controller)
-	{
-            $code = '<li '. $this->getCurrentClass($controller, "segments").'><a href="'.$root.'?controller=segments&amp;action=segmentsDt">Segment</a>';
-                $code.= '<ul>';
-
-                $code.= '<li><a href="'.$root.'?controller=segments&amp;action=segmentsDt">Segment</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=segments&amp;action=segmentsAddForm">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-
-                $code.= '<li><a href="'.$root.'?controller=segments&amp;action=subSegmentsDt">Sub Segment</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=segments&amp;action=subSegmentsAddForm">Nuevo</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-
-                $code.= '<li><a href="'.$root.'?controller=segments&amp;action=microSegmentsDt">Micro Segment</a>';
-                    if($permiso == 1){
-                        $code.= '<ul>';
-                        $code.= '<li><a href="'.$root.'?controller=segments&amp;action=microSegmentsAddForm">Nueva</a></li>';
-                        $code.= '</ul>';
-                    }
-                $code.= '</li>';
-
-                $code.= '</ul>';
-            $code.= '</li>';
-            
-            return $code;
-	}	
-		
-	function sellout($root, $controller)
-	{ 	
-            $code = '<li><a href="#">Precios</a>';
-            $code.= '<ul class="subnav">';
-                $code.= '<li><a href="'.$root.'#">Nuevo Precio</a></li>';
-                #$code.= '<li><a href="'.$root.'#">Editar Precios</a></li>';
-                #$code.= '<li><a href="'.$root.'#">Carga Masiva</a></li>';
-                $code.= '</ul>';
-            $code.= '</li>';
-            
-            return $code;
-        }
-	 
-	function indicadores($root, $controller)
-	{ 
-            $code = '<li><a href="'.$root.'#">Indicadores</a>';
-            $code.= '</li>';
-            
-            return $code;
-	}
-        
-        public function test($root, $controller)
-	{ 
-            $code = '<li><a href="'.$root.'#">Test</a>';
-            $code.= '</li>';
-            
-            return $code;
-	}
-        
-        public function exportar($root, $controller)
-	{ 
-            /*
-             * SOLO POR LOGICA DE SISTEMA
-             */
-            $code = '';            
-            return $code;
-	}
 }
-?>

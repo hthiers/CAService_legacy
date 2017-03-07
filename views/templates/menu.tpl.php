@@ -11,28 +11,30 @@
 $url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 ?>
 
-<div id="cabecera" align="left">
-</div>
-
-<div class="fin" id="banner">
-    <div class="banner_welcome">
-        Bienvenido <a href="?controller=Panel&amp;action=editUserForm&user_id=<?php echo $session->id_user;?>"><?php echo $session->name_user;?></a>
-        |
-        <a href="?controller=users&amp;action=logOut">Cerrar Sesi&oacute;n</a>
-        
-        <!--<a href="#">Ayuda</a>-->
+<div class="top-bar">
+    <div class="top-bar-title">
+        <li class="menu-text">Control v<?php echo $constants->getSysVersion(); ?></li>
     </div>
-    <div class="banner_title"></div>
+    <div class="top-bar-left">
+        <?php
+        include 'libs/Menu.php';
+        $menu = new Menu();
+        $menu->loadMainMenu($session);
+        ?>
+    </div>
+    <div class="top-bar-right">
+        <ul class="menu">
+            <li>
+                <a href="?controller=Panel&amp;action=editUserForm&user_id=<?php echo $session->id_user;?>">
+                    <span class="fi-torso-business"></span>
+                    <?php echo $session->name_user;?>
+                </a>
+            </li>
+            <li>
+                <a href="?controller=users&amp;action=logOut">
+                    <span class="fi-power"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
-
-<!-- MENU -->
-<div id="menu_div" class="menu">
-<?php
-#echo "<!-- debug navegador:".$navegador."-->\n";
-include 'libs/Menu.php';
-$menu = new Menu();
-#$menu->loadMenu($session,$navegador,$rootPath,$controller);
-$menu->loadMainMenu($session);
-?>
-</div>
-<!-- END MENU -->

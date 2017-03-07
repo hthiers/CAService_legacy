@@ -9,86 +9,11 @@ if($session->id_tenant != null && $session->id_user != null):
 ?>
 
 <!-- AGREGAR JS & CSS AQUI -->
-<style type="text/css" title="currentStyle">
-    @import "views/css/datatable.css";
-    table.dataTable, table.filtres {
-        width: 800px;
-    }
-</style>
-<script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables-control.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.jeditable.js"></script>
-<script type="text/javascript">
-function submitToForm(){
-    $('#action_type').val("view");
 
-    return false;
-}
-    
-$(document).ready(function() {
-    var oTable = $('#example').dataTable({
-        //Initial server side params
-        "bProcessing": true,
-        "bServerSide": true,
-        "sAjaxSource": <?php echo "'?controller=customers&action=ajaxCustomersDt'";?>,
-        "fnServerData": function ( sSource, aoData, fnDrawCallback ){
-            $.ajax({
-                "dataType": 'json', 
-                "type": "GET", 
-                "url": sSource, 
-                "data": aoData, 
-                "success": fnDrawCallback
-            });
-        },
-        
-        "sDom": '<"top"lpfi>rt<"clear">',
-        
-        "oLanguage": {
-            "sInfo": "_TOTAL_ registros",
-            "sInfoEmpty": "0 registros",
-            "sInfoFiltered": "(de _MAX_ registros)",
-            "sLengthMenu": "_MENU_ por p&aacute;gina",
-            "sZeroRecords": "No hay registros",
-            "sInfo": "_START_ a _END_ de _TOTAL_ registros",
-            "sInfoEmpty": "Mostrando 0 registros",
-            "sSearch": "Buscar",
-            "sProcessing": "",
-            "oPaginate": {
-                "sFirst": "Primera",
-                "sNext": "Siguiente",
-                "sPrevious": "Anterior",
-                "sLast": "&Uacute;ltima"
-            }
-        },
-        "aoColumnDefs": [
-            { "bVisible": false, "aTargets": [0,1,2] }
-        ],
-        
-        "sPaginationType": "full_numbers",
-        "aaSorting": [[0, "asc"]],
-        
-        "fnDrawCallback": function () {
-            $('#example tbody td').editable( '?controller=customers&action=ajaxCustomersUpdate', {
-                
-                "callback": function( sValue, y ) {
-                    console.log("valor: "+ sValue);
-
-                    var aPos = oTable.fnGetPosition( this );
-                    oTable.fnUpdate( sValue, aPos[0], aPos[1] );
-                },
-                "submitdata": function ( value, settings ) {
-                    return {
-                        "row_id": this.parentNode.getAttribute('id'),
-                        "column": oTable.fnGetPosition( this )[2]
-                    };
-                },
-                "placeholder" : "",
-                "height": "14px"
-            } );
-        }
-    });
-});
-</script>
+<?php require_once('js_customers_dt.php'); # JS ?>
 
 </head>
 <body id="dt_example" class="ex_highlight_row">
@@ -97,11 +22,10 @@ $(document).ready(function() {
 require('templates/menu.tpl.php'); #banner & menu
 ?>
     <!-- CENTRAL -->
-    <div id="central">
-    <div id="contenido">
+    <div class="row">
 
         <!-- DEBUG -->
-        <?php 
+        <?php
         if($debugMode)
         {
             print('<div id="debugbox">');
@@ -114,9 +38,11 @@ require('templates/menu.tpl.php'); #banner & menu
         ?>
         <!-- END DEBUG -->
 
-        <p class="titulos-form"><?php echo $titulo; ?></p>
-        
-        <?php 
+        <h1>
+            <span class="icon-title fi-book-bookmark"></span><?php echo $titulo; ?>
+        </h1>
+
+        <?php
         if (isset($error_flag)){
             if(strlen($error_flag) > 0){
                 echo $error_flag;
@@ -136,27 +62,26 @@ require('templates/menu.tpl.php'); #banner & menu
                             <th>ID</th>
                             <th>NUMERO</th>
                             <th>TENANT</th>
-                            <th>NOMBRE</th>
-                            <th>DESCRIPCION</th>
+                            <th>Nombre cliente</th>
+                            <th>Descripción cliente</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="11" class="dataTables_empty">Loading data from server</td>
+                            <td colspan="11" class="dataTables_empty">Cargando...</td>
                         </tr>
                     </tbody>
                 </table>
-                <table>
-                    <tr>
-                        <td><input id="action_type" type="hidden" name="action_type" value="" /></td>
-                    </tr>
-                </table>
+                <input id="action_type" type="hidden" name="action_type" value="" />
             </form>
+        </div>
+
+        <div id="footer" class="headers" style="color:#ffffff;">
+            <p style="text-align:right;">&nbsp;</p>
         </div>
 
         <div class="spacer"></div>
 
-    </div>
     </div>
     <!-- END CENTRAL -->
 

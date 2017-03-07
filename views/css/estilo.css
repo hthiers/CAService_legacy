@@ -46,31 +46,6 @@ body{
     margin:0 auto;
     background-color:#476085;
 }
-#menu{
-    width:1020px;
-    height:25px;
-    text-align:left;
-    padding-top:3px;
-    /*padding-left:5px; */
-    border-left:#CCCCCC 1px solid;
-    border-right:#CCCCCC 1px solid;
-    margin:0 auto;
-    background-color:#476085;
-}
-/* TO FIX! There should not be 2 menu classes */
-#menu_div{
-    color: #ffffff;
-    /*width:1020px;*/
-    height:30px;
-    text-align:left;
-    /*padding:3px;*/
-    /*padding-left:5px; */
-    border-left:#CCCCCC 1px solid;
-    border-right:#CCCCCC 1px solid;
-    border-top: #CCCCCC 1px solid;
-    margin:0 auto;
-    background-color:#476085;
-}
 #central{
     /*background-color:#FFFFFF;*/
     width:70%;
@@ -99,12 +74,13 @@ body{
     height:auto;
 }
 #info{
-    /*width:1020px; */
-    /*height:50px; */
+    width:100%;
     margin:0 auto;
     padding:5px 0;
     background-color:#476085;
     border: 1px solid #476085;
+    position: fixed;
+    bottom: 0;
 }
 .Estilo1 {
     color: #FFFFFF;
@@ -112,6 +88,7 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     text-align:center;
+    padding: 5px 0;
 }
 .Estilo2 {
     color: #FFFFFF;
@@ -428,4 +405,12 @@ noscript p {
 
 .ui-menu .ui-menu-item a {
     font-size: 12px;
+}
+
+.hidden-tr {
+    display: none !important;
+}
+
+.hidden-element {
+    display: none !important;
 }

@@ -27,51 +27,27 @@ $navegador = substr($navegador,25,8);
 <meta http-equiv="expires" content="0" />
 <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
 <meta http-equiv="pragma" content="no-cache" />
-<title>Control tiempos de trabajo - Beta v<?php echo $constants->getSysVersion(); ?></title>
-<!-- @import "views/css/custom-theme/jquery-ui-1.8.20.custom.css"; -->
-<style type="text/css">
-    @import "views/css/custom-theme-blue/jquery-ui-1.8.23.custom.css";
-    @import "views/css/jquery.timepicker.css";
-    @import "views/css/estilo.css";
-    @import "views/css/reset-min.css";
-    @import "views/css/formularios.css";
-    @import "views/css/texto.css";
-    <?php 
-    if($navegador == 'MSIE 6.0'){
-            echo '@import "views/css/menuie6.css";';
-    }
-    else{
-            echo '@import "views/css/menu2.css";';
-    }
-    ?>
-</style>
+
+<title>Control tiempos de trabajo - v<?php echo $constants->getSysVersion(); ?></title>
+
+<!--<link rel="stylesheet" href="views/css/custom-theme-blue/jquery-ui-1.8.23.custom.css"></link>-->
+<link rel="stylesheet" href="views/css/estilo.css"></link>
+<link rel="stylesheet" href="views/css/reset-min.css"></link>
+<link rel="stylesheet" href="views/css/datatable.css"></link>
+<link rel="stylesheet" href="views/css/select2.css"></link>
+<link rel="stylesheet" href="views/css/foundation.css"></link>
+<link rel="stylesheet" href="views/css/jquery-ui-datepicker-custom.css"></link>
+<link rel="stylesheet" href="views/css/jquery-ui-timepicker-custom.css"></link>
+<link rel="stylesheet" href="views/css/icons/foundation-icons.css"></link>
+<link rel="stylesheet" href="views/css/app.css"></link>
+
 <script type="text/javascript" language="javascript" src="views/lib/jquery.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.validate.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.validate.messages.js"></script>
-<script type="text/javascript" language="javascript" src="views/lib/jquery-ui-1.8.20.custom.min.js"></script>
-<script type="text/javascript" language="javascript">
-// Prevent the backspace key from navigating back.
-$(document).unbind('keydown').bind('keydown', function (event) {
-    var doPrevent = false;
-    if (event.keyCode === 8) {
-        var d = event.srcElement || event.target;
-        if ((d.tagName.toUpperCase() === 'INPUT' && (d.type.toUpperCase() === 'TEXT' || d.type.toUpperCase() === 'PASSWORD')) 
-            || d.tagName.toUpperCase() === 'TEXTAREA') {
-            doPrevent = d.readOnly || d.disabled;
-        }
-        else {
-            doPrevent = true;
-        }
-    }
+<script type="text/javascript" language="javascript" src="views/lib/jquery-ui.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/jquery.timepicker.min.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/select2.js"></script>
 
-    if (doPrevent) {
-        event.preventDefault();
-    }
-});
-</script>
 <?php
-	if($navegador == 'MSIE 6.0'){
-		echo '<script type="text/javascript" language="javascript" src="views/lib/menuie6.js"></script>';
-        }
-	
 endif; #session
