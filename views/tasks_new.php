@@ -168,7 +168,7 @@ if($session->id_tenant != null && $session->id_user != null):
                     </div>
                     <div class="medium-6 columns">
                       <div class="switch">
-                        <input class="switch-input" id="chk_past" type="checkbox" name="exampleSwitch" />
+                        <input class="switch-input" id="chk_past" type="checkbox" name="chk_past" />
                         <label class="switch-paddle" for="chk_past">
                             <span class="show-for-sr">¿Trabajo ya realizado?</span>
                             <span class="switch-active" aria-hidden="true">Si</span>
