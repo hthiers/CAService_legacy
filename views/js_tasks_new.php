@@ -162,7 +162,7 @@
                             //console.log("1.- - 0: " + response[0] + " - 1: " + response[1] + " - 2: " + response[2] + " - 3: " + response[3]);
                             if(response[3] == "Error") {
                               $("#cbotypes").val(response[1]).change();
-                              showMessage('#modalMensaje', 'Nueva Materia', "La materia seleccioanda ya existe.");
+                              showMessage('#modalMensaje', 'Nueva Materia', "La materia ya existe! Ha sido seleccionada.");
                             }
 
                           }
