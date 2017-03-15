@@ -378,8 +378,6 @@ class TypesController extends ControllerBase
                 $new_type[2] = $mensaje;
                 $new_type[3] = $estado;
               }
-
-
             }
 
             else {
@@ -394,9 +392,15 @@ class TypesController extends ControllerBase
                   $values = $result->fetch(PDO::FETCH_ASSOC);
 
                   $id_type = $values['id_type'];
+                  $mensaje = "Se ha creado la materia correctamente";
+                  $estado = "Exito";
+                  $valorEstado = 1;
 
                   $new_type[0] = $id_type;
                   $new_type[1] = $label_type;
+                  $new_type[2] = $mensaje;
+                  $new_type[3] = $estado;
+                  $new_type[4] = $valorEstado;
               }
               elseif($error[0] == 00000 && $rows_n < 1){
                   $new_type[0] = "0";
