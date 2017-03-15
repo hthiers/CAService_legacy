@@ -138,6 +138,7 @@
           $("#modalNuevaMateria form").submit(function(){
               var customer = $("#cbocustomers").val();
               var label_type = $("#dlgSbm_name_type").val();
+              //var id_type = $('cbotypes').val();
               if(label_type === '')
               {
                   alert("Ingrese nombre de la materia");
@@ -156,14 +157,21 @@
                               $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
                               showMessage('#modalMensaje', 'Nueva Materia', 'Se ha creado la nueva materia exitosamente');
                           }
-                          else
-                              alert("Error: "+response[1]);
+                          else {
+                              console.log("1.- - 0: " + response[0] + " - 1: " + response[1] + " - 2: " + response[2] + " - 3: " + response[3]);
+                                $("#cbotypes").val(response[1]);
+                                showMessage('#modalMensaje', 'Nueva Materia', "La Materia Seleccioanda ya existe.");
+                                //alert("Error: "+response[1]);
+
+                          }
                       }
                       else{
+                          console.log("0: " + response[0] + " - 1: " + response[1]);
                           alert("Ha ocurrido un error! (nulo)");
                       }
                       $("#modalNuevaMateria").foundation("close");
-                  }).fail(function(){
+                  }).fail(function(response){
+                    console.log("0: " + response[0] + " - 1: " + response[1]);
                       alert("Ha ocurrido un error!");
                   });
               }

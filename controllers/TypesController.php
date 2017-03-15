@@ -7,35 +7,35 @@ class TypesController extends ControllerBase
 
     //DT
     public function typesDt($error_flag = 0, $message = "")
-    { 
+    {
         $session = FR_Session::singleton();
-        
+
         #support global messages
         if(isset($_GET['error_flag']))
             $error_flag = $_GET['error_flag'];
         if(isset($_GET['message']))
             $message = $_GET['message'];
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/TypesModel.php';
         require_once 'models/CustomersModel.php';
-        
+
         //Creamos una instancia de nuestro "modelo"
         $model = new TypesModel();
-        
+
         //Creamos una instancia del modelo de los clientes
         $clientModel = new CustomersModel();
-        
+
         //Cargar listado de clientes
         $listadoClientes = $clientModel->getAllCustomers($session->id_tenant);
-        
+
         //Le pedimos al modelo todos los items
         $listado = $model->getAllTypesByTenant($session->id_tenant);
 
         //Pasamos a la vista toda la información que se desea representar
         $data['listado'] = $listado;
         $data['listadoClientes'] = $listadoClientes;
-        
+
         //Titulo pagina
         $data['titulo'] = "Materias";
 
@@ -48,9 +48,9 @@ class TypesController extends ControllerBase
 
         //Finalmente presentamos nuestra plantilla
         $this->view->show("types_dt.php", $data);
-        
+
     }
-    
+
     /**
     * Get customers for ajax dynamic query
     * AJAX
@@ -59,15 +59,15 @@ class TypesController extends ControllerBase
     public function ajaxTypesDt()
     {
         $session = FR_Session::singleton();
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/TypesModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new TypesModel();
-            
+
         $status_column = "status_type";
-        
+
         /*
         * Build up dynamic query
         */
@@ -80,7 +80,7 @@ class TypesController extends ControllerBase
                     , 'a.id_customer'
                     , 'c.label_customer'
             );
-        
+
         $sIndexColumn = "id_type";
 
         /******************** Paging */
@@ -153,12 +153,12 @@ class TypesController extends ControllerBase
 
         /********************** Create Query */
         $sql = "
-            SELECT SQL_CALC_FOUND_ROWS 
+            SELECT SQL_CALC_FOUND_ROWS
                 ".str_replace(" , ", " ", implode(", ", $aColumns))."
             FROM $sTable a
             INNER JOIN cas_tenant b
             ON (a.id_tenant = b.id_tenant
-                AND 
+                AND
                 b.id_tenant = $session->id_tenant)
             LEFT JOIN cas_customer c ON (a.id_customer = c.id_customer)
             $sWhere
@@ -207,7 +207,7 @@ class TypesController extends ControllerBase
         #echo $sql;
         echo json_encode( $output );
     }
-    
+
     //NEW
     public function typesAddForm($error_flag = 0)
     {
@@ -218,13 +218,13 @@ class TypesController extends ControllerBase
 
         $this->view->show("types_new.php", $data);
     }
-    
-    
-    
+
+
+
     public function typesAdd()
     {
         $session = FR_Session::singleton();
-        
+
         $label_type = $_POST["label_type"];
         $id_customer = $_POST["id_customer"];
         //$label_type = filter_input(INPUT_POST, "label_type");
@@ -232,20 +232,20 @@ class TypesController extends ControllerBase
         $code_type = Utils::guidv4();
         echo "Label: ".$label_type. " - Customer: ".$id_customer;
         exit();
-        
+
         //Incluye el modelo que corresponde
         require_once 'models/TypesModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new TypesModel();
-        
-        
+
+
         //Le pedimos al modelo todos los items
         $result = $model->addNewType(null, $code_type, $session->id_tenant, $label_type, $id_customer);
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
-        
+
         return "hola ".$label_type;
         /*
         if($error[0] == 00000 && $rows_n > 0){
@@ -257,12 +257,12 @@ class TypesController extends ControllerBase
         else{
             header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
-         
+
          */
     }
-    
+
     public function ajaxTypesAdd()
-    {   
+    {
         $session = FR_Session::singleton();
 
         if(isset($_POST['label_type']) && $_POST['label_type'] != ""):
@@ -276,40 +276,73 @@ class TypesController extends ControllerBase
             $code_type = Utils::guidv4();
             $new_type[] = null;
 
-            //Le pedimos al modelo todos los items
-            $resultPdo = $model->addNewType(null, $code_type, $session->id_tenant, $label_type);
+            $labelExist = $model->getTypeByLabel($label_type, $session->id_tenant);
 
-            $error = $resultPdo->errorInfo();
-            $rows_n = $resultPdo->rowCount();
+            if($labelExist->rowCount() > 0)  {
 
-            if($error[0] == 00000 && $rows_n > 0){
-                $result = $model->getLastType($session->id_tenant);
-                $values = $result->fetch(PDO::FETCH_ASSOC);
+              $error = $labelExist->errorInfo();
+              $rows_n = $labelExist->rowCount();
+
+              if($error[0] == 00000 && $rows_n > 0){
+
+                $values = $labelExist->fetch(PDO::FETCH_ASSOC);
 
                 $id_type = $values['id_type'];
+                $label = $values['label_type'];
+                $mensaje = "La materia seleccioanda ya existe";
+                $estado = "Error";
 
-                $new_type[0] = $id_type;
-                $new_type[1] = $label_type;
-            }
-            elseif($error[0] == 00000 && $rows_n < 1){
                 $new_type[0] = "0";
-                $new_type[1] = "No se ha podido ingresar el registro";
-            }
-            else{
-                $new_type[0] = "0";
-                $new_type[1] = $error[2];
-            }
+                $new_type[1] = $id_type;
+                $new_type[2] = $mensaje;
+                $new_type[3] = $estado;
 
-            print json_encode($new_type);
+                //$new_type[0] = 0;
+                //$new_type[1] = 'La Materia ingresada ya existe';
+              }
+
+              print json_encode($new_type);
+            }
+            else {
+              //Le pedimos al modelo todos los items
+              $resultPdo = $model->addNewType(null, $code_type, $session->id_tenant, $label_type);
+
+              $error = $resultPdo->errorInfo();
+              $rows_n = $resultPdo->rowCount();
+
+              if($error[0] == 00000 && $rows_n > 0){
+                  $result = $model->getLastType($session->id_tenant);
+                  $values = $result->fetch(PDO::FETCH_ASSOC);
+
+                  $id_type = $values['id_type'];
+
+                  $new_type[0] = $id_type;
+                  $new_type[1] = $label_type;
+                  $new_type[2] = "Registro Creado Correctamente";
+                  $new_type[3] = "Exito";
+              }
+              elseif($error[0] == 00000 && $rows_n < 1){
+                  $new_type[0] = "0";
+                  $new_type[1] = "No se ha podido ingresar el registro";
+              }
+              else{
+                  $new_type[0] = "0";
+                  $new_type[1] = $error[2];
+              }
+
+              print json_encode($new_type);
+          }
+
+
 
             return true;
         else:
             return false;
         endif;
     }
-    
+
     public function ajaxTypesAddWithCustomer()
-    {   
+    {
         $session = FR_Session::singleton();
 
         if(isset($_POST['label_type']) && $_POST['label_type'] != ""):
@@ -324,28 +357,56 @@ class TypesController extends ControllerBase
             $code_type = Utils::guidv4();
             $new_type[] = null;
 
-            //Le pedimos al modelo todos los items
-            $resultPdo = $model->addNewTypeWithCustomer(null, $code_type, $session->id_tenant, $label_type, $id_customer);
+            $labelExist = $model->getTypeByLabel($label_type, $session->id_tenant);
 
-            $error = $resultPdo->errorInfo();
-            $rows_n = $resultPdo->rowCount();
+            if($labelExist->rowCount() > 0)  {
 
-            if($error[0] == 00000 && $rows_n > 0){
-                $result = $model->getLastType($session->id_tenant);
-                $values = $result->fetch(PDO::FETCH_ASSOC);
+              $error = $labelExist->errorInfo();
+              $rows_n = $labelExist->rowCount();
+
+              if($error[0] == 00000 && $rows_n > 0){
+
+                $values = $labelExist->fetch(PDO::FETCH_ASSOC);
 
                 $id_type = $values['id_type'];
+                $label = $values['label_type'];
+                $mensaje = "La materia seleccioanda ya existe";
+                $estado = "Error";
 
-                $new_type[0] = $id_type;
-                $new_type[1] = $label_type;
-            }
-            elseif($error[0] == 00000 && $rows_n < 1){
                 $new_type[0] = "0";
-                $new_type[1] = "No se ha podido ingresar el registro";
+                $new_type[1] = $id_type;
+                $new_type[2] = $mensaje;
+                $new_type[3] = $estado;
+              }
+
+
             }
-            else{
-                $new_type[0] = "0";
-                $new_type[1] = $error[2];
+
+            else {
+              //Le pedimos al modelo todos los items
+              $resultPdo = $model->addNewTypeWithCustomer(null, $code_type, $session->id_tenant, $label_type, $id_customer);
+
+              $error = $resultPdo->errorInfo();
+              $rows_n = $resultPdo->rowCount();
+
+              if($error[0] == 00000 && $rows_n > 0){
+                  $result = $model->getLastType($session->id_tenant);
+                  $values = $result->fetch(PDO::FETCH_ASSOC);
+
+                  $id_type = $values['id_type'];
+
+                  $new_type[0] = $id_type;
+                  $new_type[1] = $label_type;
+              }
+              elseif($error[0] == 00000 && $rows_n < 1){
+                  $new_type[0] = "0";
+                  $new_type[1] = "No se ha podido ingresar el registro";
+              }
+              else{
+                  $new_type[0] = "0";
+                  $new_type[1] = $error[2];
+              }
+
             }
 
             print json_encode($new_type);
@@ -355,7 +416,7 @@ class TypesController extends ControllerBase
             return false;
         endif;
     }
-    
+
     public function ajaxTypesUpdate()
     {
         $session = FR_Session::singleton();
@@ -368,9 +429,9 @@ class TypesController extends ControllerBase
             //Creamos una instancia de nuestro "modelo"
             $model = new TypesModel();
             $targetTypePdo = $model->getTypeByID($session->id_tenant, filter_input(INPUT_POST, 'row_id'));
-            
+
             $new_value = filter_input(INPUT_POST, 'value');
-            
+
             $targetType = $targetTypePdo->fetch(PDO::FETCH_ASSOC);
             if($targetType != null && $targetType != false){
                 //apply change
@@ -379,7 +440,7 @@ class TypesController extends ControllerBase
                         , $targetType['code_type']
                         , $targetType['id_tenant']
                         , $new_value);
-                
+
                 if($result){
                     $error = $result->errorInfo();
                     $rows_n = $result->rowCount();
@@ -402,7 +463,7 @@ class TypesController extends ControllerBase
             else{
                 print 'no se encontro elemento a actualizar';
             }
-            
+
             return true;
         else:
             return false;
@@ -416,7 +477,7 @@ class TypesController extends ControllerBase
     {
         $session = FR_Session::singleton();
         $id_type = null;
-        
+
         // Support POST & GET
         if(filter_input(INPUT_POST, 'type_id') != ''){
             $id_type = filter_input(INPUT_POST, 'type_id');
@@ -424,11 +485,11 @@ class TypesController extends ControllerBase
         else{
             $id_type = filter_input(INPUT_GET, 'type_id');
         }
-        
+
         if($id_type != null){
             require_once 'models/TypesModel.php';
             $model = new TypesModel();
-            
+
             $status = 9; // 9 removed status
 
             // remove
@@ -452,18 +513,18 @@ class TypesController extends ControllerBase
         else{
             header("Location: ".$this->root."?controller=types&action=typesDt&error_flag=10&message='Error: esta materia ya no existe!");
         }
-    }   
-    
+    }
+
     public function ajaxGetTypesByCustomer() {
         $session = FR_Session::singleton();
         require_once 'models/TypesModel.php';
         $model = new TypesModel();
-        
+
         $id_customer = $_POST["id_customer"];
-        
+
         //Le pedimos al modelo todos los items
         $listadoPDO = $model->getTypesByCustomer($session->id_tenant, $id_customer);
-        
+
         $respuesta = "<option value=''>Seleccione Materia</option>";
         while($materia = $listadoPDO->fetch(PDO::FETCH_ASSOC))
         {
@@ -476,22 +537,22 @@ class TypesController extends ControllerBase
         */
         echo $respuesta;
     }
-    
+
     public function getTypesByCustomer($id_customer)
-    { 
+    {
         $session = FR_Session::singleton();
-        
+
         require_once 'models/TypesModel.php';
-        
+
         //Creamos una instancia de nuestro "modelo"
         $model = new TypesModel();
-        
+
         //Le pedimos al modelo todos los items
         $listado = $model->getTypesByCustomer($session->id_tenant, $id_customer);
 
         return $listado;
     }
-    
+
     public function ajaxUpdateType()
     {
         $session = FR_Session::singleton();
@@ -501,22 +562,22 @@ class TypesController extends ControllerBase
 
         //Creamos una instancia de nuestro "modelo"
         $model = new TypesModel();
-        
+
         //Ajax requested vars
         $idType = $_REQUEST['idtype'];
         $column = $_REQUEST['column'];
         $newValue = $_REQUEST['value'];
-        
-        $target_column = ""; 
+
+        $target_column = "";
         if($column == 1)
             $target_column = "cod_type";
         else if($column == 2)
             $target_column = "label_type";
         else if($column == 3)
             $target_column = "id_customer";
-        
+
         $result = $model->updateTypeDinamic($idType, $target_column, $newValue);
-        
+
         if($result){
             $error = $result->errorInfo();
             $rows_n = $result->rowCount();
