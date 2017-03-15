@@ -99,6 +99,28 @@ class TypesModel extends ModelBase
             return $consulta;
         }
 
+				/**
+         * Get type por ID de type (materia)
+         * @param int $id_tenant
+         * @param varchar $id_type
+         * @return PDO
+         */
+        public function getTypeByLabel($label_type, $id_tenant)
+        {
+            $consulta = $this->db->prepare("
+				SELECT id_type
+                                    , code_type
+                                    , id_tenant
+                                    , label_type
+                                FROM cas_type a
+                                WHERE label_type = '$label_type'
+                                  and id_tenant = $id_tenant");
+
+            $consulta->execute();
+
+            return $consulta;
+        }
+
         /**
          * Add new customer
          * @param int $id_customer

@@ -762,12 +762,13 @@ class TasksController extends ControllerBase
         $fecha = null;
         $hora_ini = null;
 
+        // verifica si es tarea pasada
         if($_POST['chk_past']){
             $fecha = $_POST['fecha'];
             $hora_ini = $_POST['hora_ini'];
             $duration = $_POST['duration'];
 
-            //Get end and duration if past job
+            // Consigue fin y duracion de tarea pasada
             $fecha_ini_full = $fecha.' '.$hora_ini;
             $total_time = Utils::formatTimeSeconds($duration);
             $fecha_fin = date('Y/m/d H:i:s', strtotime($fecha_ini_full)+$total_time);

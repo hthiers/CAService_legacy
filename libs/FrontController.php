@@ -20,7 +20,7 @@ class FrontController
 		require 'libs/ErrorMessage.php'; //Clase de utilidades
 
 		require '/../config.php'; //Archivo con configuraciones.
-    //  require 'config.php'; //Archivo con configuraciones.
+		//require 'config.php'; //Archivo con configuraciones.
 
 		//Con el objetivo de no repetir nombre de clases, nuestros controladores
 		//terminaran todos en Controller. Por ej, la clase controladora Items, ser� ItemsController
