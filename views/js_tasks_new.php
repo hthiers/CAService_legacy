@@ -153,14 +153,14 @@
                       dataType: "json"
                   }).done(function(response){
                       if(response !== null){
-                        //console.log(response);
-                          if(response[0] !== 0){
+                          //console.log(response);
+                          if(response[0] !== "0"){
                               $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
                               showMessage('#modalMensaje', 'Nueva Materia', 'Se ha creado la nueva materia exitosamente');
                           }
                           else {
-                            console.log("1.- - 0: " + response[0] + " - 1: " + response[1] + " - 2: " + response[2] + " - 3: " + response[3]);
-                            if(respose[3] == "Error") {
+                            //console.log("1.- - 0: " + response[0] + " - 1: " + response[1] + " - 2: " + response[2] + " - 3: " + response[3]);
+                            if(response[3] == "Error") {
                               $("#cbotypes").val(response[1]);
                               showMessage('#modalMensaje', 'Nueva Materia', "La Materia Seleccioanda ya existe.");
                             }

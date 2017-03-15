@@ -333,8 +333,6 @@ class TypesController extends ControllerBase
               print json_encode($new_type);
           }
 
-
-
             return true;
         else:
             return false;
@@ -394,7 +392,7 @@ class TypesController extends ControllerBase
                   $id_type = $values['id_type'];
                   $mensaje = "Se ha creado la materia correctamente";
                   $estado = "Exito";
-                  $valorEstado = 1;
+                  $valorEstado = "1";
 
                   $new_type[0] = $id_type;
                   $new_type[1] = $label_type;
@@ -412,7 +410,6 @@ class TypesController extends ControllerBase
               }
 
             }
-
             print json_encode($new_type);
 
             return true;
