@@ -138,6 +138,7 @@
           $("#modalNuevaMateria form").submit(function(){
               var customer = $("#cbocustomers").val();
               var label_type = $("#dlgSbm_name_type").val();
+              //var id_type = $('cbotypes').val();
               if(label_type === '')
               {
                   alert("Ingrese nombre de la materia");
@@ -152,18 +153,27 @@
                       dataType: "json"
                   }).done(function(response){
                       if(response !== null){
-                          if(response[0] !== 0){
+                          //console.log(response);
+                          if(response[0] !== "0"){
                               $("#cbotypes").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
                               showMessage('#modalMensaje', 'Nueva Materia', 'Se ha creado la nueva materia exitosamente');
                           }
-                          else
-                              alert("Error: "+response[1]);
+                          else {
+                            //console.log("1.- - 0: " + response[0] + " - 1: " + response[1] + " - 2: " + response[2] + " - 3: " + response[3]);
+                            if(response[3] == "Error") {
+                              $("#cbotypes").val(response[1]).change();
+                              showMessage('#modalMensaje', 'Nueva Materia', "La materia ya existe! Ha sido seleccionada.");
+                            }
+
+                          }
                       }
                       else{
+                          console.log(" === null 0: " + response[0] + " - 1: " + response[1]);
                           alert("Ha ocurrido un error! (nulo)");
                       }
                       $("#modalNuevaMateria").foundation("close");
-                  }).fail(function(){
+                  }).fail(function(response){
+                      console.log("fail - 0: " + response[0] + " - 1: " + response[1]);
                       alert("Ha ocurrido un error!");
                   });
               }
